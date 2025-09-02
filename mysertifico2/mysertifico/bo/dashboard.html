@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySertifico Back Office - Dashboard</title>
+    <link rel="icon" type="image/png" href="../src/images/logos/favicon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- ApexCharts CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <!-- Konfigurasi Tambahan untuk Tailwind -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#0d9488', // Teal-600
+                        'primary-dark': '#0f766e', // Teal-700
+                        'accent': '#f59e0b', // Amber-500
+                        'accent-dark': '#d97706', // Amber-600
+                        'bo-bg-light': '#f8fafc', // Slate-50
+                        'bo-bg-dark': '#020617', // Slate-950
+                        'bo-surface-light': '#ffffff',
+                        'bo-surface-dark': '#1e293b', // Slate-800
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .sidebar { scrollbar-width: none; }
+        .sidebar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-bo-bg-light dark:bg-bo-bg-dark transition-colors duration-300">
+
+    <!-- ===== Sidebar Start ===== -->
+    <!-- Sidebar disembunyikan secara lalai dengan '-translate-x-full' -->
+    <aside id="sidebar" class="sidebar fixed top-0 left-0 z-50 h-full w-64 bg-gray-900 text-white transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto">
+        <!-- Sidebar Header -->
+        <div class="flex items-center justify-between p-5 border-b border-gray-800">
+             <a href="dashboard.html" class="flex items-center gap-3">
+                <img src="../src/images/logos/logo.png" class="h-8 w-8 rounded-lg" alt="Logo">
+                <h2 class="font-poppins text-xl font-bold text-white">MySertifico</h2>
+             </a>
+             <!-- Ikon 'X' untuk tutup sidebar -->
+             <button id="close-sidebar" class="text-gray-400 hover:text-white">
+                 <i class="ri-close-line text-2xl"></i>
+             </button>
+        </div>
+        
+        <!-- Navigation Menu -->
+        <nav class="p-4">
+            <ul class="space-y-1">
+                <li class="px-4 text-xs text-gray-400 uppercase font-semibold tracking-wider my-4">Menu</li>
+                <li><a href="dashboard.html" class="flex items-center py-2.5 px-4 rounded-lg text-white bg-primary border-l-4 border-accent"><i class="ri-dashboard-3-line mr-3 text-lg"></i><span>Dashboard</span></a></li>
+                <li><a href="templates.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700/50 text-gray-300 hover:text-white"><i class="ri-layout-3-line mr-3 text-lg"></i><span>Templates</span></a></li>
+                <li><a href="logos-badges.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700/50 text-gray-300 hover:text-white"><i class="ri-medal-line mr-3 text-lg"></i><span>Logos & Badges</span></a></li>
+                <li><a href="certificates.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700/50 text-gray-300 hover:text-white"><i class="ri-award-line mr-3 text-lg"></i><span>Certificates</span></a></li>
+                <li>
+                    <button data-collapse-toggle="submenu-users" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg hover:bg-gray-700/50 text-gray-300 hover:text-white">
+                        <span class="flex items-center"><i class="ri-group-line mr-3 text-lg"></i><span>Users</span></span>
+                        <i class="ri-arrow-down-s-line transition-transform duration-200"></i>
+                    </button>
+                    <ul id="submenu-users" class="hidden py-1 space-y-1 pl-8">
+                        <li><a href="organizations.html" class="flex items-center gap-3 block py-2 px-4 rounded-lg text-sm hover:bg-gray-700"><i class="ri-school-line"></i>Organizations</a></li>
+                        <li><a href="school-users.html" class="flex items-center gap-3 block py-2 px-4 rounded-lg text-sm hover:bg-gray-700"><i class="ri-user-2-line"></i>School Users</a></li>
+                        <li><a href="mywall-users.html" class="flex items-center gap-3 block py-2 px-4 rounded-lg text-sm hover:bg-gray-700"><i class="ri-user-star-line"></i>MyWall Users</a></li>
+                    </ul>
+                </li>
+                <li class="px-4 text-xs text-gray-400 uppercase font-semibold tracking-wider pt-6 pb-2">Administration</li>
+                <li>
+                    <button data-collapse-toggle="submenu-admin" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg hover:bg-gray-700/50 text-gray-300 hover:text-white">
+                        <span class="flex items-center"><i class="ri-settings-3-line mr-3 text-lg"></i><span>Settings</span></span>
+                        <i class="ri-arrow-down-s-line transition-transform duration-200"></i>
+                    </button>
+                    <ul id="submenu-admin" class="hidden py-1 space-y-1 pl-8">
+                        <li><a href="bo-users.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Staff</a></li>
+                        <li><a href="plan-subscriptions.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Plans & Subscriptions</a></li>
+                        <li><a href="system-setting.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">System Settings</a></li>
+                        <li><a href="support-help.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Support & Help</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    <!-- Overlay untuk klik di luar sidebar -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+    <!-- ===== Sidebar End ===== -->
+    
+    <!-- ===== Main Content Start ===== -->
+    <!-- Margin kiri (lg:ml-64) akan ditambah/dibuang oleh JS -->
+    <div id="main-content" class="relative min-h-screen transition-all duration-300 ease-in-out">
+        <!-- ===== Navbar Start ===== -->
+        <header class="sticky top-0 z-30 bg-bo-surface-light/80 dark:bg-bo-surface-dark/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between p-4 h-20">
+                <!-- Left Navbar Section -->
+                <div class="flex items-center space-x-4">
+                    <!-- Ikon Hamburger untuk buka sidebar -->
+                    <button id="sidebar-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
+                        <i class="ri-menu-line text-2xl"></i>
+                    </button>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">Dashboard</h1>
+                </div>
+
+                <!-- Right Navbar Section -->
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-xl"><i class="ri-moon-line block dark:hidden"></i><i class="ri-sun-line hidden dark:block"></i></button>
+                    
+                    <!-- Profile Dropdown Menu -->
+                    <div class="relative">
+                        <button id="profile-menu-button" class="flex items-center space-x-2">
+                             <img class="h-9 w-9 rounded-full object-cover" src="https://i.pravatar.cc/150?u=admin" alt="Admin">
+                             <div class="hidden md:block text-left">
+                                 <div class="text-sm font-semibold text-gray-800 dark:text-white">Masta Rob</div>
+                                 <div class="text-xs text-gray-500 dark:text-gray-400">Super Admin</div>
+                             </div>
+                             <i class="ri-arrow-down-s-line text-gray-500 dark:text-gray-400 hidden md:block"></i>
+                        </button>
+                        <!-- Dropdown Menu -->
+                        <div id="profile-menu" class="hidden absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-bo-surface-light dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <div class="py-1">
+                                <a href="my-profile.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                    <i class="ri-user-line mr-3"></i>My Profile
+                                </a>
+                                <a href="change-password.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                    <i class="ri-lock-password-line mr-3"></i>Change Password
+                                </a>
+                                <hr class="border-gray-200 dark:border-gray-700 my-1">
+                                <a href="#" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                    <i class="ri-logout-box-r-line mr-3"></i>Logout
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- ===== Navbar End ===== -->
+        
+        <!-- ===== Page Content Start ===== -->
+        <main class="p-6 sm:p-8">
+            <div class="max-w-7xl mx-auto">
+
+                <!-- Main Stat Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-bo-surface-light dark:bg-bo-surface-dark p-6 rounded-xl shadow-md flex items-center gap-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
+                        <div class="bg-primary/10 text-primary p-4 rounded-full"><i class="ri-award-fill text-3xl"></i></div>
+                        <div>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Certificates Issued</p>
+                            <p class="text-2xl font-bold text-gray-800 dark:text-white">12,540</p>
+                        </div>
+                    </div>
+                    <div class="bg-bo-surface-light dark:bg-bo-surface-dark p-6 rounded-xl shadow-md flex items-center gap-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
+                        <div class="bg-purple-500/10 text-purple-500 p-4 rounded-full"><i class="ri-artboard-2-line text-3xl"></i></div>
+                        <div>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Ready Templates</p>
+                            <p class="text-2xl font-bold text-gray-800 dark:text-white">85</p>
+                        </div>
+                    </div>
+                    <div class="bg-bo-surface-light dark:bg-bo-surface-dark p-6 rounded-xl shadow-md flex items-center gap-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
+                        <div class="bg-accent/10 text-accent p-4 rounded-full"><i class="ri-school-fill text-3xl"></i></div>
+                        <div>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Registered Schools</p>
+                            <p class="text-2xl font-bold text-gray-800 dark:text-white">1,280</p>
+                        </div>
+                    </div>
+                    <div class="bg-bo-surface-light dark:bg-bo-surface-dark p-6 rounded-xl shadow-md flex items-center gap-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
+                        <div class="bg-green-500/10 text-green-500 p-4 rounded-full"><i class="ri-user-fill text-3xl"></i></div>
+                        <div>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">Active Users</p>
+                            <p class="text-2xl font-bold text-gray-800 dark:text-white">3,450</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Full-width Sales Card -->
+                 <div class="bg-bo-surface-light dark:bg-bo-surface-dark p-6 rounded-xl shadow-md mb-8 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer">
+                     <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-white">This Month's Sales Summary</h3>
+                     <div class="flex flex-col md:flex-row items-center">
+                         <!-- MySertifico Sales -->
+                         <div class="w-full md:w-1/2 flex items-center gap-6 p-4">
+                             <div class="bg-blue-500/10 text-blue-500 p-4 rounded-full"><i class="ri-shopping-bag-3-fill text-3xl"></i></div>
+                             <div>
+                                 <p class="text-sm text-gray-500 dark:text-gray-400">MySertifico Subscriptions</p>
+                                 <p class="text-2xl font-bold text-gray-800 dark:text-white">RM 1,850.00</p>
+                             </div>
+                         </div>
+                         <!-- Divider -->
+                         <div class="w-full md:w-px h-px md:h-16 bg-gray-200 dark:bg-gray-700"></div>
+                         <!-- MyWall Sales -->
+                         <div class="w-full md:w-1/2 flex items-center gap-6 p-4">
+                              <div class="bg-pink-500/10 text-pink-500 p-4 rounded-full"><i class="ri-wallet-3-fill text-3xl"></i></div>
+                             <div>
+                                 <p class="text-sm text-gray-500 dark:text-gray-400">MyWall Subscriptions</p>
+                                 <p class="text-2xl font-bold text-gray-800 dark:text-white">RM 300.00</p>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+
+                <!-- Chart & Recent Activities -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+                    <div class="lg:col-span-2 bg-bo-surface-light dark:bg-bo-surface-dark p-6 rounded-xl shadow-md">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-white">Subscription Sales (Last 6 Months)</h3>
+                        <div id="sales-chart"></div>
+                    </div>
+                    <div class="bg-bo-surface-light dark:bg-bo-surface-dark p-6 rounded-xl shadow-md">
+                        <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-white">Recent Activities</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-4">
+                                <div class="bg-primary/10 text-primary p-2 rounded-full mt-1"><i class="ri-award-line"></i></div>
+                                <div><p class="text-sm font-medium text-gray-700 dark:text-gray-200">SK Langgar generated 50 new certificates.</p><p class="text-xs text-gray-500 dark:text-gray-400">5 minutes ago</p></div>
+                            </li>
+                             <li class="flex items-start gap-4">
+                                <div class="bg-accent/10 text-accent p-2 rounded-full mt-1"><i class="ri-school-line"></i></div>
+                                <div><p class="text-sm font-medium text-gray-700 dark:text-gray-200">SMK Panchor registered for the Premium Plan.</p><p class="text-xs text-gray-500 dark:text-gray-400">2 hours ago</p></div>
+                            </li>
+                             <li class="flex items-start gap-4">
+                                <div class="bg-green-500/10 text-green-500 p-2 rounded-full mt-1"><i class="ri-user-add-line"></i></div>
+                                <div><p class="text-sm font-medium text-gray-700 dark:text-gray-200">Ahmad (MyWall) has verified 3 certificates.</p><p class="text-xs text-gray-500 dark:text-gray-400">8 hours ago</p></div>
+                            </li>
+                             <li class="flex items-start gap-4">
+                                <div class="bg-blue-500/10 text-blue-500 p-2 rounded-full mt-1"><i class="ri-layout-3-line"></i></div>
+                                <div><p class="text-sm font-medium text-gray-700 dark:text-gray-200">The 'Excellence Award' template has been updated.</p><p class="text-xs text-gray-500 dark:text-gray-400">1 day ago</p></div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+        <!-- ===== Page Content End ===== -->
+    </div>
+    <!-- ===== Main Content End ===== -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggleBtn = document.getElementById('sidebar-toggle');
+            const closeSidebarBtn = document.getElementById('close-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const mainContent = document.getElementById('main-content');
+            
+            // --- Logik Baru untuk Sidebar ---
+            function openSidebar() {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                // Tambah margin pada kandungan utama hanya pada skrin besar
+                if (window.innerWidth >= 1024) {
+                    mainContent.classList.add('lg:ml-64');
+                }
+            }
+
+            function closeSidebar() {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+                // Buang margin dari kandungan utama
+                mainContent.classList.remove('lg:ml-64');
+            }
+
+            sidebarToggleBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openSidebar();
+            });
+            
+            closeSidebarBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                closeSidebar();
+            });
+
+            overlay.addEventListener('click', () => {
+                closeSidebar();
+            });
+
+            // --- Logik Lain (sedia ada) ---
+            document.querySelectorAll('[data-collapse-toggle]').forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.getAttribute('data-collapse-toggle');
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.classList.toggle('hidden');
+                        const arrowIcon = button.querySelector('.ri-arrow-down-s-line');
+                        if(arrowIcon) arrowIcon.classList.toggle('rotate-180');
+                    }
+                });
+            });
+
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const isDarkMode = () => document.documentElement.classList.contains('dark');
+
+            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+            themeToggleBtn.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                localStorage.setItem('color-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+                renderSalesChart();
+            });
+
+            const profileMenuButton = document.getElementById('profile-menu-button');
+            const profileMenu = document.getElementById('profile-menu');
+
+            profileMenuButton?.addEventListener('click', (e) => {
+                e.stopPropagation(); 
+                profileMenu.classList.toggle('hidden');
+            });
+
+            window.addEventListener('click', (e) => {
+                if (profileMenu && !profileMenu.classList.contains('hidden') && !profileMenuButton.contains(e.target)) {
+                    profileMenu.classList.add('hidden');
+                }
+            });
+            
+            function renderSalesChart() {
+                const options = {
+                  series: [{
+                    name: 'Sales (RM)',
+                    data: [1200, 1900, 3100, 2800, 4200, 2150]
+                  }],
+                  chart: {
+                    height: 350,
+                    type: 'area',
+                    toolbar: {
+                        show: false
+                    }
+                  },
+                  dataLabels: {
+                    enabled: false
+                  },
+                  stroke: {
+                    curve: 'smooth',
+                    width: 2,
+                  },
+                  xaxis: {
+                    categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+                    labels: {
+                        style: {
+                            colors: isDarkMode() ? '#9ca3af' : '#6b7280'
+                        }
+                    }
+                  },
+                   yaxis: {
+                    labels: {
+                        style: {
+                            colors: isDarkMode() ? '#9ca3af' : '#6b7280'
+                        },
+                        formatter: function (value) {
+                          return "RM " + value;
+                        }
+                    }
+                  },
+                  grid: {
+                    borderColor: isDarkMode() ? '#374151' : '#e5e7eb',
+                    strokeDashArray: 4
+                  },
+                  tooltip: {
+                    theme: isDarkMode() ? 'dark' : 'light',
+                    x: {
+                      format: 'MMM yy'
+                    },
+                    y: {
+                        formatter: function (val) {
+                            return "RM " + val
+                        }
+                    }
+                  },
+                  colors: ['#0d9488'], // primary color
+                  fill: {
+                    type: 'gradient',
+                    gradient: {
+                        shade: 'light',
+                        type: "vertical",
+                        shadeIntensity: 0.5,
+                        gradientToColors: undefined,
+                        inverseColors: true,
+                        opacityFrom: 0.5,
+                        opacityTo: 0,
+                        stops: [0, 100],
+                    }
+                  },
+                };
+
+                const chartContainer = document.querySelector("#sales-chart");
+                chartContainer.innerHTML = '';
+                const chart = new ApexCharts(chartContainer, options);
+                chart.render();
+            }
+
+            renderSalesChart();
+        });
+    </script>
+
+</body>
+</html>

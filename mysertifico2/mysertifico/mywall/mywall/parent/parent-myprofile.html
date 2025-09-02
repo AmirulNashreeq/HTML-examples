@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - MyWall</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../src/images/logos/favicon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        // Ocean Aqua & Sunset Orange Palette
+                        'primary': {
+                            'DEFAULT': '#14B8A6',       // Ocean Aqua (Teal-500)
+                            '50': '#f0fdfa',
+                            '100': '#ccfbf1',
+                            '200': '#99f6e4',
+                            '300': '#5eead4',
+                            '400': '#2dd4bf',
+                            '500': '#14b8a6',
+                            '600': '#0d9488',
+                            '700': '#0f766e',
+                            '800': '#115e59',
+                            '900': '#134E4A',    // Dark Aqua (Teal-900)
+                        },
+                        'accent': {
+                            'DEFAULT': '#F97316',        // Sunset Orange (Orange-500)
+                            'hover': '#EA580C',  // Warm Orange for hover (Orange-600)
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Modal transition */
+        .modal-panel {
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+        .modal.hidden .modal-panel {
+            transform: scale(0.95);
+            opacity: 0;
+        }
+        /* Toast Notification transition */
+        #toast-notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        /* Input validation style */
+        .input-error {
+            border-color: #EF4444 !important; /* red-500 */
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-primary-900 to-primary text-white flex flex-col min-h-screen">
+
+    <!-- Header & Navbar -->
+    <header class="bg-white shadow-md text-gray-800 fixed w-full top-0 z-50">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex items-center justify-between">
+                <a href="parent-wall.html" class="flex items-center gap-2">
+                    <img src="../../src/images/logos/logo.png" alt="MyWall Logo" class="h-10 w-10 rounded-full">
+                    <span class="font-poppins font-bold text-2xl text-primary">MyWall</span>
+                </a>
+                <div class="relative">
+                    <button id="profile-menu-button" class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-300 hover:border-primary transition-all">
+                        <img src="../../src/images/users/aliyah.png" 
+                             onerror="this.onerror=null;this.src='https://placehold.co/40x40/134E4A/FFFFFF?text=A';"
+                             alt="User Avatar" class="w-full h-full object-cover">
+                    </button>
+                    <div id="profile-menu" class="hidden absolute top-full right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 z-50">
+                        <a href="parent-wall.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-layout-grid-fill mr-3"></i>MyWall</a>
+                        <a href="parent-myprofile.html" class="flex items-center px-4 py-2 text-sm text-primary font-bold bg-primary-50"><i class="ri-user-line mr-3"></i>My Profile</a>
+                        <a href="myfamily.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-group-line mr-3"></i>My Family</a>
+                        <a href="parent-myaccount.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-settings-3-line mr-3"></i>My Account</a>
+                        <a href="parent-resume.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-article-line mr-3"></i>My Resume</a>
+                        <div class="border-t my-1 border-gray-200"></div>
+                        <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-logout-box-r-line mr-3"></i>Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="pt-24 pb-12 flex-grow">
+        <section class="py-16">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto bg-white/10 backdrop-blur-sm rounded-2xl shadow-lg p-8">
+                    
+                    <!-- Profile Header -->
+                    <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 pb-6 mb-6 border-b border-primary-800/50">
+                        <div class="relative flex-shrink-0">
+                            <img src="../../src/images/users/aliyah.png" 
+                                 onerror="this.onerror=null;this.src='https://placehold.co/128x128/134E4A/FFFFFF?text=A';"
+                                 alt="User Avatar" class="w-28 h-28 rounded-full border-4 border-primary-400 shadow-md user-avatar-img">
+                            <input type="file" id="profile-picture-upload" class="hidden" accept="image/*">
+                            <button id="change-picture-button" class="absolute bottom-0 right-0 bg-accent text-white w-8 h-8 rounded-full flex items-center justify-center hover:bg-accent-hover transition-transform hover:scale-110" title="Change Picture">
+                                <i class="ri-camera-line"></i>
+                            </button>
+                        </div>
+                        <div class="flex-grow text-center sm:text-left">
+                            <h1 class="text-3xl font-bold font-poppins text-white">Aliyah Zawaton binti Muhammad</h1>
+                            <p class="text-lg text-primary-200 mt-1"><span class="font-semibold text-primary-300">National ID:</span> 750101-10-1234</p>
+                        </div>
+                        <div class="flex-shrink-0 mt-4 sm:mt-0">
+                             <a href="parent-edit-profile.html" class="bg-primary hover:bg-primary-600 text-white font-semibold py-2 px-5 rounded-full transition-colors flex items-center gap-2">
+                                <i class="ri-pencil-line"></i>
+                                <span>Edit Profile</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- About Me Section -->
+                    <div class="mb-8">
+                        <h3 class="text-xl font-bold text-primary-300 mb-2">About Me</h3>
+                        <p class="text-white leading-relaxed">
+                            A dedicated parent and professional with a background in accounting. Passionate about supporting my children's educational journey and managing our family's digital achievements.
+                        </p>
+                    </div>
+
+                    <!-- Personal Details, Skills & Links Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Left Column: Personal Details -->
+                        <div class="space-y-6">
+                            <h3 class="text-xl font-bold text-primary-300 border-b border-primary-700/50 pb-2">Personal Details</h3>
+                            <div>
+                                <label class="block text-sm font-semibold text-primary-300">Country</label>
+                                <p class="text-lg text-white flex items-center gap-2">
+                                    <span class="text-2xl">🇲🇾</span> Malaysia
+                                </p>
+                            </div>
+                             <div>
+                                <label class="block text-sm font-semibold text-primary-300">Email Address</label>
+                                <p class="text-lg text-white">aliyah.zawaton@email.com</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-primary-300">Phone Number</label>
+                                <p class="text-lg text-white">012-3456789</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-primary-300">Address</label>
+                                <p class="text-lg text-white">No. 123, Jalan Seri Utama, Taman Saujana, Sungai Buloh, Selangor</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Right Column: Skills & Links -->
+                        <div class="space-y-6">
+                            <!-- Skills -->
+                            <div>
+                                <h3 class="text-xl font-bold text-primary-300 border-b border-primary-700/50 pb-2 mb-3">Skills</h3>
+                                <div class="flex flex-wrap gap-3">
+                                    <span class="bg-primary-700/50 text-primary-100 text-sm font-medium px-3 py-1 rounded-full">Financial Planning</span>
+                                    <span class="bg-primary-700/50 text-primary-100 text-sm font-medium px-3 py-1 rounded-full">Accounting</span>
+                                    <span class="bg-primary-700/50 text-primary-100 text-sm font-medium px-3 py-1 rounded-full">Microsoft Office</span>
+                                </div>
+                            </div>
+                            <!-- Links -->
+                            <div>
+                                <h3 class="text-xl font-bold text-primary-300 border-b border-primary-700/50 pb-2 mb-3">Links</h3>
+                                <div class="flex flex-wrap gap-4">
+                                    <a href="#" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-primary-200 hover:text-white"><i class="ri-linkedin-box-fill text-2xl"></i> LinkedIn</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="border-t border-primary-800/50 pt-8 mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <a href="parent-resume.html" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold py-3 px-8 rounded-full transition-colors shadow-lg hover:shadow-xl transform hover:scale-105">
+                            <i class="ri-download-2-line"></i>
+                            <span>Download As Resume</span>
+                        </a>
+                        <button id="change-password-button" class="w-full sm:w-auto text-primary-200 font-semibold hover:text-white transition-colors py-3 px-6">
+                            Change Password
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Change Password Modal -->
+    <div id="change-password-modal" class="modal hidden fixed inset-0 z-[60] flex items-center justify-center p-4">
+        <div class="modal-backdrop absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+        <div class="modal-panel relative bg-white/10 border border-primary-500/50 rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col scale-95 opacity-0">
+            <form id="change-password-form">
+                <div class="flex justify-between items-center p-4 border-b border-primary-800/50">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="ri-lock-password-line"></i> Change Password</h3>
+                    <button type="button" class="modal-close-button text-primary-200 hover:text-white text-2xl"><i class="ri-close-line"></i></button>
+                </div>
+                <div class="p-6 flex-grow overflow-auto space-y-4">
+                    <div class="relative">
+                        <label for="current-password" class="block text-sm font-medium text-primary-200 mb-1">Current Password</label>
+                        <input type="password" id="current-password" name="current-password" required class="w-full pl-4 pr-10 py-2 bg-white/20 text-white placeholder-primary-200 rounded-lg border-2 border-transparent focus:border-primary-300 focus:bg-white/30 focus:outline-none transition-all">
+                        <button type="button" class="password-toggle absolute inset-y-0 right-0 top-7 pr-3 flex items-center text-primary-200 hover:text-white">
+                            <i class="ri-eye-line text-xl"></i>
+                        </button>
+                    </div>
+                    <div class="relative">
+                        <label for="new-password" class="block text-sm font-medium text-primary-200 mb-1">New Password</label>
+                        <input type="password" id="new-password" name="new-password" required class="w-full pl-4 pr-10 py-2 bg-white/20 text-white placeholder-primary-200 rounded-lg border-2 border-transparent focus:border-primary-300 focus:bg-white/30 focus:outline-none transition-all">
+                        <button type="button" class="password-toggle absolute inset-y-0 right-0 top-7 pr-3 flex items-center text-primary-200 hover:text-white">
+                            <i class="ri-eye-line text-xl"></i>
+                        </button>
+                    </div>
+                    <div class="relative">
+                        <label for="confirm-password" class="block text-sm font-medium text-primary-200 mb-1">Confirm New Password</label>
+                        <input type="password" id="confirm-password" name="confirm-password" required class="w-full pl-4 pr-10 py-2 bg-white/20 text-white placeholder-primary-200 rounded-lg border-2 border-transparent focus:border-primary-300 focus:bg-white/30 focus:outline-none transition-all">
+                        <button type="button" class="password-toggle absolute inset-y-0 right-0 top-7 pr-3 flex items-center text-primary-200 hover:text-white">
+                            <i class="ri-eye-line text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+                 <div class="p-4 flex justify-end items-center gap-4 border-t border-primary-800/50">
+                    <button type="button" class="modal-close-button px-6 py-2 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600 transition-colors">Cancel</button>
+                    <button type="submit" class="px-6 py-2 bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover transition-colors">Update Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Custom Toast/Popup Notification -->
+    <div id="toast-notification" class="hidden fixed bottom-10 right-10 bg-accent text-white px-6 py-3 rounded-full shadow-lg transform transition-all duration-300 translate-y-20 opacity-0 flex items-center gap-2 z-[90]">
+        <i id="toast-icon" class="ri-checkbox-circle-line"></i>
+        <span id="toast-message"></span>
+    </div>
+
+    <!-- Main Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const body = document.body;
+
+            // --- Toast Notification ---
+            function showToast(message, isError = false) {
+                const toast = document.getElementById('toast-notification');
+                const toastMessage = document.getElementById('toast-message');
+                const toastIcon = document.getElementById('toast-icon');
+                if (!toast || !toastMessage || !toastIcon) return;
+
+                toastMessage.textContent = message;
+                toast.classList.remove('bg-accent', 'bg-red-500'); 
+                toast.classList.add(isError ? 'bg-red-500' : 'bg-accent');
+                toastIcon.className = isError ? 'ri-error-warning-line' : 'ri-checkbox-circle-line';
+
+                toast.classList.remove('hidden');
+                setTimeout(() => {
+                    toast.classList.add('show');
+                }, 10);
+
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => {
+                        toast.classList.add('hidden');
+                    }, 500);
+                }, 3000);
+            }
+
+            // --- Profile Menu Toggle ---
+            const profileMenuButton = document.getElementById('profile-menu-button');
+            const profileMenu = document.getElementById('profile-menu');
+
+            if (profileMenuButton) {
+                profileMenuButton.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    profileMenu.classList.toggle('hidden');
+                });
+            }
+            
+            window.addEventListener('click', (event) => {
+                if (profileMenu && !profileMenu.classList.contains('hidden') && !profileMenuButton.contains(event.target)) {
+                    profileMenu.classList.add('hidden');
+                }
+            });
+
+            // --- Modal Logic ---
+            const modals = {};
+            function setupModal(modalId) {
+                const modal = document.getElementById(modalId);
+                if (!modal) return null;
+                
+                const closeButtons = modal.querySelectorAll('.modal-close-button');
+                const backdrop = modal.querySelector('.modal-backdrop');
+                const panel = modal.querySelector('.modal-panel');
+
+                const open = () => {
+                    modal.classList.remove('hidden');
+                    body.style.overflow = 'hidden';
+                    setTimeout(() => {
+                        panel.classList.remove('scale-95', 'opacity-0');
+                    }, 10);
+                };
+
+                const close = () => {
+                    panel.classList.add('scale-95', 'opacity-0');
+                    setTimeout(() => {
+                        modal.classList.add('hidden');
+                        if (!document.querySelector('.modal:not(.hidden)')) {
+                            body.style.overflow = '';
+                        }
+                    }, 300);
+                };
+                
+                closeButtons.forEach(btn => btn.addEventListener('click', close));
+                if (backdrop) backdrop.addEventListener('click', close);
+                
+                const modalInstance = { open, close, modal };
+                modals[modalId] = modalInstance;
+                return modalInstance;
+            }
+
+            const changePasswordModal = setupModal('change-password-modal');
+            
+            document.getElementById('change-password-button')?.addEventListener('click', () => changePasswordModal.open());
+            
+            // --- Password Visibility Toggle ---
+            document.querySelectorAll('.password-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function() {
+                    const input = this.previousElementSibling;
+                    const icon = this.querySelector('i');
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        icon.classList.remove('ri-eye-line');
+                        icon.classList.add('ri-eye-off-line');
+                    } else {
+                        input.type = 'password';
+                        icon.classList.remove('ri-eye-off-line');
+                        icon.classList.add('ri-eye-line');
+                    }
+                });
+            });
+
+            const changePasswordForm = document.getElementById('change-password-form');
+            if (changePasswordForm && changePasswordModal) {
+                changePasswordForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const currentPassword = document.getElementById('current-password').value;
+                    const newPassword = document.getElementById('new-password').value;
+                    const confirmPassword = document.getElementById('confirm-password').value;
+                    
+                    // Dummy password for simulation
+                    const correctCurrentPassword = "password123";
+
+                    if (currentPassword !== correctCurrentPassword) {
+                        showToast("Current password is incorrect.", true);
+                        return;
+                    }
+
+                    if (newPassword !== confirmPassword) {
+                        showToast("New passwords do not match.", true);
+                        return;
+                    }
+                    
+                    showToast('Password updated successfully!');
+                    changePasswordForm.reset();
+                    changePasswordModal.close();
+                });
+            }
+
+            window.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    Object.values(modals).forEach(modal => modal?.close());
+                }
+            });
+
+            // --- Profile Picture Upload ---
+            const changePictureButton = document.getElementById('change-picture-button');
+            const profilePictureUpload = document.getElementById('profile-picture-upload');
+            const userAvatarImages = document.querySelectorAll('.user-avatar-img');
+
+            if (changePictureButton && profilePictureUpload) {
+                changePictureButton.addEventListener('click', () => {
+                    profilePictureUpload.click();
+                });
+
+                profilePictureUpload.addEventListener('change', function(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            userAvatarImages.forEach(img => {
+                                img.src = e.target.result;
+                            });
+                            showToast('Profile picture updated!');
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySertifico - Privacy Policy</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../src/images/logos/favicon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#0d9488', // Teal-600
+                        'primary-dark': '#0f766e', // Teal-700
+                        'accent': '#f59e0b', // Amber-500
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-primary-dark to-primary text-white">
+
+    <!-- Header & Navbar -->
+    <header class="bg-white shadow-md text-gray-800 fixed w-full top-0 z-50">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <a href="home.html" class="flex items-center gap-2">
+                    <img src="../../src/images/logos/logo.png" alt="Logo" class="h-10 w-10">
+                    <span class="font-poppins font-bold text-2xl text-primary">MySertifico</span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="home.html" class="text-primary font-semibold">Home</a>
+                    <a href="about.html" class="hover:text-primary font-medium">About</a>
+                    <a href="price.html" class="hover:text-primary font-medium">Pricing</a>
+                    <a href="contact-us.html" class="hover:text-primary font-medium">Contact Us</a>
+                </div>
+                
+                <!-- Login Buttons for Desktop -->
+                 <div class="hidden md:flex items-center space-x-2">
+                    <a href="../auth/sign-in.html" class="px-4 py-2 text-sm bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark">Sign In</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="menu-toggle" class="text-gray-800 focus:outline-none">
+                        <i id="icon-open" class="ri-menu-line text-2xl"></i>
+                        <i id="icon-close" class="ri-close-line text-2xl hidden"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden mt-4">
+                <a href="home.html" class="block py-2 text-sm text-primary font-semibold">Home</a>
+                <a href="about.html" class="block py-2 text-sm hover:text-primary">About</a>                
+                <a href="price.html" class="block py-2 text-sm hover:text-primary">Pricing</a>
+                <a href="contact-us.html" class="block py-2 text-sm hover:text-primary">Contact Us</a>
+                 <div class="border-t my-4"></div>
+                 <a href="../auth/sign-in.html" class="block w-full text-center py-2 text-sm bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark">Sign In</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="pt-24">
+        <!-- Page Header Section -->
+        <section class="py-16">
+            <div class="container mx-auto text-center px-6">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-3">Privacy Policy</h1>
+                <p class="text-lg md:text-xl text-teal-100 max-w-3xl mx-auto">Your privacy is important to us. Here's how we protect your data.</p>
+                <p class="text-sm text-teal-200 mt-2">Last Updated: 21 June 2025</p>
+            </div>
+        </section>
+
+        <!-- Privacy Policy Content -->
+        <section class="pb-20">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto bg-white/10 backdrop-blur-sm p-8 rounded-2xl shadow-lg">
+                    <div class="prose prose-invert prose-p:text-teal-200 prose-headings:text-white prose-h2:border-b prose-h2:border-white/20 prose-h2:pb-2 prose-a:text-accent hover:prose-a:text-yellow-300">
+                        <h2><strong>Introduction</strong></h2>
+                        <p class="mb-4">Welcome to MySertifico. Webapp Studio Sdn. Bhd. ("we", "us", or "our") is committed to protecting your personal data. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our platform.</p>
+                        
+                        <h2><strong>Information We Collect</strong></h2>
+                        <p class="mb-4">We may collect information about you in a variety of ways. The information we may collect on the Site includes:</p>
+                        <ul class="mb-4">
+                            <li class="mb-4"><strong>Personal Data:</strong> Personally identifiable information, such as your name, email address, and telephone number, that you voluntarily give to us when you register with the Site or when you choose to participate in various activities related to the Site.</li>
+                            <li class="mb-4"><strong>Certificate Data:</strong> Information required for the creation and issuance of certificates, such as recipient names, identification numbers, event details, and signatory information, provided by the issuing Organisation.</li>
+                            <li><strong>Derivative Data:</strong> Information our servers automatically collect when you access the Site, such as your IP address, browser type, operating system, access times, and the pages you have viewed directly before and after accessing the Site.</li>
+                        </ul>
+
+                        <h2><strong>How We Use Your Information</strong></h2>
+                        <p class="mb-4">Having accurate information permits us to provide you with a smooth, efficient, and customized experience. Specifically, we may use information collected about you via the Site to:</p>
+                        <ul class="space-y-2 mb-4">
+                            <li class="flex items-start"><i class="ri-checkbox-circle-line text-accent mt-1 mr-3"></i><span>Create and manage your account.</span></li>
+                            <li class="flex items-start"><i class="ri-checkbox-circle-line text-accent mt-1 mr-3"></i><span>Generate, issue, and deliver digital certificates.</span></li>
+                            <li class="flex items-start"><i class="ri-checkbox-circle-line text-accent mt-1 mr-3"></i><span>Enable verification of certificates via QR code.</span></li>
+                            <li class="flex items-start"><i class="ri-checkbox-circle-line text-accent mt-1 mr-3"></i><span>Process payments and refunds for subscription plans and tokens.</span></li>
+                            <li class="flex items-start"><i class="ri-checkbox-circle-line text-accent mt-1 mr-3"></i><span>Email you regarding your account or order.</span></li>
+                            <li class="flex items-start"><i class="ri-checkbox-circle-line text-accent mt-1 mr-3"></i><span>Monitor and analyze usage and trends to improve your experience with the Site.</span></li>
+                            <li class="flex items-start"><i class="ri-checkbox-circle-line text-accent mt-1 mr-3"></i><span>Notify you of updates to the Site.</span></li>
+                            <li class="flex items-start"><i class="ri-checkbox-circle-line text-accent mt-1 mr-3"></i><span>Provide customer support and respond to your requests.</span></li>
+                        </ul>
+                        
+                        <h2><strong>Data Security</strong></h2>
+                        <p class="mb-4">We use administrative, technical, and physical security measures to help protect your personal information. While we have taken reasonable steps to secure the personal information you provide to us, please be aware that despite our efforts, no security measures are perfect or impenetrable, and no method of data transmission can be guaranteed against any interception or other type of misuse.</p>
+
+                        <h2><strong>Your Rights</strong></h2>
+                        <p class="mb-4">You have certain rights in relation to your personal data. You have the right to request access, correction, or deletion of your data. To make such a request, please contact us using the contact information provided below.</p>
+
+                        <h2><strong>Contact Us</strong></h2>
+                        <p>If you have questions or comments about this Privacy Policy, please contact us at: <a href="mailto:support@mwebappstudio.my">support@mwebappstudio.my</a>.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white">
+        <div class="container mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+            <!-- Info -->
+            <div>
+                <h3 class="text-xl font-bold font-poppins mb-4">MySertifico</h3>
+                <p class="text-sm text-gray-400">MySertifico is a secure digital platform for managing official certificates for schools and institutions across Malaysia. Trusted. Simple. Digital.</p>
+            </div>
+            <!-- Links -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Links</h4>
+                <ul class="space-y-2 text-sm text-gray-300">
+                    <li><a href="home.html" class="hover:text-white">Home</a></li>
+                    <li><a href="about.html" class="hover:text-white">About</a></li>
+                    <li><a href="price.html" class="hover:text-white">Pricing</a></li>
+                    <li><a href="contact-us.html" class="hover:text-white">Contact Us</a></li>
+                </ul>
+            </div>
+            <!-- Policies -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Terms & Policies</h4>
+                <ul class="space-y-2 text-sm text-gray-300">
+                    <li><a href="privacy-policy.html" class="hover:text-white">Privacy Policy</a></li>
+                    <li><a href="terms-of-service.html" class="hover:text-white">Terms of Service</a></li>
+                    <li><a href="security-policy.html" class="hover:text-white">Security Policy</a></li>
+                </ul>
+            </div>
+            <!-- Social -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Follow Us</h4>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-white text-xl" title="Facebook"><i class="ri-facebook-fill"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white text-xl" title="Instagram"><i class="ri-instagram-fill"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white text-xl" title="TikTok"><i class="ri-tiktok-fill"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white text-xl" title="YouTube"><i class="ri-youtube-fill"></i></a>
+                </div>
+            </div>
+        </div>
+        <!-- Divider + Copyright -->
+        <div class="border-t border-gray-700">
+            <div class="container mx-auto px-6 py-4 text-center text-sm text-gray-400">&copy; 2025 MySertifico. All rights reserved by Webapp Studio Sdn. Bhd.</div>
+        </div>
+    </footer>
+
+    <!-- Main Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- Navbar Toggle for Mobile ---
+            const menuToggle = document.getElementById('menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const iconOpen = document.getElementById('icon-open');
+            const iconClose = document.getElementById('icon-close');
+
+            menuToggle.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                iconOpen.classList.toggle('hidden');
+                iconClose.classList.toggle('hidden');
+            });
+        });
+    </script>
+</body>
+</html>

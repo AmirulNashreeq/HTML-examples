@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySertifico - Certificate Recipients</title>
+    <link rel="icon" type="image/png" href="../assets/images/logos/favicon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': {
+                            'DEFAULT': '#0d9488', // Teal-600
+                            'dark': '#0f766e', // Teal-700
+                        },
+                        'accent': {
+                            'DEFAULT': '#f59e0b', // Amber-500
+                            'hover': '#d97706', // Amber-600
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .sidebar { scrollbar-width: none; }
+        .sidebar::-webkit-scrollbar { display: none; }
+        .modal-content {
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printable-area, #printable-area * {
+                visibility: visible;
+            }
+            #printable-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                padding: 0;
+                margin: 0;
+            }
+            .no-print, .no-print * {
+                display: none !important;
+            }
+            .print-only-text {
+                visibility: visible !important;
+                color: #000 !important;
+            }
+            .bg-white {
+                background-color: white !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+
+    <!-- ===== Sidebar Start ===== -->
+    <aside id="sidebar" class="sidebar no-print fixed top-0 left-0 z-50 h-full w-64 bg-gray-800 dark:bg-gray-950 text-white transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto">
+        <div class="flex items-center justify-between p-6">
+             <h2 class="font-poppins text-2xl font-bold text-white">Menu</h2>
+             <button id="close-sidebar" class="text-gray-400 hover:text-white lg:hidden">
+                 <i class="ri-close-line text-2xl"></i>
+             </button>
+        </div>
+        <nav class="p-4">
+            <ul class="space-y-2">
+                <li><a href="dashboard.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white"><i class="ri-dashboard-3-line mr-3 text-lg"></i><span>Dashboard</span></a></li>
+                <li>
+                    <button data-collapse-toggle="submenu-gallery" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white">
+                        <span class="flex items-center"><i class="ri-gallery-line mr-3 text-lg"></i><span>Gallery</span></span>
+                        <i class="ri-arrow-down-s-line transition-transform duration-200"></i>
+                    </button>
+                    <ul id="submenu-gallery" class="hidden py-2 space-y-1 pl-8">
+                        <li><a href="templates-list.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Templates</a></li>
+                        <li><a href="logos-badges.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Logos & Badges</a></li>
+                    </ul>
+                </li>
+                <li><a href="certificate-list.html" class="flex items-center py-2.5 px-4 rounded-lg text-white bg-primary-dark"><i class="ri-award-line mr-3 text-lg"></i><span>Certificates</span></a></li>
+                 <li>
+                    <button data-collapse-toggle="submenu-settings" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white">
+                        <span class="flex items-center"><i class="ri-settings-3-line mr-3 text-lg"></i><span>Settings</span></span>
+                        <i class="ri-arrow-down-s-line transition-transform duration-200"></i>
+                    </button>
+                    <ul id="submenu-settings" class="hidden py-2 space-y-1 pl-8">
+                        <li><a href="organisation.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Organisation</a></li>
+                        <li><a href="logo-list.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Logos</a></li>
+                        <li><a href="user-list.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Users</a></li>
+                        <li><a href="selected-template-list.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Templates</a></li>
+                        <li><a href="recipient-list.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Recipients</a></li>
+                        <li><a href="account.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Account</a></li>
+                    </ul>
+                </li>
+                <li class="pt-4 mt-4 border-t border-gray-700"><a href="#" class="flex items-center py-2.5 px-4 rounded-lg text-red-500 hover:bg-gray-700 hover:text-white"><i class="ri-logout-box-r-line mr-3 text-lg"></i><span>Log Out</span></a></li>
+            </ul>
+        </nav>
+    </aside>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+    <!-- ===== Sidebar End ===== -->
+    
+    <!-- ===== Main Content Start ===== -->
+    <div id="main-content" class="relative min-h-screen transition-all duration-300 ease-in-out">
+        <!-- ===== Navbar Start ===== -->
+        <header class="sticky top-0 z-30 bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 no-print">
+            <div class="flex items-center justify-between p-4">
+                <div class="flex items-center space-x-4">
+                    <button id="sidebar-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"><i class="ri-menu-line text-2xl"></i></button>
+                    <a href="dashboard.html" class="flex items-center gap-x-2">
+                        <img src="../assets/images/logos/logo.png" alt="MySertifico Logo" class="h-8 w-8 rounded-lg" onerror="this.onerror=null;this.src='https://placehold.co/32x32/0d9488/ffffff?text=M';">
+                        <span class="font-poppins text-2xl font-bold text-primary hidden sm:block">MySertifico</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-moon-line block dark:hidden"></i><i class="ri-sun-line hidden dark:block"></i></button>
+                    <div class="relative">
+                        <button id="profile-menu-button" class="flex items-center space-x-2">
+                             <img class="h-9 w-9 rounded-full object-cover" src="https://i.pravatar.cc/150?u=admin" alt="Admin" onerror="this.onerror=null;this.src='https://placehold.co/150x150/0d9488/ffffff?text=A';">
+                             <div class="hidden md:block text-left">
+                                 <div class="text-sm font-semibold text-gray-800 dark:text-white">Taufik Nabil Irmiza</div>
+                                 <div class="text-xs text-gray-500 dark:text-gray-400">Super Admin</div>
+                             </div>
+                        </button>
+                        <div id="profile-menu" class="hidden absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <div class="py-1">
+                                <a href="my-profile.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-user-line mr-3"></i>My Profile</a>
+                                <a href="change-password.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-lock-password-line mr-3"></i>Change Password</a>
+                                <hr class="border-gray-200 dark:border-gray-700 my-1">
+                                <a href="#" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-logout-box-r-line mr-3"></i>Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- ===== Navbar End ===== -->
+        
+        <!-- ===== Page Content Start ===== -->
+        <main class="p-6 sm:p-8">
+            <div id="printable-area" class="max-w-7xl mx-auto">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+                    <div>
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white print-only-text">Recipient List</h1>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 print-only-text">For: School Completion Certificate 2025 (BATCH-001)</p>
+                    </div>
+                     <a href="certificate-list.html" class="no-print px-4 py-2 rounded-lg bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:focus:ring-offset-gray-900 flex-shrink-0 self-start sm:self-center flex items-center gap-2 text-sm font-medium" title="Back to List">
+                        <i class="ri-arrow-left-line"></i>
+                        <span>Back</span>
+                    </a>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+                    <div class="no-print flex flex-col sm:flex-row items-center justify-between mb-4">
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4 sm:mb-0">Manage recipients for this batch.</p>
+                        <div class="flex space-x-2 w-full sm:w-auto">
+                            <button id="add-recipient-button" class="flex-1 sm:flex-initial justify-center px-4 py-2 text-sm bg-primary text-white rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-4 focus:ring-primary/50 flex items-center transition-colors" title="Add Recipient"><i class="ri-user-add-line mr-2"></i>Add</button>
+                            <button id="print-button" class="inline-flex items-center px-3 py-2 rounded-lg bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400" title="Print or Save as PDF"><i class="ri-printer-line"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="no-print flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0 mb-6">
+                        <div class="relative w-full md:w-1/3">
+                            <input type="text" id="search-input" placeholder="Search recipient..." class="w-full pl-10 pr-4 py-2 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary">
+                            <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        </div>
+                    </div>
+
+                    <div id="data-wrapper">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-300">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">#</th>
+                                        <th scope="col" class="px-6 py-3">Recipient Details</th>
+                                        <th scope="col" class="px-6 py-3 hidden md:table-cell">National ID</th>
+                                        <th scope="col" class="px-6 py-3 hidden lg:table-cell">Class</th>
+                                        <th scope="col" class="px-6 py-3 hidden print:table-cell">Notes</th>
+                                        <th scope="col" class="px-6 py-3 text-right no-print">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recipient-table-body">
+                                    <!-- Rows will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div id="no-results-message" class="hidden text-center py-16 text-gray-500 dark:text-gray-400">
+                        <i class="ri-user-search-line text-5xl mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">No Recipients Found</h3>
+                        <p class="mt-2">Your search did not match any recipients in this batch.</p>
+                    </div>
+                    
+                    <nav id="pagination-nav" class="no-print flex flex-col md:flex-row items-center justify-between pt-6 mt-6 border-t border-gray-200 dark:border-gray-700 space-y-4 md:space-y-0" aria-label="Pagination">
+                         <span id="pagination-info" class="text-sm text-gray-700 dark:text-gray-400"></span>
+                        <ul id="pagination-wrapper" class="inline-flex items-center -space-x-px text-sm">
+                            <!-- Pagination buttons will be populated by JavaScript -->
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </main>
+        <!-- ===== Page Content End ===== -->
+    </div>
+    <!-- ===== Main Content End ===== -->
+    
+    <!-- Delete Modal -->
+    <div id="deleteModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm hidden">
+        <div class="modal-content relative bg-white dark:bg-gray-800 w-full max-w-md p-6 rounded-xl shadow-lg transform scale-95 opacity-0">
+            <div class="text-center">
+                <div class="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mx-auto mb-4">
+                    <i class="ri-delete-bin-line text-4xl text-red-600 dark:text-red-400"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">Confirm Deletion</h3>
+                <p id="deleteModalContent" class="text-gray-600 dark:text-gray-400 mt-2"></p>
+                <div class="flex justify-center space-x-4 mt-6">
+                    <button type="button" class="modal-close-button px-6 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">Cancel</button>
+                    <button type="button" id="confirmDeleteButton" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">Yes, Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Recipient Modal -->
+    <div id="addModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm hidden">
+        <div class="modal-content relative bg-white dark:bg-gray-800 w-full max-w-lg p-6 rounded-xl shadow-lg transform scale-95 opacity-0">
+            <div class="flex items-center justify-between pb-4 border-b dark:border-gray-700">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">Add Recipient to Batch</h3>
+                <button class="modal-close-button text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <i class="ri-close-line text-2xl"></i>
+                </button>
+            </div>
+            <div class="mt-6 space-y-4">
+                <div>
+                    <label for="recipientSearch" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Search for Recipient</label>
+                    <div class="relative">
+                        <input type="search" id="recipientSearch" placeholder="Search by Name, ID, or Class..." class="w-full bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-sm rounded-lg focus:ring-primary focus:border-primary block p-2.5 pl-10">
+                         <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    </div>
+                </div>
+                <div id="searchResultsContainer" class="max-h-60 overflow-y-auto space-y-2 p-1 border rounded-md dark:border-gray-600">
+                    <p class="text-center text-gray-500 p-4">Start typing to search for recipients.</p>
+                </div>
+            </div>
+            <div class="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700 flex justify-end space-x-3">
+                <button type="button" class="modal-close-button px-6 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors">Cancel</button>
+                <button type="button" id="confirmAddButton" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-4 focus:ring-primary/50 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed dark:disabled:bg-gray-500" disabled>Add Selected</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Common Elements & Functions ---
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggleBtn = document.getElementById('sidebar-toggle');
+            const closeSidebarBtn = document.getElementById('close-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const mainContent = document.getElementById('main-content');
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const profileMenuButton = document.getElementById('profile-menu-button');
+            const profileMenu = document.getElementById('profile-menu');
+
+            function openSidebar() {
+                sidebar.classList.remove('-translate-x-full');
+                mainContent.classList.add('lg:ml-64');
+                if (window.innerWidth < 1024) {
+                    overlay.classList.remove('hidden');
+                }
+            }
+
+            function closeSidebar() {
+                sidebar.classList.add('-translate-x-full');
+                mainContent.classList.remove('lg:ml-64');
+                overlay.classList.add('hidden');
+            }
+
+            sidebarToggleBtn.addEventListener('click', (e) => { e.stopPropagation(); if (sidebar.classList.contains('-translate-x-full')) openSidebar(); else closeSidebar(); });
+            closeSidebarBtn?.addEventListener('click', closeSidebar);
+            overlay.addEventListener('click', closeSidebar);
+            window.addEventListener('resize', () => { if (!sidebar.classList.contains('-translate-x-full')) { if (window.innerWidth >= 1024) { overlay.classList.add('hidden'); } else { overlay.classList.remove('hidden'); } } });
+            
+            document.querySelectorAll('[data-collapse-toggle]').forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.getAttribute('data-collapse-toggle');
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.classList.toggle('hidden');
+                        const arrowIcon = button.querySelector('.ri-arrow-down-s-line');
+                        if(arrowIcon) arrowIcon.classList.toggle('rotate-180');
+                    }
+                });
+            });
+
+            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark')
+            }
+            themeToggleBtn.addEventListener('click', () => {
+                const isDark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('color-theme', isDark ? 'dark' : 'light');
+            });
+
+            profileMenuButton?.addEventListener('click', (e) => { e.stopPropagation(); profileMenu.classList.toggle('hidden'); });
+            window.addEventListener('click', (e) => { if (profileMenu && !profileMenu.classList.contains('hidden') && !profileMenuButton.contains(e.target)) profileMenu.classList.add('hidden'); });
+
+            // --- Page Specific Logic ---
+            const searchInput = document.getElementById('search-input');
+            const tableBody = document.getElementById('recipient-table-body');
+            const dataWrapper = document.getElementById('data-wrapper');
+            const noResultsMessage = document.getElementById('no-results-message');
+            const paginationNav = document.getElementById('pagination-nav');
+            const paginationWrapper = document.getElementById('pagination-wrapper');
+            const paginationInfo = document.getElementById('pagination-info');
+            
+            // Modals
+            const deleteModal = document.getElementById('deleteModal');
+            const addModal = document.getElementById('addModal');
+            let itemToDelete = null;
+
+            // Data
+            let allRecipientsInBatch = [
+                { name: 'Ahmad bin Abdullah', id: '080101-03-5287', class: '5 Amanah' },
+                { name: 'Siti Nurhaliza binti Kamal', id: '081230-01-4452', class: '5 Amanah' },
+            ];
+            
+            const masterRecipientList = [
+                ...allRecipientsInBatch,
+                { name: 'Lee Wei Chong', id: '080315-10-1121', class: '5 Bestari' },
+                { name: 'Anusha a/p Muthu', id: '080522-07-3456', class: '5 Cekal' },
+                { name: 'Badrul Hisham bin Zulkifli', id: '081101-03-9987', class: '5 Bestari' },
+                { name: 'Cheryl Tan', id: '080214-14-1234', class: '5 Cekal' },
+                { name: 'David Lee', id: '080404-08-4321', class: '4 Amanah' },
+                { name: 'Farah Adibah', id: '080606-05-6543', class: '4 Bestari' },
+                { name: 'Goh Liu Ying', id: '080808-01-8888', class: '4 Cekal' },
+                { name: 'Harith Iskander', id: '080910-10-9101', class: '3 Amanah' },
+                { name: 'Indah Ruhaila', id: '081111-11-1111', class: '3 Bestari' },
+                { name: 'Jamal Abdillah', id: '081212-12-1212', class: '3 Cekal' },
+            ];
+
+            let currentPage = 1;
+            const rowsPerPage = 5;
+            let filteredRecipients = [...allRecipientsInBatch];
+
+            function showModal(modal) {
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    modal.querySelector('.modal-content').classList.remove('scale-95', 'opacity-0');
+                }, 10);
+            }
+
+            function hideModal(modal) {
+                if (!modal) return;
+                modal.querySelector('.modal-content').classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                    modal.classList.add('opacity-0');
+                    setTimeout(() => { modal.classList.add('hidden'); }, 300);
+                }, 200);
+            }
+            
+            // --- Delete Modal Logic ---
+            deleteModal.querySelectorAll('.modal-close-button').forEach(button => button.addEventListener('click', () => hideModal(deleteModal)));
+            document.getElementById('confirmDeleteButton').addEventListener('click', () => {
+                if(itemToDelete) {
+                    const nameToDelete = itemToDelete.dataset.name;
+                    allRecipientsInBatch = allRecipientsInBatch.filter(r => r.name !== nameToDelete);
+                    renderTable();
+                }
+                hideModal(deleteModal);
+            });
+
+            // --- Add Modal Logic ---
+            const addRecipientButton = document.querySelector('button[title="Add Recipient"]');
+            const recipientSearchInput = document.getElementById('recipientSearch');
+            const searchResultsContainer = document.getElementById('searchResultsContainer');
+            const confirmAddButton = document.getElementById('confirmAddButton');
+            let selectedStudent = null;
+            
+            addRecipientButton.addEventListener('click', () => showModal(addModal));
+            addModal.querySelectorAll('.modal-close-button').forEach(button => button.addEventListener('click', () => hideModal(addModal)));
+
+            recipientSearchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                searchResultsContainer.innerHTML = '';
+                selectedStudent = null;
+                confirmAddButton.disabled = true;
+
+                if (searchTerm.length < 2) {
+                    searchResultsContainer.innerHTML = '<p class="text-center text-gray-500 p-4">Start typing to search for recipients.</p>';
+                    return;
+                }
+
+                const results = masterRecipientList.filter(student => 
+                    (student.name.toLowerCase().includes(searchTerm) || student.id.includes(searchTerm)) &&
+                    !allRecipientsInBatch.some(r => r.id === student.id)
+                );
+                
+                if(results.length === 0) {
+                     searchResultsContainer.innerHTML = '<p class="text-center text-gray-500 p-4">No matching recipients found.</p>';
+                     return;
+                }
+
+                results.forEach(student => {
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'p-3 rounded-lg cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-600';
+                    resultItem.dataset.studentId = student.id;
+                    resultItem.innerHTML = `
+                        <p class="font-semibold text-gray-800 dark:text-white">${student.name}</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">${student.id} - ${student.class}</p>
+                    `;
+                    searchResultsContainer.appendChild(resultItem);
+                });
+            });
+
+            searchResultsContainer.addEventListener('click', (e) => {
+                const clickedItem = e.target.closest('[data-student-id]');
+                if (!clickedItem) return;
+
+                Array.from(searchResultsContainer.children).forEach(child => child.classList.remove('bg-primary/20', 'dark:bg-primary/30'));
+                clickedItem.classList.add('bg-primary/20', 'dark:bg-primary/30');
+                
+                const studentId = clickedItem.dataset.studentId;
+                selectedStudent = masterRecipientList.find(s => s.id === studentId);
+                confirmAddButton.disabled = false;
+            });
+
+            confirmAddButton.addEventListener('click', () => {
+                if (!selectedStudent) return;
+                allRecipientsInBatch.push(selectedStudent);
+                renderTable();
+                hideModal(addModal);
+            });
+
+
+            // --- Main Table Rendering & Filtering ---
+            function displayPage(page, items) {
+                tableBody.innerHTML = '';
+                page--; 
+
+                const start = rowsPerPage * page;
+                const end = start + rowsPerPage;
+                const paginatedItems = items.slice(start, end);
+
+                for (const [index, item] of paginatedItems.entries()) {
+                    const row = tableBody.insertRow();
+                    row.className = 'data-row bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600';
+                    row.dataset.name = item.name;
+                    row.innerHTML = `
+                        <td class="px-6 py-4">${start + index + 1}</td>
+                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <div class="font-bold">${item.name}</div>
+                            <div class="font-normal text-sm text-gray-500 dark:text-gray-400 md:hidden">
+                                <span>${item.id}</span> · <span>${item.class}</span>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 hidden md:table-cell">${item.id}</td>
+                        <td class="px-6 py-4 hidden lg:table-cell">${item.class}</td>
+                        <td class="px-6 py-4 border-l dark:border-gray-700 hidden print:table-cell" contenteditable="true"></td>
+                        <td class="px-6 py-4 text-right no-print"><button class="delete-btn text-red-500 hover:text-red-700 dark:hover:text-red-400" title="Delete Recipient"><i class="ri-delete-bin-line"></i></button></td>
+                    `;
+                }
+                
+                tableBody.querySelectorAll('.delete-btn').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        itemToDelete = e.target.closest('tr');
+                        const recipientName = itemToDelete.dataset.name;
+                        document.getElementById('deleteModalContent').textContent = `Are you sure you want to delete recipient '${recipientName}' from this batch?`;
+                        showModal(deleteModal);
+                    });
+                });
+                
+                const endItem = Math.min(start + rowsPerPage, items.length);
+                paginationInfo.innerHTML = `Showing <span class="font-semibold text-gray-900 dark:text-white">${items.length > 0 ? start + 1 : 0}</span> to <span class="font-semibold text-gray-900 dark:text-white">${endItem}</span> of <span class="font-semibold text-gray-900 dark:text-white">${items.length}</span> Recipients`;
+            }
+
+            function setupPagination(items) {
+                paginationWrapper.innerHTML = '';
+                const pageCount = Math.ceil(items.length / rowsPerPage);
+
+                if (pageCount <= 1) {
+                    paginationNav.style.display = 'none';
+                    return;
+                }
+                paginationNav.style.display = 'flex';
+
+                const prevButton = document.createElement('li');
+                prevButton.innerHTML = `<button class="pagination-btn flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"><span class="sr-only">Previous</span><i class="ri-arrow-left-s-line"></i></button>`;
+                paginationWrapper.appendChild(prevButton);
+                prevButton.addEventListener('click', () => {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        displayPage(currentPage, items);
+                        updatePaginationButtons();
+                    }
+                });
+
+                for (let i = 1; i <= pageCount; i++) {
+                    const pageButton = document.createElement('li');
+                    pageButton.innerHTML = `<button class="pagination-btn flex items-center justify-center px-3 h-8 leading-tight" data-page="${i}">${i}</button>`;
+                    paginationWrapper.appendChild(pageButton);
+                    pageButton.addEventListener('click', () => {
+                        currentPage = i;
+                        displayPage(currentPage, items);
+                        updatePaginationButtons();
+                    });
+                }
+                
+                const nextButton = document.createElement('li');
+                nextButton.innerHTML = `<button class="pagination-btn flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"><span class="sr-only">Next</span><i class="ri-arrow-right-s-line"></i></button>`;
+                paginationWrapper.appendChild(nextButton);
+                nextButton.addEventListener('click', () => {
+                    if (currentPage < pageCount) {
+                        currentPage++;
+                        displayPage(currentPage, items);
+                        updatePaginationButtons();
+                    }
+                });
+                
+                updatePaginationButtons();
+            }
+
+            function updatePaginationButtons() {
+                const pageCount = Math.ceil(filteredRecipients.length / rowsPerPage);
+                document.querySelectorAll('.pagination-btn[data-page]').forEach(btn => {
+                    btn.className = "pagination-btn flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white";
+                    if (parseInt(btn.dataset.page) === currentPage) {
+                        btn.className = "pagination-btn z-10 flex items-center justify-center px-3 h-8 leading-tight text-white border border-primary bg-primary hover:bg-primary-dark dark:border-gray-700 dark:bg-gray-700 dark:text-white";
+                    }
+                });
+                
+                paginationWrapper.firstElementChild.querySelector('button').disabled = currentPage === 1;
+                paginationWrapper.lastElementChild.querySelector('button').disabled = currentPage === pageCount;
+            }
+
+            function renderTable() {
+                const query = searchInput.value.toLowerCase().trim();
+                filteredRecipients = allRecipientsInBatch.filter(recipient => 
+                    recipient.name.toLowerCase().includes(query) ||
+                    recipient.id.includes(query)
+                );
+                
+                currentPage = 1;
+                
+                const hasResults = filteredRecipients.length > 0;
+                if (hasResults) {
+                    dataWrapper.classList.remove('hidden');
+                    noResultsMessage.classList.add('hidden');
+                    displayPage(currentPage, filteredRecipients);
+                    setupPagination(filteredRecipients);
+                } else {
+                    dataWrapper.classList.add('hidden');
+                    noResultsMessage.classList.remove('hidden');
+                    paginationNav.classList.add('hidden');
+                }
+            }
+            
+            document.getElementById('print-button').addEventListener('click', () => {
+                window.print();
+            });
+
+            searchInput.addEventListener('input', renderTable);
+
+            // Initial Load
+            renderTable();
+        });
+    </script>
+
+</body>
+</html>

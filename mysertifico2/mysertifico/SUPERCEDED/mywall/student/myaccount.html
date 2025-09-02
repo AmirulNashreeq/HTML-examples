@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - MyWall</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/images/logos/favicon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        // Ocean Aqua & Sunset Orange Palette
+                        'primary': { 'DEFAULT': '#14B8A6', '50': '#f0fdfa', '100': '#ccfbf1', '200': '#99f6e4', '300': '#5eead4', '400': '#2dd4bf', '500': '#14b8a6', '600': '#0d9488', '700': '#0f766e', '800': '#115e59', '900': '#134E4A' },
+                        'accent': { 'DEFAULT': '#F97316', 'hover': '#EA580C' },
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .modal-panel { transition: transform 0.3s ease-out, opacity 0.3s ease-out; }
+        .modal.hidden .modal-panel { transform: scale(0.95); opacity: 0; }
+        .payment-radio:checked + label { border-color: #F97316; background-color: rgba(249, 115, 22, 0.1); }
+        #toast-notification.show { transform: translateY(0); opacity: 1; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-primary-900 to-primary text-white flex flex-col min-h-screen">
+
+    <!-- Header & Navbar -->
+    <header class="bg-white shadow-md text-gray-800 fixed w-full top-0 z-50">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex items-center justify-between">
+                <a href="mywall.html" class="flex items-center gap-2">
+                    <img src="../../assets/images/logos/logo.png" alt="MyWall Logo" class="h-10 w-10 rounded-full">
+                    <span class="font-poppins font-bold text-2xl text-primary">MyWall</span>
+                </a>
+                <div class="relative">
+                    <button id="profile-menu-button" class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary hover:border-primary-600 transition-all">
+                        <img src="../../assets/images/users/nabil.png" onerror="this.onerror=null;this.src='https://placehold.co/40x40/134E4A/FFFFFF?text=A';" alt="User Avatar" class="w-full h-full object-cover">
+                    </button>
+                    <div id="profile-menu" class="hidden absolute top-full right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 z-50">
+                        <a href="myprofile.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-user-line mr-3"></i>My Profile</a>
+                        <a href="myaccount.html" class="flex items-center px-4 py-2 text-sm text-primary font-bold bg-primary-50"><i class="ri-settings-3-line mr-3"></i>My Account</a>
+                        <a href="resume.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-article-line mr-3"></i>My Resume</a>
+                        <a href="mywall.html#achievements" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-award-line mr-3"></i>My Achievements</a>
+                        <div class="border-t my-1 border-gray-200"></div>
+                        <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-logout-box-r-line mr-3"></i>Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="pt-24 pb-12 flex-grow">
+        <section class="py-16">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl md:text-5xl font-bold font-poppins text-white">My Account</h1>
+                    <p class="text-lg text-primary-200 mt-4 max-w-3xl mx-auto">Manage your plan, usage, and billing history.</p>
+                </div>
+
+                <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    
+                    <div class="lg:col-span-1 space-y-8">
+                        <div class="bg-white/10 backdrop-blur-sm rounded-2xl shadow-lg p-6">
+                            <h3 class="text-xl font-bold text-primary-300 mb-4">Current Plan</h3>
+                            <div id="current-plan-summary"></div>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-sm rounded-2xl shadow-lg p-6">
+                            <h3 class="text-xl font-bold text-primary-300 mb-4">Usage & Top-ups</h3>
+                            <div id="usage-summary"></div>
+                            <div class="mt-4 pt-4 border-t border-primary-800/50">
+                                <p class="text-primary-200 mb-2">Need more uploads?</p>
+                                <button id="top-up-button" class="bg-accent hover:bg-accent-hover text-white font-semibold py-2 px-5 rounded-full transition-colors">Top-up Now</button>
+                            </div>
+                        </div>
+                        <div class="bg-red-900/20 border border-red-500/50 rounded-2xl shadow-lg p-6">
+                            <h3 class="text-xl font-bold text-red-300 mb-2">Danger Zone</h3>
+                            <p class="text-red-200/80 text-sm mb-4">If you cancel, your subscription will remain active until the end of the current billing period.</p>
+                            <button id="cancel-subscription-button" class="w-full md:w-auto px-6 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors">Cancel Subscription</button>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-2 space-y-8">
+                         <div class="bg-white/10 backdrop-blur-sm rounded-2xl shadow-lg p-6">
+                            <h3 class="text-2xl font-bold text-white mb-6">Change Your Plan</h3>
+                            <div id="plan-options" class="space-y-4"></div>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-sm rounded-2xl shadow-lg p-6">
+                            <h3 class="text-2xl font-bold text-white mb-6">Billing History</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-left">
+                                    <thead class="text-xs text-primary-200 uppercase border-b border-primary-700/50">
+                                        <tr>
+                                            <th scope="col" class="px-4 py-3">Date</th>
+                                            <th scope="col" class="px-4 py-3">Description</th>
+                                            <th scope="col" class="px-4 py-3">Amount</th>
+                                            <th scope="col" class="px-4 py-3">Invoice</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="billing-history-body"></tbody>
+                                </table>
+                            </div>
+                            <nav id="billing-pagination" class="flex justify-between items-center pt-4" aria-label="Table navigation"></nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modals will be injected here by JS -->
+    <div id="toast-notification" class="hidden fixed bottom-10 right-10 bg-accent text-white px-6 py-3 rounded-full shadow-lg transform transition-all duration-300 translate-y-20 opacity-0 flex items-center gap-2 z-[90]">
+        <i id="toast-icon" class="ri-checkbox-circle-line"></i>
+        <span id="toast-message"></span>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const body = document.body;
+            
+            // --- MODAL TEMPLATES ---
+            const modalTemplates = {
+                confirmation: `
+                    <div class="p-6 text-center">
+                        <div id="modal-icon" class="text-5xl text-primary-400 mb-4"><i class="ri-question-line"></i></div>
+                        <h3 id="modal-title" class="text-lg font-bold text-white">Confirm Action</h3>
+                        <p id="modal-text" class="text-sm text-primary-200 mt-2">Are you sure?</p>
+                    </div>
+                    <div class="p-4 flex justify-center items-center gap-4 border-t border-primary-800/50 bg-white/5">
+                        <button type="button" class="modal-close-button px-6 py-2 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600">Cancel</button>
+                        <button type="button" id="confirm-change-button" class="px-6 py-2 bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover">Yes, Confirm</button>
+                    </div>`,
+                cancel: `
+                    <div class="p-6 text-center">
+                        <div class="text-5xl text-red-400 mb-4"><i class="ri-error-warning-line"></i></div>
+                        <h3 class="text-lg font-bold text-white">Are you sure you want to cancel?</h3>
+                        <p class="text-sm text-primary-200 mt-2">Your plan will be active until the end of the current billing period. This action cannot be undone.</p>
+                    </div>
+                    <div class="p-4 flex justify-center items-center gap-4 border-t border-primary-800/50 bg-white/5">
+                        <button type="button" class="modal-close-button px-6 py-2 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600">Nevermind</button>
+                        <button type="button" id="confirm-cancel-button" class="px-6 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700">Yes, Cancel</button>
+                    </div>`,
+                topUp: `
+                    <form id="top-up-form">
+                        <div class="flex justify-between items-center p-4 border-b border-primary-800/50">
+                            <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="ri-rocket-line"></i> Top-up Uploads</h3>
+                            <button type="button" class="modal-close-button text-primary-200 hover:text-white text-2xl"><i class="ri-close-line"></i></button>
+                        </div>
+                        <div class="p-6 flex-grow overflow-auto space-y-4">
+                            <p class="text-primary-200">Select a package to add more external certificate uploads to your account.</p>
+                            <div class="space-y-3">
+                                <label class="flex items-center p-4 bg-white/10 rounded-lg border-2 border-transparent has-[:checked]:border-accent transition-all cursor-pointer">
+                                    <input type="radio" name="topup-option" value="10" data-price="5.00" data-label="10 Extra Uploads" class="h-5 w-5 text-accent bg-transparent border-primary-300 focus:ring-accent">
+                                    <span class="ml-4 flex flex-col"><span class="font-bold text-white">10 Extra Uploads</span><span class="text-sm text-primary-200">RM 5.00</span></span>
+                                </label>
+                                <label class="flex items-center p-4 bg-white/10 rounded-lg border-2 border-transparent has-[:checked]:border-accent transition-all cursor-pointer">
+                                    <input type="radio" name="topup-option" value="25" data-price="10.00" data-label="25 Extra Uploads" checked class="h-5 w-5 text-accent bg-transparent border-primary-300 focus:ring-accent">
+                                    <span class="ml-4 flex flex-col"><span class="font-bold text-white">25 Extra Uploads</span><span class="text-sm text-primary-200">RM 10.00</span></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="p-4 flex justify-end items-center gap-4 border-t border-primary-800/50">
+                            <button type="button" class="modal-close-button px-6 py-2 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600">Cancel</button>
+                            <button type="submit" class="px-6 py-2 bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover">Check Out</button>
+                        </div>
+                    </form>`,
+                paymentCheckout: `
+                    <form id="payment-checkout-form">
+                        <div class="flex justify-between items-center p-4 border-b border-primary-800/50">
+                            <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="ri-secure-payment-line"></i> Checkout</h3>
+                            <button type="button" class="modal-close-button text-primary-200 hover:text-white text-2xl"><i class="ri-close-line"></i></button>
+                        </div>
+                        <div class="p-6 flex-grow overflow-auto space-y-6">
+                            <div>
+                                <h4 class="text-md font-bold text-primary-200 mb-2">ORDER SUMMARY</h4>
+                                <div class="p-4 bg-white/10 rounded-lg space-y-2 text-sm">
+                                    <div class="flex justify-between items-center"><span class="text-primary-200">Item:</span><span id="checkout-item-label" class="font-semibold text-white"></span></div>
+                                    <div class="flex justify-between items-center"><span class="text-primary-200">Sub Total:</span><span id="checkout-subtotal" class="font-semibold text-white"></span></div>
+                                    <div class="flex justify-between items-center"><span class="text-primary-200">SST (8%):</span><span id="checkout-sst" class="font-semibold text-white"></span></div>
+                                    <div class="border-t border-primary-700/50 my-2"></div>
+                                    <div class="flex justify-between items-center text-lg"><span class="font-bold text-white">Grand Total:</span><span id="checkout-grand-total" class="font-bold text-white"></span></div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-md font-bold text-primary-200 mb-2">SELECT PAYMENT METHOD</h4>
+                                <div class="space-y-3">
+                                    <input type="radio" name="payment-method" id="pay-card" value="card" class="payment-radio hidden"><label for="pay-card" class="flex items-center p-4 bg-white/5 rounded-lg border-2 border-transparent transition-all cursor-pointer"><i class="ri-bank-card-line text-2xl text-primary-200"></i><span class="ml-4 font-bold text-white">Credit / Debit Card</span></label>
+                                    <input type="radio" name="payment-method" id="pay-fpx" value="fpx" class="payment-radio hidden" checked><label for="pay-fpx" class="flex items-center p-4 bg-white/5 rounded-lg border-2 border-transparent transition-all cursor-pointer"><i class="ri-bank-line text-2xl text-primary-200"></i><span class="ml-4 font-bold text-white">Online Banking (FPX)</span></label>
+                                    <input type="radio" name="payment-method" id="pay-ewallet" value="ewallet" class="payment-radio hidden"><label for="pay-ewallet" class="flex items-center p-4 bg-white/5 rounded-lg border-2 border-transparent transition-all cursor-pointer"><i class="ri-qr-code-line text-2xl text-primary-200"></i><span class="ml-4 font-bold text-white">E-Wallet (TNG, DuitNow QR)</span></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-4 flex justify-end items-center gap-4 border-t border-primary-800/50">
+                            <button type="button" id="payment-back-button" class="px-6 py-2 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600">Back</button>
+                            <button type="submit" class="px-8 py-2 bg-accent text-white font-bold rounded-lg hover:bg-accent-hover flex items-center gap-2"><span>Proceed to Payment</span><i class="ri-arrow-right-line"></i></button>
+                        </div>
+                    </form>`,
+                updatePayment: `
+                    <form id="payment-form">
+                        <div class="flex justify-between items-center p-4 border-b border-primary-800/50">
+                            <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="ri-bank-card-line"></i> Update Payment Method</h3>
+                            <button type="button" class="modal-close-button text-primary-200 hover:text-white text-2xl"><i class="ri-close-line"></i></button>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <div class="relative">
+                                <label for="card-number" class="block text-sm font-medium text-primary-200 mb-1">Card Number</label>
+                                <input type="text" id="card-number" required class="w-full bg-white/10 border border-primary-700 rounded-lg pl-3 pr-12 py-2 text-white focus:ring-accent focus:border-accent" placeholder="•••• •••• •••• ••••">
+                                <div id="card-type-icon" class="absolute inset-y-0 right-0 top-7 pr-3 flex items-center pointer-events-none text-2xl"></div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div><label for="expiry-date" class="block text-sm font-medium text-primary-200 mb-1">Expiry Date</label><input type="text" id="expiry-date" required class="w-full bg-white/10 border border-primary-700 rounded-lg px-3 py-2 text-white focus:ring-accent focus:border-accent" placeholder="MM / YY"></div>
+                                <div><label for="cvc" class="block text-sm font-medium text-primary-200 mb-1">CVC</label><input type="text" id="cvc" required class="w-full bg-white/10 border border-primary-700 rounded-lg px-3 py-2 text-white focus:ring-accent focus:border-accent" placeholder="•••"></div>
+                            </div>
+                        </div>
+                        <div class="p-4 flex justify-end items-center gap-4 border-t border-primary-800/50">
+                            <button type="button" class="modal-close-button px-6 py-2 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600">Cancel</button>
+                            <button type="submit" class="px-6 py-2 bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover">Save Changes</button>
+                        </div>
+                    </form>`,
+                fpx: `
+                    <div class="flex justify-between items-center p-4 border-b border-primary-800/50">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="ri-bank-line"></i> Select Bank (FPX)</h3>
+                        <button type="button" class="modal-close-button text-primary-200 hover:text-white text-2xl"><i class="ri-close-line"></i></button>
+                    </div>
+                    <div class="p-6 flex-grow overflow-auto">
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                            <button class="bank-button bg-white/10 rounded-lg flex flex-col items-center justify-center hover:bg-white/20 transition-colors aspect-[1.5/1] p-2 overflow-hidden"><img src="https://upload.wikimedia.org/wikipedia/commons/c/c2/Maybank_logo.svg" alt="Maybank" class="h-8 object-contain"><span class="text-xs text-white mt-2">Maybank</span></button>
+                            <button class="bank-button bg-white/10 rounded-lg flex flex-col items-center justify-center hover:bg-white/20 transition-colors aspect-[1.5/1] p-2 overflow-hidden"><img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/CIMB_Group_logo.svg" alt="CIMB" class="h-6 object-contain"><span class="text-xs text-white mt-2">CIMB Bank</span></button>
+                            <button class="bank-button bg-white/10 rounded-lg flex flex-col items-center justify-center hover:bg-white/20 transition-colors aspect-[1.5/1] p-2 overflow-hidden"><img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Public_Bank_Berhad_logo.svg" alt="Public Bank" class="h-8 object-contain"><span class="text-xs text-white mt-2">Public Bank</span></button>
+                            <button class="bank-button bg-white/10 rounded-lg flex flex-col items-center justify-center hover:bg-white/20 transition-colors aspect-[1.5/1] p-2 overflow-hidden"><img src="https://upload.wikimedia.org/wikipedia/commons/3/36/RHB_Bank_logo.svg" alt="RHB Bank" class="h-6 object-contain"><span class="text-xs text-white mt-2">RHB Bank</span></button>
+                        </div>
+                    </div>
+                    <div class="p-4 flex justify-end items-center gap-4 border-t border-primary-800/50">
+                        <button type="button" class="payment-back-button px-6 py-2 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600">Back</button>
+                    </div>`,
+                qrCode: `
+                    <div class="flex justify-between items-center p-4 border-b border-primary-800/50">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="ri-qr-scan-2-line"></i> Scan to Pay</h3>
+                        <button type="button" class="modal-close-button text-primary-200 hover:text-white text-2xl"><i class="ri-close-line"></i></button>
+                    </div>
+                    <div class="p-6 flex-grow overflow-auto flex flex-col items-center justify-center text-center">
+                        <p class="text-primary-200 mb-2">Scan the DuitNow QR code below using your e-wallet or banking app.</p>
+                        <div class="bg-white p-4 rounded-lg"><img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://example.com/payment" alt="DuitNow QR Code"></div>
+                        <p class="text-2xl font-bold text-white mt-4">Amount: <span id="qr-amount"></span></p>
+                        <p class="text-xs text-primary-300 mt-2">(This is a dummy QR code for demonstration)</p>
+                    </div>
+                    <div class="p-4 flex justify-center items-center gap-4 border-t border-primary-800/50">
+                        <button type="button" class="modal-close-button px-8 py-2 bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover">Done</button>
+                    </div>`
+            };
+
+            // --- Modal Management ---
+            const modals = {};
+            function createModal(id, content, sizeClass = 'max-w-md') {
+                const modalWrapper = document.createElement('div');
+                modalWrapper.id = id;
+                modalWrapper.className = 'modal hidden fixed inset-0 z-[60] flex items-center justify-center p-4';
+                modalWrapper.innerHTML = `<div class="modal-backdrop absolute inset-0 bg-black/70 backdrop-blur-sm"></div><div class="modal-panel relative bg-white/10 border border-primary-500/50 rounded-2xl shadow-2xl w-full ${sizeClass} max-h-[90vh] flex flex-col scale-95 opacity-0">${content}</div>`;
+                document.body.appendChild(modalWrapper);
+                return setupModal(id);
+            }
+
+            function setupModal(modalId) {
+                const modal = document.getElementById(modalId);
+                if (!modal) return null;
+                const closeButtons = modal.querySelectorAll('.modal-close-button');
+                const backdrop = modal.querySelector('.modal-backdrop');
+                const panel = modal.querySelector('.modal-panel');
+                const open = () => {
+                    modal.classList.remove('hidden');
+                    body.style.overflow = 'hidden';
+                    setTimeout(() => panel.classList.remove('scale-95', 'opacity-0'), 10);
+                };
+                const close = () => {
+                    panel.classList.add('scale-95', 'opacity-0');
+                    setTimeout(() => {
+                        modal.classList.add('hidden');
+                        if (!document.querySelector('.modal:not(.hidden)')) body.style.overflow = '';
+                    }, 300);
+                };
+                const modalInstance = { open, close, modal, panel };
+                closeButtons.forEach(btn => btn.addEventListener('click', close));
+                if (backdrop) backdrop.addEventListener('click', close);
+                modals[modalId] = modalInstance;
+                return modalInstance;
+            }
+
+            const confirmationModal = createModal('confirmation-modal', modalTemplates.confirmation);
+            const cancelModal = createModal('cancel-modal', modalTemplates.cancel);
+            const paymentModal = createModal('update-payment-modal', modalTemplates.updatePayment);
+            const topUpModal = createModal('top-up-modal', modalTemplates.topUp);
+            const paymentCheckoutModal = createModal('payment-checkout-modal', modalTemplates.paymentCheckout, 'max-w-lg');
+            const cardPaymentModal = createModal('card-payment-modal', modalTemplates.cardPayment);
+            const fpxModal = createModal('fpx-modal', modalTemplates.fpx, 'max-w-2xl');
+            const qrCodeModal = createModal('qr-code-modal', modalTemplates.qrCode, 'max-w-sm');
+            
+            // --- Event Listeners ---
+            document.getElementById('cancel-subscription-button')?.addEventListener('click', () => cancelModal?.open());
+            document.getElementById('update-payment-button')?.addEventListener('click', () => paymentModal?.open());
+            document.getElementById('top-up-button')?.addEventListener('click', () => topUpModal?.open());
+            
+            document.getElementById('confirm-cancel-button')?.addEventListener('click', () => {
+                alert('Subscription cancelled successfully. This is a demo.');
+                cancelModal?.close();
+            });
+
+            paymentModal.modal.querySelector('form')?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('Payment method updated successfully. This is a demo.');
+                paymentModal.close();
+            });
+
+            topUpModal.modal.querySelector('form')?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const selectedOption = topUpModal.modal.querySelector('input[name="topup-option"]:checked');
+                if(selectedOption) {
+                    const price = parseFloat(selectedOption.getAttribute('data-price'));
+                    const label = selectedOption.getAttribute('data-label');
+                    const sstRate = 0.08;
+                    const subTotal = price;
+                    const sstAmount = subTotal * sstRate;
+                    const grandTotal = subTotal + sstAmount;
+                    const formatCurrency = (amount) => `RM ${amount.toFixed(2)}`;
+
+                    paymentCheckoutModal.modal.querySelector('#checkout-item-label').textContent = label;
+                    paymentCheckoutModal.modal.querySelector('#checkout-subtotal').textContent = formatCurrency(subTotal);
+                    paymentCheckoutModal.modal.querySelector('#checkout-sst').textContent = formatCurrency(sstAmount);
+                    paymentCheckoutModal.modal.querySelector('#checkout-grand-total').textContent = formatCurrency(grandTotal);
+                    
+                    topUpModal.close();
+                    setTimeout(() => paymentCheckoutModal.open(), 350);
+                }
+            });
+
+            paymentCheckoutModal.modal.querySelector('form')?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const selectedPayment = paymentCheckoutModal.modal.querySelector('input[name="payment-method"]:checked').value;
+                const grandTotal = paymentCheckoutModal.modal.querySelector('#checkout-grand-total').textContent;
+
+                paymentCheckoutModal.close();
+
+                setTimeout(() => {
+                    if (selectedPayment === 'ewallet') {
+                        qrCodeModal.modal.querySelector('#qr-amount').textContent = grandTotal;
+                        qrCodeModal.open();
+                    } else if (selectedPayment === 'card') {
+                        cardPaymentModal.open();
+                    } else if (selectedPayment === 'fpx') {
+                        fpxModal.open();
+                    }
+                }, 350);
+            });
+
+            paymentCheckoutModal.modal.querySelector('#payment-back-button')?.addEventListener('click', () => {
+                paymentCheckoutModal.close();
+                setTimeout(() => topUpModal.open(), 350);
+            });
+            
+            cardPaymentModal.modal.querySelectorAll('.payment-back-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    cardPaymentModal.close();
+                    setTimeout(() => paymentCheckoutModal.open(), 350);
+                });
+            });
+
+            fpxModal.modal.querySelectorAll('.payment-back-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    fpxModal.close();
+                    setTimeout(() => paymentCheckoutModal.open(), 350);
+                });
+            });
+
+            cardPaymentModal.modal.querySelector('form')?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('Card payment successful! (This is a demo)');
+                cardPaymentModal.close();
+            });
+
+            fpxModal.modal.querySelectorAll('.bank-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const bankName = button.querySelector('img').alt;
+                    alert(`Redirecting to ${bankName} for FPX payment... (This is a demo)`);
+                    fpxModal.close();
+                });
+            });
+            
+            // --- Subscription Plan Logic ---
+            const plans = [
+                { id: 'basic', name: 'Basic', price: 'Free', priceValue: 0, level: 0, uploads: 10, description: 'For casual users.' },
+                { id: 'standard', name: 'Standard', price: 'RM5', priceSuffix: '/year', priceValue: 5, level: 1, uploads: 20, description: 'For frequent users.' },
+                { id: 'premium', name: 'Premium', price: 'RM10', priceSuffix: '/year', priceValue: 10, level: 2, uploads: 50, description: 'For power users.' },
+                { id: 'pro', name: 'Pro', price: 'RM50', priceSuffix: '/year', priceValue: 50, level: 3, uploads: 150, description: 'For professionals.' }
+            ];
+            let currentPlanId = 'premium';
+            let targetPlanId = null;
+            let currentUsage = 18; // Dummy data
+
+            const planOptionsContainer = document.getElementById('plan-options');
+            const summaryContainer = document.getElementById('current-plan-summary');
+            const usageContainer = document.getElementById('usage-summary');
+
+            function renderPlans() {
+                planOptionsContainer.innerHTML = '';
+                const currentPlan = plans.find(p => p.id === currentPlanId);
+
+                plans.forEach(plan => {
+                    const isCurrent = plan.id === currentPlanId;
+                    let buttonHtml = '';
+
+                    if (isCurrent) {
+                        buttonHtml = `<button class="mt-2 px-6 py-2 bg-primary text-white font-semibold rounded-lg cursor-not-allowed opacity-50">Selected</button>`;
+                    } else if (plan.level < currentPlan.level) {
+                        buttonHtml = `<button data-plan-id="${plan.id}" class="plan-change-button mt-2 px-6 py-2 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600 transition-colors">Downgrade</button>`;
+                    } else {
+                        buttonHtml = `<button data-plan-id="${plan.id}" class="plan-change-button mt-2 px-6 py-2 bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover transition-colors">Upgrade</button>`;
+                    }
+                    
+                    const planCard = `
+                        <div id="plan-card-${plan.id}" class="plan-card border-2 ${isCurrent ? 'border-accent' : 'border-primary-700/50'} rounded-lg p-5 flex flex-col md:flex-row justify-between items-center relative transition-all">
+                            ${isCurrent ? '<span class="absolute -top-3 bg-accent text-white px-3 py-1 text-xs font-bold rounded-full">Current Plan</span>' : ''}
+                            <div>
+                                <h4 class="text-xl font-bold text-white">${plan.name}</h4>
+                                <p class="text-primary-200">${plan.description} Includes ${plan.uploads} uploads.</p>
+                            </div>
+                            <div class="text-center md:text-right mt-4 md:mt-0">
+                                <p class="text-2xl font-bold text-white">${plan.price}<span class="text-base text-primary-300">${plan.priceSuffix || ''}</span></p>
+                                ${buttonHtml}
+                            </div>
+                        </div>
+                    `;
+                    planOptionsContainer.innerHTML += planCard;
+                });
+
+                attachPlanButtonListeners();
+            }
+
+            function updateSummary() {
+                const plan = plans.find(p => p.id === currentPlanId);
+                summaryContainer.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-3xl font-poppins font-bold text-white">${plan.name}</h2>
+                        <span class="bg-green-500/20 text-green-300 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1"><i class="ri-checkbox-circle-fill"></i>Active</span>
+                    </div>
+                    <p class="text-3xl font-bold text-white mt-4">${plan.price}<span class="text-lg text-primary-300">${plan.priceSuffix || ''}</span></p>
+                    <p class="text-sm text-primary-200 mt-2">Includes ${plan.uploads} certificate uploads.</p>
+                    <p class="text-sm text-primary-300 mt-2">Your plan renews on July 15, 2026.</p>
+                `;
+                
+                const totalUploads = plan.uploads;
+                const percentage = (currentUsage / totalUploads) * 100;
+                
+                usageContainer.innerHTML = `
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-base font-medium text-primary-200">External Certificate Uploads</span>
+                        <span class="text-sm font-medium text-white">${currentUsage} / ${totalUploads}</span>
+                    </div>
+                    <div class="w-full bg-primary-800/50 rounded-full h-4">
+                        <div class="bg-accent h-4 rounded-full" style="width: ${percentage}%"></div>
+                    </div>
+                    <p class="text-xs text-primary-300 mt-2">You have ${totalUploads - currentUsage} uploads remaining.</p>
+                `;
+            }
+
+            function attachPlanButtonListeners() {
+                document.querySelectorAll('.plan-change-button').forEach(button => {
+                    button.addEventListener('click', function() {
+                        targetPlanId = this.dataset.planId;
+                        const targetPlan = plans.find(p => p.id === targetPlanId);
+                        confirmationModal.modal.querySelector('#modal-title').textContent = `Confirm Plan Change`;
+                        confirmationModal.modal.querySelector('#modal-text').textContent = `Are you sure you want to switch to the ${targetPlan.name} plan?`;
+                        confirmationModal.open();
+                    });
+                });
+            }
+
+            confirmationModal.modal.querySelector('#confirm-change-button')?.addEventListener('click', () => {
+                currentPlanId = targetPlanId;
+                alert(`Plan changed to ${plans.find(p => p.id === currentPlanId).name}! This is a demo.`);
+                confirmationModal.close();
+                renderPlans();
+                updateSummary();
+            });
+
+            // --- Billing History Pagination ---
+            const billingData = [
+                { date: 'July 15, 2025', desc: 'Premium Plan - Annual', amount: 'RM10.00' },
+                { date: 'June 10, 2025', desc: 'Top-up: 25 Uploads', amount: 'RM10.00' },
+                { date: 'May 5, 2025', desc: 'Top-up: 10 Uploads', amount: 'RM5.00' },
+                { date: 'July 15, 2024', desc: 'Premium Plan - Annual', amount: 'RM10.00' },
+                { date: 'March 2, 2024', desc: 'Top-up: 10 Uploads', amount: 'RM5.00' },
+                { date: 'July 15, 2023', desc: 'Standard Plan - Annual', amount: 'RM5.00' },
+            ];
+            let currentPage = 1;
+            const rowsPerPage = 4;
+
+            function renderBillingHistory() {
+                const tbody = document.getElementById('billing-history-body');
+                tbody.innerHTML = '';
+                const startIndex = (currentPage - 1) * rowsPerPage;
+                const endIndex = startIndex + rowsPerPage;
+                const paginatedItems = billingData.slice(startIndex, endIndex);
+
+                paginatedItems.forEach(item => {
+                    const row = `
+                        <tr class="border-b border-primary-800/50 hover:bg-white/5">
+                            <td class="px-4 py-3 font-medium text-white whitespace-nowrap">${item.date}</td>
+                            <td class="px-4 py-3">${item.desc}</td>
+                            <td class="px-4 py-3">${item.amount}</td>
+                            <td class="px-4 py-3"><a href="#" class="text-accent hover:text-accent-hover font-medium">Invoice <i class="ri-download-2-line"></i></a></td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                });
+                renderPaginationControls();
+            }
+
+            function renderPaginationControls() {
+                const nav = document.getElementById('billing-pagination');
+                const pageCount = Math.ceil(billingData.length / rowsPerPage);
+                nav.innerHTML = `
+                    <span class="text-sm font-normal text-primary-300">
+                        Showing <span class="font-semibold text-white">${(currentPage - 1) * rowsPerPage + 1}-${Math.min(currentPage * rowsPerPage, billingData.length)}</span> of <span class="font-semibold text-white">${billingData.length}</span>
+                    </span>
+                    <div class="inline-flex items-center -space-x-px">
+                        <button id="prev-page" class="px-3 h-8 ms-0 leading-tight text-primary-300 bg-white/10 border border-primary-700 rounded-s-lg hover:bg-white/20 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed">
+                            Prev
+                        </button>
+                        <button id="next-page" class="px-3 h-8 leading-tight text-primary-300 bg-white/10 border border-primary-700 rounded-e-lg hover:bg-white/20 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed">
+                            Next
+                        </button>
+                    </div>
+                `;
+                
+                const prevButton = document.getElementById('prev-page');
+                const nextButton = document.getElementById('next-page');
+
+                prevButton.disabled = currentPage === 1;
+                nextButton.disabled = currentPage === pageCount;
+
+                prevButton.addEventListener('click', () => {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        renderBillingHistory();
+                    }
+                });
+                nextButton.addEventListener('click', () => {
+                    if (currentPage < pageCount) {
+                        currentPage++;
+                        renderBillingHistory();
+                    }
+                });
+            }
+
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                   const visibleModals = document.querySelectorAll('.modal:not(.hidden)');
+                   if (visibleModals.length > 0) {
+                       const topModalId = visibleModals[visibleModals.length - 1].id;
+                       if (modals[topModalId]) modals[topModalId].close();
+                   }
+                }
+            });
+
+            // Initial render
+            renderPlans();
+            updateSummary();
+            renderBillingHistory();
+        });
+    </script>
+</body>
+</html>

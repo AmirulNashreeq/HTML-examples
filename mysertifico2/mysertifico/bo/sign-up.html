@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" class="dark"> <!-- Force dark mode for BO -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySertifico - Back Office Registration</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../src/assets/logos/favicon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#0d9488', // Teal-600
+                        'primary-dark': '#0f766e', // Teal-700
+                        'accent': '#f59e0b', // Amber-500
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-900">
+
+    <div class="flex flex-col items-center justify-center min-h-screen p-4">
+        <!-- Logo -->
+        <a href="#" class="flex items-center gap-2 mb-8">
+            <img src="../src/assets/logos/logo.png" alt="Logo" class="h-10 w-10">
+            <span class="font-poppins font-bold text-2xl text-white">MySertifico</span>
+        </a>
+        
+        <div class="w-full max-w-md bg-gray-800 shadow-2xl rounded-2xl p-8">
+            <div class="text-center">
+                <h2 class="font-bold text-2xl text-white">Back Office Registration</h2>
+                <p class="text-sm font-normal text-gray-400 mb-4">For authorized personnel only.</p>
+            </div>
+
+            <!-- Success Message (visible by default for UI dev) -->
+            <div id="success-message" class="flex items-center p-4 mb-4 text-sm text-green-400 rounded-lg bg-green-900/20 border border-green-400/30" role="alert">
+              <i class="ri-check-double-line mr-3"></i>
+              <div>
+                <span class="font-medium">Registration successful!</span> Your account is pending approval by an administrator.
+              </div>
+            </div>
+
+            <form action="#" method="POST" class="space-y-5">
+                <div>
+                    <label for="admin_name" class="block text-sm font-medium text-gray-300">Full Name</label>
+                    <input type="text" id="admin_name" name="admin_name" required class="mt-1 w-full p-3 border rounded-lg bg-gray-700 border-gray-600 text-white focus:ring-primary focus:border-primary">
+                </div>
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-300">Email</label>
+                    <input type="email" id="email" name="email" required class="mt-1 w-full p-3 border rounded-lg bg-gray-700 border-gray-600 text-white focus:ring-primary focus:border-primary">
+                </div>
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-300">Password</label>
+                    <div class="relative">
+                        <input type="password" id="password" name="password" required class="mt-1 w-full p-3 border rounded-lg pr-10 bg-gray-700 border-gray-600 text-white focus:ring-primary focus:border-primary">
+                        <button type="button" class="password-toggle absolute inset-y-0 right-0 px-3 text-gray-400">
+                            <i class="ri-eye-off-line"></i>
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <label for="confirm_password" class="block text-sm font-medium text-gray-300">Confirm Password</label>
+                    <div class="relative">
+                        <input type="password" id="confirm_password" name="confirm_password" required class="mt-1 w-full p-3 border rounded-lg pr-10 bg-gray-700 border-gray-600 text-white focus:ring-primary focus:border-primary">
+                        <button type="button" class="password-toggle absolute inset-y-0 right-0 px-3 text-gray-400">
+                            <i class="ri-eye-off-line"></i>
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <label for="access_key" class="block text-sm font-medium text-gray-300">Access Key</label>
+                    <input type="text" id="access_key" name="access_key" required placeholder="Enter your invitation key" class="mt-1 w-full p-3 border rounded-lg bg-gray-700 border-gray-600 text-white focus:ring-primary focus:border-primary">
+                </div>
+                
+                <button type="submit" class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary-dark">Create Account</button>
+            </form>
+
+            <div class="mt-8 text-center text-sm text-gray-400">
+                Already have an account? <a href="sign-in.html" class="font-semibold text-primary hover:underline">Sign In</a>.
+            </div>
+        </div>
+        <p class="text-xs text-gray-600 text-center mt-6">&copy; 2025 MySertifico | Webapp Studio Sdn. Bhd.</p>
+    </div>
+
+    <!-- Script for password toggle -->
+    <script>
+        document.querySelectorAll('.password-toggle').forEach(button => {
+            button.addEventListener('click', function () {
+                const input = this.closest('.relative').querySelector('input');
+                const icon = this.querySelector('i');
+                const isPassword = input.getAttribute('type') === 'password';
+                input.setAttribute('type', isPassword ? 'text' : 'password');
+                icon.classList.toggle('ri-eye-line', isPassword);
+                icon.classList.toggle('ri-eye-off-line', !isPassword);
+            });
+        });
+    </script>
+</body>
+</html>

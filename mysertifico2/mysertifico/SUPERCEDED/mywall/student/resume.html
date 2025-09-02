@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Resume - MyWall</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/images/logos/favicon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        // Ocean Aqua & Sunset Orange Palette
+                        'primary': {
+                            'DEFAULT': '#14B8A6',       // Ocean Aqua (Teal-500)
+                            '50': '#f0fdfa',
+                            '100': '#ccfbf1',
+                            '200': '#99f6e4',
+                            '300': '#5eead4',
+                            '400': '#2dd4bf',
+                            '500': '#14b8a6',
+                            '600': '#0d9488',
+                            '700': '#0f766e',
+                            '800': '#115e59',
+                            '900': '#134E4A',    // Dark Aqua (Teal-900)
+                        },
+                        'accent': {
+                            'DEFAULT': '#F97316',        // Sunset Orange (Orange-500)
+                            'hover': '#EA580C',  // Warm Orange for hover (Orange-600)
+                        },
+                        'dark-bg': '#134E4A',       // Very Dark Aqua for footer (Teal-900)
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @media print {
+            body, html {
+                margin: 0;
+                padding: 0;
+                background-color: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .no-print {
+                display: none !important;
+            }
+            main {
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
+            }
+            .print-container {
+                box-shadow: none !important;
+                margin: 0 !important;
+                padding: 1.5cm !important; /* Standard A4 margin */
+                border: none !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                border-radius: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-primary-900 to-primary text-gray-800">
+
+    <!-- Header & Navbar (Hidden on Print) -->
+    <header class="bg-white shadow-md text-gray-800 fixed w-full top-0 z-50 no-print">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <a href="mywall.html" class="flex items-center gap-2">
+                    <img src="../../assets/images/logos/logo.png" alt="MyWall Logo" class="h-10 w-10 rounded-full">
+                    <span class="font-poppins font-bold text-2xl text-primary">MyWall</span>
+                </a>
+
+                <!-- Profile Icon & Dropdown -->
+                <div class="relative">
+                    <button id="profile-menu-button" class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary hover:border-primary-600 transition-all">
+                        <img src="../../assets/images/users/nabil.png" 
+                             onerror="this.onerror=null;this.src='https://placehold.co/40x40/134E4A/FFFFFF?text=A';"
+                             alt="User Avatar" class="w-full h-full object-cover">
+                    </button>
+                    <!-- Dropdown Menu -->
+                    <div id="profile-menu" class="hidden absolute top-full right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 z-50">
+                        <a href="myprofile.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-user-line mr-3"></i>My Profile</a>
+                        <a href="myaccount.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-settings-3-line mr-3"></i>My Account</a>
+                        <a href="resume.html" class="flex items-center px-4 py-2 text-sm text-primary font-bold bg-primary-50"><i class="ri-article-line mr-3"></i>My Resume</a>
+                        <a href="mywall.html#achievements" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-award-line mr-3"></i>My Achievements</a>
+                        <div class="border-t my-1 border-gray-200"></div>
+                        <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-logout-box-r-line mr-3"></i>Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="pt-24 pb-12">
+        <!-- Action Bar (Hidden on Print) -->
+        <div class="container mx-auto px-6 mb-8 text-right no-print">
+            <button onclick="window.print()" class="bg-accent hover:bg-accent-hover text-white font-semibold py-2 px-5 rounded-full transition-colors flex items-center gap-2 ml-auto">
+                <i class="ri-printer-line"></i>
+                <span>Print or Download as PDF</span>
+            </button>
+        </div>
+
+        <!-- Resume Container -->
+        <div id="resume-content" class="print-container container mx-auto max-w-4xl bg-white rounded-lg shadow-2xl p-8 md:p-12">
+            
+            <!-- Resume Header -->
+            <header class="flex flex-col sm:flex-row items-center gap-8 border-b pb-8">
+                <img src="../../assets/images/users/nabil.png" 
+                     onerror="this.onerror=null;this.src='https://placehold.co/128x128/cccccc/333333?text=A';"
+                     alt="User Avatar" class="w-32 h-32 rounded-full border-4 border-gray-200 shadow-md flex-shrink-0">
+                <div class="text-center sm:text-left">
+                    <h1 class="text-4xl md:text-5xl font-bold font-poppins text-primary-700">Taufik Nabil bin Yusoff</h1>
+                    <p class="text-lg text-gray-600 mt-2">Pelajar kejuruteraan perisian yang bermotivasi tinggi dengan minat mendalam dalam pembangunan aplikasi dan pembelajaran mesin. Berpengalaman dalam pengurusan projek dan sentiasa mencari peluang untuk mengaplikasikan kemahiran teknikal dalam menyelesaikan cabaran dunia sebenar.</p>
+                </div>
+            </header>
+
+            <!-- Resume Body -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mt-8">
+                
+                <!-- Left Column (Contact, Skills, etc.) -->
+                <aside class="md:col-span-1 space-y-8">
+                    <div>
+                        <h2 class="text-xl font-bold text-primary-800 border-b-2 border-primary-200 pb-2 mb-4">CONTACT</h2>
+                        <div class="space-y-2 text-gray-700 text-sm">
+                            <p class="flex items-start"><i class="ri-mail-line w-4 mr-3 mt-1 text-primary-600"></i><span>taufik.nabil@email.com</span></p>
+                            <p class="flex items-start"><i class="ri-phone-line w-4 mr-3 mt-1 text-primary-600"></i><span>+60 12-345 6789</span></p>
+                            <p class="flex items-start"><i class="ri-map-pin-line w-4 mr-3 mt-1 text-primary-600"></i><span>Kuala Lumpur, Malaysia</span></p>
+                            <p class="flex items-start"><i class="ri-linkedin-box-fill w-4 mr-3 mt-1 text-primary-600"></i><a href="#" class="hover:underline">linkedin.com/in/taufiknabil</a></p>
+                            <p class="flex items-start"><i class="ri-github-fill w-4 mr-3 mt-1 text-primary-600"></i><a href="#" class="hover:underline">github.com/taufiknabil</a></p>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-primary-800 border-b-2 border-primary-200 pb-2 mb-4">SKILLS</h2>
+                        <div class="space-y-4">
+                            <div>
+                                <h3 class="font-semibold text-md text-gray-800">Teknikal</h3>
+                                <div class="flex flex-wrap gap-2 mt-2">
+                                    <span class="bg-primary-100 text-primary-800 text-xs font-medium px-3 py-1 rounded-full">Python</span>
+                                    <span class="bg-primary-100 text-primary-800 text-xs font-medium px-3 py-1 rounded-full">JavaScript</span>
+                                    <span class="bg-primary-100 text-primary-800 text-xs font-medium px-3 py-1 rounded-full">React</span>
+                                    <span class="bg-primary-100 text-primary-800 text-xs font-medium px-3 py-1 rounded-full">Node.js</span>
+                                    <span class="bg-primary-100 text-primary-800 text-xs font-medium px-3 py-1 rounded-full">SQL</span>
+                                    <span class="bg-primary-100 text-primary-800 text-xs font-medium px-3 py-1 rounded-full">AWS</span>
+                                     <span class="bg-primary-100 text-primary-800 text-xs font-medium px-3 py-1 rounded-full">Git</span>
+                                </div>
+                            </div>
+                             <div>
+                                <h3 class="font-semibold text-md text-gray-800">Pengurusan</h3>
+                                <div class="flex flex-wrap gap-2 mt-2">
+                                    <span class="bg-primary-100 text-primary-800 text-xs font-medium px-3 py-1 rounded-full">Pengurusan Projek (Agile, Scrum)</span>
+                                    <span class="bg-primary-100 text-primary-800 text-xs font-medium px-3 py-1 rounded-full">Pengurusan Masa</span>
+                                </div>
+                            </div>
+                             <div>
+                                <h3 class="font-semibold text-md text-gray-800">Komunikasi & Bahasa</h3>
+                                <div class="flex flex-wrap gap-2 mt-2">
+                                    <span class="bg-primary-100 text-primary-800 text-xs font-medium px-3 py-1 rounded-full">Pengucapan Awam</span>
+                                    <span class="bg-primary-100 text-primary-800 text-xs font-medium px-3 py-1 rounded-full">Bahasa Melayu (Natif)</span>
+                                    <span class="bg-primary-100 text-primary-800 text-xs font-medium px-3 py-1 rounded-full">Bahasa Inggeris (Profesional)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Right Column (Education & Achievements) -->
+                <div class="md:col-span-2 space-y-8">
+                    <div>
+                        <h2 class="text-xl font-bold text-primary-800 border-b-2 border-primary-200 pb-2 mb-4">PENDIDIKAN & PENCAPAIAN</h2>
+                        <div class="space-y-6">
+                            <!-- UTP -->
+                            <div>
+                                <h3 class="font-bold text-lg text-gray-800">Universiti Teknologi Petronas</h3>
+                                <p class="text-sm text-gray-600 italic">Sarjana Muda Kejuruteraan, Kejuruteraan Perisian | 2022 - Kini</p>
+                                <div class="mt-4 pl-4 space-y-4">
+                                    <div>
+                                        <h4 class="font-semibold text-md text-primary-700">Pencapaian Tahun 2024:</h4>
+                                        <ul class="list-disc list-inside space-y-1 text-gray-700 mt-2 text-sm">
+                                            <li><span class="font-semibold">Anugerah Dekan</span>, Semester 2, 2023/2024</li>
+                                            <li><span class="font-semibold">Exco Teknikal</span>, Kelab Pembangun Google UTP</li>
+                                            <li><span class="font-semibold">AJK Protokol</span>, Minggu Aluan Siswa</li>
+                                            <li>Sijil Profesional: <span class="font-semibold">Professional Scrum Master I</span> (Scrum.org)</li>
+                                            <li>Sijil Profesional: <span class="font-semibold">AWS Certified Cloud Practitioner</span> (Amazon Web Services)</li>
+                                        </ul>
+                                    </div>
+                                     <div>
+                                        <h4 class="font-semibold text-md text-primary-700">Pencapaian Tahun 2023:</h4>
+                                        <ul class="list-disc list-inside space-y-1 text-gray-700 mt-2 text-sm">
+                                            <li><span class="font-semibold">Anugerah Dekan</span>, Semester 1 & 2, 2022/2023</li>
+                                            <li><span class="font-semibold">Penyertaan</span>, Pertandingan Hackathon Kebangsaan 'Code-X'</li>
+                                            <li>Sijil Kemahiran: <span class="font-semibold">Advanced Public Speaking</span> (Toastmasters Int.)</li>
+                                            <li>Sijil Profesional: <span class="font-semibold">Project Management Professional</span> (PMI)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                             <!-- SM Sains Machang -->
+                            <div class="pt-4 border-t border-gray-200">
+                                <h3 class="font-bold text-lg text-gray-800">SM Sains Machang, Kelantan</h3>
+                                <p class="text-sm text-gray-600 italic">Sijil Pelajaran Malaysia (SPM) | 2017 - 2021</p>
+                                 <div class="mt-4 pl-4 space-y-4">
+                                    <div>
+                                        <h4 class="font-semibold text-md text-primary-700">Pencapaian Tahun 2021 (Tingkatan 5):</h4>
+                                        <ul class="list-disc list-inside space-y-1 text-gray-700 mt-2 text-sm">
+                                            <li><span class="font-semibold">Anugerah Pelajar Cemerlang SPM</span> (9A)</li>
+                                            <li><span class="font-semibold">Ketua Pengawas Sekolah</span></li>
+                                            <li><span class="font-semibold">Pengerusi</span>, Kelab Robotik</li>
+                                            <li><span class="font-semibold">Johan</span>, Pertandingan Robotik Peringkat Negeri</li>
+                                        </ul>
+                                    </div>
+                                     <div>
+                                        <h4 class="font-semibold text-md text-primary-700">Pencapaian Tahun 2020 (Tingkatan 4):</h4>
+                                        <ul class="list-disc list-inside space-y-1 text-gray-700 mt-2 text-sm">
+                                            <li><span class="font-semibold">Anugerah Tempat Pertama Dalam Tingkatan</span></li>
+                                            <li><span class="font-semibold">Penyertaan</span>, Kuiz Kimia Kebangsaan</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Main Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- Profile Menu Toggle ---
+            const profileMenuButton = document.getElementById('profile-menu-button');
+            const profileMenu = document.getElementById('profile-menu');
+
+            if (profileMenuButton) {
+                profileMenuButton.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    profileMenu.classList.toggle('hidden');
+                });
+            }
+            
+            // --- General Click Handlers ---
+            window.addEventListener('click', (event) => {
+                // Close profile dropdown
+                if (profileMenu && !profileMenu.classList.contains('hidden') && !profileMenuButton.contains(event.target)) {
+                    profileMenu.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

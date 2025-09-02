@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About MySertifico - Digital Certificate Platform</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../src/images/logos/favicon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#0d9488', // Teal-600
+                        'primary-dark': '#0f766e', // Teal-700
+                        'accent': '#f59e0b', // Amber-500
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-primary-dark to-primary text-white">
+
+    <!-- Header & Navbar -->
+    <header class="bg-white shadow-md text-gray-800 fixed w-full top-0 z-50">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <a href="home.html" class="flex items-center gap-2">
+                    <img src="../../src/images/logos/logo.png" alt="Logo" class="h-10 w-10">
+                    <span class="font-poppins font-bold text-2xl text-primary">MySertifico</span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="home.html" class="text-primary font-semibold">Home</a>
+                    <a href="about.html" class="hover:text-primary font-medium">About</a>
+                    <a href="price.html" class="hover:text-primary font-medium">Pricing</a>
+                    <a href="contact-us.html" class="hover:text-primary font-medium">Contact Us</a>
+                </div>
+                
+                <!-- Login Buttons for Desktop -->
+                 <div class="hidden md:flex items-center space-x-2">
+                    <a href="../auth/sign-in.html" class="px-4 py-2 text-sm bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark">Sign In</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="menu-toggle" class="text-gray-800 focus:outline-none">
+                        <i id="icon-open" class="ri-menu-line text-2xl"></i>
+                        <i id="icon-close" class="ri-close-line text-2xl hidden"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden mt-4">
+                <a href="home.html" class="block py-2 text-sm text-primary font-semibold">Home</a>
+                <a href="about.html" class="block py-2 text-sm hover:text-primary">About</a>
+                <a href="price.html" class="block py-2 text-sm hover:text-primary">Pricing</a>
+                <a href="contact-us.html" class="block py-2 text-sm hover:text-primary">Contact Us</a>
+                 <div class="border-t my-4"></div>
+                 <a href="../auth/sign-in.html" class="block w-full text-center py-2 text-sm bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark">Sign In</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="pt-24">
+        <!-- Page Header Section -->
+        <section class="py-16">
+            <div class="container mx-auto text-center px-6">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-3">About MySertifico</h1>
+                <p class="text-lg md:text-xl text-teal-100 max-w-3xl mx-auto">A trusted platform for simple, secure, and smart certificate management.</p>
+            </div>
+        </section>
+
+        <!-- The Problem Section -->
+        <section class="py-16">
+            <div class="container mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto">
+                    <h2 class="text-3xl font-bold text-white mb-4">The Challenge with Traditional Certificates</h2>
+                    <p class="text-teal-200 mb-12">The traditional method of managing physical certificates is outdated and comes with significant challenges for both institutions and individuals.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Problem Card 1 -->
+                    <div class="bg-white/20 backdrop-blur-sm p-6 rounded-lg text-center transform hover:-translate-y-2 transition-transform duration-300">
+                        <i class="ri-file-damage-line text-4xl text-red-400 mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-2 text-white">Lost & Damaged</h3>
+                        <p class="text-teal-200 text-sm">Physical certificates are easily lost, misplaced, or damaged by water and time, making it hard to prove achievements.</p>
+                    </div>
+                    <!-- Problem Card 2 -->
+                    <div class="bg-white/20 backdrop-blur-sm p-6 rounded-lg text-center transform hover:-translate-y-2 transition-transform duration-300">
+                        <i class="ri-timer-flash-line text-4xl text-yellow-400 mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-2 text-white">Slow Verification</h3>
+                        <p class="text-teal-200 text-sm">Verifying a certificate's authenticity is a manual, time-consuming process for schools and potential employers.</p>
+                    </div>
+                    <!-- Problem Card 3 -->
+                    <div class="bg-white/20 backdrop-blur-sm p-6 rounded-lg text-center transform hover:-translate-y-2 transition-transform duration-300">
+                        <i class="ri-shield-cross-line text-4xl text-orange-400 mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-2 text-white">Risk of Fraud</h3>
+                        <p class="text-teal-200 text-sm">Physical documents can be easily forged, undermining the credibility of the issuing institution and the holder.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Our Solution Section -->
+        <section class="py-16">
+            <div class="container mx-auto px-6">
+                <div class="text-center max-w-3xl mx-auto">
+                     <h2 class="text-3xl font-bold text-white mb-4">Our Solution: The MySertifico Ecosystem</h2>
+                    <p class="text-teal-200 mb-12">MySertifico revolutionizes certificate management with a secure, centralized, and verifiable digital platform.</p>
+                </div>
+                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Solution Card 1 -->
+                    <div class="bg-white/20 backdrop-blur-sm p-6 rounded-lg text-center transform hover:-translate-y-2 transition-transform duration-300">
+                        <i class="ri-qr-scan-2-line text-4xl text-accent mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-2 text-white">Instant Verification</h3>
+                        <p class="text-teal-200 text-sm">Every certificate comes with a unique QR code. A quick scan is all it takes for anyone to verify its authenticity instantly.</p>
+                    </div>
+                    <!-- Solution Card 2 -->
+                    <div class="bg-white/20 backdrop-blur-sm p-6 rounded-lg text-center transform hover:-translate-y-2 transition-transform duration-300">
+                        <i class="ri-lock-2-fill text-4xl text-accent mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-2 text-white">Secure & Permanent</h3>
+                        <p class="text-teal-200 text-sm">Stored securely in the cloud, digital certificates are tamper-proof and protected from loss or damage, forever.</p>
+                    </div>
+                    <!-- Solution Card 3 -->
+                    <div class="bg-white/20 backdrop-blur-sm p-6 rounded-lg text-center transform hover:-translate-y-2 transition-transform duration-300">
+                        <i class="ri-wallet-3-line text-4xl text-accent mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-2 text-white">MyWall Digital Wallet</h3>
+                        <p class="text-teal-200 text-sm">Recipients get a lifelong digital wallet to access, manage, and share all their achievements from one single place.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Vision Section -->
+        <section class="py-20">
+             <div class="container mx-auto px-6 text-center max-w-4xl">
+                 <img src="../../src/images/logos/logo.png" class="mx-auto h-28 w-28 mb-6 rounded-full bg-white/40" alt="MySertifico Icon">
+                 <h2 class="text-3xl font-bold text-white">Our Vision</h2>
+                 <p class="mt-4 text-xl text-teal-100 italic">
+                     “We envision a future where every certificate is instantly verifiable, tamper-proof, and digitally archived. Our goal is to become the national standard for academic and co-curricular certificate management across Malaysia and beyond.”
+                 </p>
+             </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white">
+        <div class="container mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+            <!-- Info -->
+            <div>
+                <h3 class="text-xl font-bold font-poppins mb-4">MySertifico</h3>
+                <p class="text-sm text-gray-400">MySertifico is a secure digital platform for managing official certificates for schools and institutions across Malaysia. Trusted. Simple. Digital.</p>
+            </div>
+            <!-- Links -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Links</h4>
+                <ul class="space-y-2 text-sm text-gray-300">
+                    <li><a href="home.html" class="hover:text-white">Home</a></li>
+                    <li><a href="about.html" class="hover:text-white">About</a></li>
+                    <li><a href="price.html" class="hover:text-white">Pricing</a></li>
+                    <li><a href="contact-us.html" class="hover:text-white">Contact Us</a></li>
+                </ul>
+            </div>
+            <!-- Policies -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Terms & Policies</h4>
+                <ul class="space-y-2 text-sm text-gray-300">
+                    <li><a href="privacy-policy.html" class="hover:text-white">Privacy Policy</a></li>
+                    <li><a href="terms-of-service.html" class="hover:text-white">Terms of Service</a></li>
+                    <li><a href="security-policy.html" class="hover:text-white">Security Policy</a></li>
+                </ul>
+            </div>
+            <!-- Social -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Follow Us</h4>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-white text-xl" title="Facebook"><i class="ri-facebook-fill"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white text-xl" title="Instagram"><i class="ri-instagram-fill"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white text-xl" title="TikTok"><i class="ri-tiktok-fill"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white text-xl" title="YouTube"><i class="ri-youtube-fill"></i></a>
+                </div>
+            </div>
+        </div>
+        <!-- Divider + Copyright -->
+        <div class="border-t border-gray-700">
+            <div class="container mx-auto px-6 py-4 text-center text-sm text-gray-400">&copy; 2025 MySertifico. All rights reserved by Webapp Studio Sdn. Bhd.</div>
+        </div>
+    </footer>
+
+    <!-- Main Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- Navbar Toggle for Mobile ---
+            const menuToggle = document.getElementById('menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const iconOpen = document.getElementById('icon-open');
+            const iconClose = document.getElementById('icon-close');
+
+            menuToggle.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                iconOpen.classList.toggle('hidden');
+                iconClose.classList.toggle('hidden');
+            });
+        });
+    </script>
+</body>
+</html>

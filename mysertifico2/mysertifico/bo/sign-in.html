@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" class="dark"> <!-- Changed to 'en' for English -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySertifico - Back Office Sign In</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../src/images/logos/favicon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#0d9488', // Teal-600
+                        'primary-dark': '#0f766e', // Teal-700
+                        'accent': '#f59e0b', // Amber-500
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-900">
+
+    <div class="flex flex-col items-center justify-center min-h-screen p-4">
+        <!-- Logo -->
+        <a href="#" class="flex items-center gap-2 mb-8">
+            <img src="../src/images/logos/logo.png" alt="Logo" class="h-10 w-10" onerror="this.onerror=null;this.src='https://placehold.co/40x40/111827/ffffff?text=M';">
+            <span class="font-poppins font-bold text-2xl text-white">MySertifico</span>
+        </a>
+        
+        <div class="w-full max-w-md bg-gray-800 shadow-2xl rounded-2xl p-8">
+            <div class="text-center">
+                <h2 class="font-bold text-2xl text-white">Back Office Sign In</h2>
+                <p class="text-sm font-normal text-gray-400 mb-4">For authorized personnel only.</p>
+            </div>
+            
+            <!-- Success Message (hidden by default) -->
+            <div id="success-message" class="hidden flex items-center p-4 mb-4 text-sm text-teal-400 rounded-lg bg-teal-900/20 border border-teal-400/30" role="alert">
+                <i class="ri-checkbox-circle-line mr-3"></i>
+                <div>
+                    <span class="font-medium">Sign In Successful!</span> Redirecting...
+                </div>
+            </div>
+
+            <!-- Error Message (hidden by default) -->
+            <div id="error-message" class="hidden flex items-center p-4 mb-4 text-sm text-red-400 rounded-lg bg-red-900/20 border border-red-400/30" role="alert">
+                <i class="ri-error-warning-line mr-3"></i>
+                <div id="error-text">
+                    <span class="font-medium">Sign In Failed!</span> Invalid credentials or unauthorized access.
+                </div>
+            </div>
+
+            <form id="login-form" class="space-y-5">
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-300">Email</label>
+                    <input type="email" id="email" name="email" required class="mt-1 w-full p-3 border rounded-lg bg-gray-700 border-gray-600 text-white focus:ring-primary focus:border-primary">
+                </div>
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-300">Password</label>
+                    <div class="relative">
+                        <input type="password" id="password" name="password" required class="mt-1 w-full p-3 border rounded-lg pr-10 bg-gray-700 border-gray-600 text-white focus:ring-primary focus:border-primary">
+                        <button type="button" class="password-toggle absolute inset-y-0 right-0 px-3 text-gray-400">
+                            <i class="ri-eye-off-line"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between items-center text-sm">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="remember_me" name="remember_me" class="h-4 w-4 text-primary focus:ring-primary border-gray-500 rounded bg-gray-700">
+                        <label for="remember_me" class="ml-2 text-gray-400">Remember me</label>
+                    </div>
+                    <a href="forgot-password.html" class="font-semibold text-primary text-xs hover:underline">Forgot Password?</a>
+                </div>
+                
+                <button type="submit" class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary-dark">Sign In</button>
+            </form>
+
+            <!-- Removed the registration link section -->
+        </div>
+        <p class="text-xs text-gray-600 text-center mt-6">&copy; 2025 MySertifico | Webapp Studio Sdn. Bhd.</p>
+    </div>
+
+    <!-- Script for form validation and password toggle -->
+    <script>
+        // Password visibility toggle
+        document.querySelectorAll('.password-toggle').forEach(button => {
+            button.addEventListener('click', function () {
+                const input = this.closest('.relative').querySelector('input');
+                const icon = this.querySelector('i');
+                const isPassword = input.getAttribute('type') === 'password';
+                input.setAttribute('type', isPassword ? 'text' : 'password');
+                icon.classList.toggle('ri-eye-line', isPassword);
+                icon.classList.toggle('ri-eye-off-line', !isPassword);
+            });
+        });
+
+        // Form validation logic
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('login-form');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const successMessage = document.getElementById('success-message');
+            const errorMessage = document.getElementById('error-message');
+            const errorText = document.getElementById('error-text');
+
+            // Dummy credentials for testing
+            const DUMMY_EMAIL = 'admin@mysertifico.com';
+            const DUMMY_PASSWORD = 'password123';
+
+            loginForm.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent actual form submission
+
+                // Hide messages before validation
+                successMessage.classList.add('hidden');
+                errorMessage.classList.add('hidden');
+
+                const email = emailInput.value.trim();
+                const password = passwordInput.value.trim();
+
+                // Validation 1: Check for empty fields
+                if (email === '' || password === '') {
+                    errorText.innerHTML = '<span class="font-medium">Error!</span> Please fill in both email and password fields.';
+                    errorMessage.classList.remove('hidden');
+                    return;
+                }
+
+                // Validation 2: Check credentials
+                if (email === DUMMY_EMAIL && password === DUMMY_PASSWORD) {
+                    // On success
+                    successMessage.classList.remove('hidden');
+                    // Redirect after a short delay
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html'; // Redirect to dashboard
+                    }, 2000);
+                } else {
+                    // On failure
+                    errorText.innerHTML = '<span class="font-medium">Sign In Failed!</span> Please check your email and password.';
+                    errorMessage.classList.remove('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySertifico - Organisation Pricing</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../src/images/logos/favicon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#0d9488', // Teal-600
+                        'primary-dark': '#0f766e', // Teal-700
+                        'accent': '#f59e0b', // Amber-500
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-primary-dark to-primary text-white">
+
+    <!-- Header & Navbar -->
+    <header class="bg-white shadow-md text-gray-800 fixed w-full top-0 z-50">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <a href="home.html" class="flex items-center gap-2">
+                    <img src="../../src/images/logos/logo.png" alt="Logo" class="h-10 w-10">
+                    <span class="font-poppins font-bold text-2xl text-primary">MySertifico</span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="home.html" class="text-primary font-semibold">Home</a>
+                    <a href="about.html" class="hover:text-primary font-medium">About</a>
+                    <a href="price.html" class="hover:text-primary font-medium">Pricing</a>
+                    <a href="contact-us.html" class="hover:text-primary font-medium">Contact Us</a>
+                </div>
+                
+                <!-- Login Buttons for Desktop -->
+                 <div class="hidden md:flex items-center space-x-2">
+                    <a href="../auth/sign-in.html" class="px-4 py-2 text-sm bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark">Sign In</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="menu-toggle" class="text-gray-800 focus:outline-none">
+                        <i id="icon-open" class="ri-menu-line text-2xl"></i>
+                        <i id="icon-close" class="ri-close-line text-2xl hidden"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden mt-4">
+                <a href="home.html" class="block py-2 text-sm text-primary font-semibold">Home</a>
+                <a href="about.html" class="block py-2 text-sm hover:text-primary">About</a>
+                <a href="price.html" class="block py-2 text-sm hover:text-primary">Pricing</a>
+                <a href="contact-us.html" class="block py-2 text-sm hover:text-primary">Contact Us</a>
+                 <div class="border-t my-4"></div>
+                 <a href="../auth/sign-in.html" class="block w-full text-center py-2 text-sm bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark">Sign In</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="pt-24">
+        <!-- Page Header Section -->
+        <section class="py-16">
+            <div class="container mx-auto text-center px-6">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-3">Organisation Pricing Plans</h1>
+                <p class="text-lg md:text-xl text-teal-100 max-w-3xl mx-auto">Choose the plan that best fits your institution's needs.<br>Subscription prices may vary by country.</p>
+                <!-- Country Price Checker -->
+                <div class="mt-8 max-w-xs mx-auto">
+                    <label for="country-select" class="block text-sm font-medium text-teal-200 mb-2">Check the price for your country:</label>
+                    <select id="country-select" class="w-full bg-white/20 border-white/30 rounded-lg py-2 px-4 text-white focus:ring-accent focus:border-accent">
+                        <option value="my" selected>Malaysia</option>
+                        <option value="id">Indonesia</option>
+                        <option value="sg">Singapore</option>
+                        <option value="bn">Brunei</option>
+                        <option value="au">Australia</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section class="pb-16">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Starter Pack -->
+                    <div class="bg-white text-gray-800 rounded-xl shadow-lg p-6 flex flex-col transform hover:-translate-y-2 transition-transform duration-300">
+                        <p class="my-2"><span class="text-2xl font-bold text-primary">Starter Pack</span></p>
+                        <p class="my-2"><span class="text-2xl font-bold text-primary">14-day free</span></p>
+                        <h2 class="text-lg font-semibold text-gray-700">Free 20 tokens</h2>                        
+                        <p class="text-sm text-gray-500 mb-6">No payment or credit card required</p>
+                        <div class="bg-green-500 text-white p-3 rounded-lg text-center mb-6 shadow-md">
+                            <p class="font-bold">1 token per recipient</p>
+                        </div>
+                        <ul class="space-y-3 text-sm flex-grow">
+                            <li class="flex items-center"><i class="ri-checkbox-circle-fill text-accent mr-2"></i>Unlimited Certificates</li>
+                            <li class="flex items-center"><i class="ri-checkbox-circle-fill text-accent mr-2"></i>Unlimited Templates</li>
+                            <li class="flex items-center"><i class="ri-checkbox-circle-fill text-accent mr-2"></i>Unlimited Logos</li>
+                            <li class="flex items-center"><i class="ri-checkbox-circle-fill text-accent mr-2"></i>Unlimited Super Admins</li>
+                            <li class="flex items-center"><i class="ri-checkbox-circle-fill text-accent mr-2"></i>Unlimited Issuers</li>
+                            <li class="flex items-center"><i class="ri-checkbox-circle-fill text-accent mr-2"></i>Unlimited Verifiers</li>
+                            <li class="flex items-center"><i class="ri-checkbox-circle-fill text-accent mr-2"></i>Unlimited Signatories</li>
+                            <li class="flex items-center"><i class="ri-checkbox-circle-fill text-accent mr-2"></i>20 Certificate Recipients</li>
+                            <li class="flex items-center"><i class="ri-checkbox-circle-fill text-accent mr-2"></i>QR Code Embedded</li>
+                        </ul>
+                        <a href="../auth/sign-up.html" class="mt-8 w-full block text-center border border-primary text-primary py-2 px-4 rounded-lg hover:bg-primary hover:text-white font-semibold">Start Free Trial</a>
+                    </div>
+
+                    <!-- Basic Pack -->
+                    <div class="bg-white text-gray-800 rounded-xl shadow-lg p-6 flex flex-col transform hover:-translate-y-2 transition-transform duration-300">
+                        <p class="my-2"><span class="text-2xl font-bold text-primary">Basic Pack</span></p>
+                        <p class="my-2"><span id="standard-price" class="text-2xl font-bold text-primary"></span></p>
+                        <h2 class="text-lg font-semibold text-gray-700 mb-10">333 tokens</h2>                        
+                        <div class="bg-green-500 text-white p-3 rounded-lg text-center mb-6 shadow-md">
+                            <p id="standard-cost" class="font-bold">≈ 0.15 sen per recipient</p>
+                        </div>
+                        <ul class="space-y-3 text-sm text-gray-600 flex-grow">
+                            <li class="flex items-center"><i class="ri-checkbox-circle-fill text-accent mr-2"></i>All the same features are available on the Trial Plan.</li>
+                            <li class="flex items-center"><i class="ri-checkbox-circle-fill text-accent mr-2"></i>333 Certificate Recipients</li>
+                        </ul>
+                        <a href="../auth/sign-up.html" class="mt-8 w-full block text-center border border-primary text-primary py-2 px-4 rounded-lg 
+                        hover:bg-primary hover:text-white font-semibold">Get Started</a>
+                    </div>
+
+                    <!-- Value Pack -->
+                    <div class="bg-primary text-white rounded-xl shadow-2xl p-6 flex flex-col relative transform hover:-translate-y-2 transition-transform duration-300">
+                        <span class="absolute top-0 right-4 bg-accent text-white text-xs px-3 py-1 rounded-b-lg font-bold">POPULAR</span>
+                        <p class="my-2"><span class="text-2xl font-bold text-white">Value Pack</span></p>
+                        <p class="my-2"><span id="premium-price" class="text-2xl font-bold"></span></p>
+                        <h2 class="text-lg font-semibold mb-10">769 tokens</h2>                        
+                        <div class="bg-green-500 text-white p-3 rounded-lg text-center mb-6 shadow-md">
+                            <p class="font-bold">Save 13%</p>
+                            <p id="premium-cost" class="text-sm font-medium">Only ≈ 0.13 sen per recipient</p>
+                        </div>
+                        <ul class="space-y-3 text-sm flex-grow">
+                            <li class="flex items-center"><i class="ri-checkbox-circle-fill text-accent mr-2"></i>All the same features are available on the Trial Plan.</li>
+                            <li class="flex items-center"><i class="ri-checkbox-circle-fill text-accent mr-2"></i>769 Certificate Recipients</li>
+                        </ul>
+                        <a href="../auth/sign-up.html" class="mt-8 w-full block text-center bg-white text-primary py-2 px-4 rounded-lg hover:bg-gray-100 font-semibold">Get Started</a>
+                    </div>
+
+                    <!-- Mega Pack -->
+                    <div class="bg-white text-gray-800 rounded-xl shadow-lg p-6 flex flex-col transform hover:-translate-y-2 transition-transform duration-300">
+                        <span class="absolute top-0 right-4 bg-accent text-white text-xs px-3 py-1 rounded-b-lg font-bold">SUPER SAVE!</span>
+                        <p class="my-2"><span class="text-2xl font-bold text-primary">Mega Pack</span></p>
+                        <p class="my-2"><span id="pro-price" class="text-2xl font-bold text-primary"></span></p>
+                        <h2 class="text-lg font-semibold text-gray-700 mb-10">2,000 tokens</h2>                        
+                        <div class="bg-green-500 text-white p-3 rounded-lg text-center mb-6 shadow-md">
+                            <p class="font-bold">Save 33%</p>
+                            <p id="pro-cost" class="text-sm font-medium">Only ≈ 0.10 sen per recipient</p>
+                        </div>
+                        <ul class="space-y-3 text-sm text-gray-600 flex-grow">
+                            <li class="flex items-center"><i class="ri-checkbox-circle-fill text-accent mr-2"></i>All the same features are available on the Trial Plan.</li>
+                            <li class="flex items-center"><i class="ri-checkbox-circle-fill text-accent mr-2"></i>2,000 Certificate Recipients</li>
+                        </ul>
+                        <a href="../auth/sign-up.html" class="mt-8 w-full block text-center border border-primary text-primary py-2 px-4 rounded-lg 
+                        hover:bg-primary hover:text-white font-semibold">Get Started</a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white">
+        <div class="container mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+            <!-- Info -->
+            <div>
+                <h3 class="text-xl font-bold font-poppins mb-4">MySertifico</h3>
+                <p class="text-sm text-gray-400">MySertifico is a secure digital platform for managing official certificates for schools and institutions across Malaysia. Trusted. Simple. Digital.</p>
+            </div>
+            <!-- Links -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Links</h4>
+                <ul class="space-y-2 text-sm text-gray-300">
+                    <li><a href="home.html" class="hover:text-white">Home</a></li>
+                    <li><a href="about.html" class="hover:text-white">About</a></li>
+                    <li><a href="price.html" class="hover:text-white">Pricing</a></li>
+                    <li><a href="contact-us.html" class="hover:text-white">Contact Us</a></li>
+                </ul>
+            </div>
+            <!-- Policies -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Terms & Policies</h4>
+                <ul class="space-y-2 text-sm text-gray-300">
+                    <li><a href="privacy-policy.html" class="hover:text-white">Privacy Policy</a></li>
+                    <li><a href="terms-of-service.html" class="hover:text-white">Terms of Service</a></li>
+                    <li><a href="security-policy.html" class="hover:text-white">Security Policy</a></li>
+                </ul>
+            </div>
+            <!-- Social -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Follow Us</h4>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-white text-xl" title="Facebook"><i class="ri-facebook-fill"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white text-xl" title="Instagram"><i class="ri-instagram-fill"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white text-xl" title="TikTok"><i class="ri-tiktok-fill"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white text-xl" title="YouTube"><i class="ri-youtube-fill"></i></a>
+                </div>
+            </div>
+        </div>
+        <!-- Divider + Copyright -->
+        <div class="border-t border-gray-700">
+            <div class="container mx-auto px-6 py-4 text-center text-sm text-gray-400">&copy; 2025 MySertifico. All rights reserved by Webapp Studio Sdn. Bhd.</div>
+        </div>
+    </footer>
+
+    <!-- Main Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- Navbar Toggle for Mobile ---
+            const menuToggle = document.getElementById('menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const iconOpen = document.getElementById('icon-open');
+            const iconClose = document.getElementById('icon-close');
+
+            menuToggle.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                iconOpen.classList.toggle('hidden');
+                iconClose.classList.toggle('hidden');
+            });
+
+            // --- Regional Pricing Logic ---
+            const countrySelect = document.getElementById('country-select');
+            const standardPriceEl = document.getElementById('standard-price');
+            const premiumPriceEl = document.getElementById('premium-price');
+            const proPriceEl = document.getElementById('pro-price');
+            const standardCostEl = document.getElementById('standard-cost');
+            const premiumCostEl = document.getElementById('premium-cost');
+            const proCostEl = document.getElementById('pro-cost');
+
+            const pricingData = {
+                'my': { standard: 'RM50', premium: 'RM100', pro: 'RM200', standard_cost: '≈ 15.0 sen per recipient', premium_cost: 'Only ≈ 13.0 sen per recipient', pro_cost: 'Only ≈ 10.0 sen per recipient' },
+                'id': { standard: 'Rp 192,000', premium: 'Rp 383,000', pro: 'Rp 766,000', standard_cost: '≈ Rp 577 per recipient', premium_cost: 'Only ≈ Rp 498 per recipient', pro_cost: 'Only ≈ Rp 383 per recipient' },
+                'sg': { standard: 'S$15', premium: 'S$29', pro: 'S$58', standard_cost: '≈ 4.5¢ per recipient', premium_cost: 'Only ≈ 3.8¢ per recipient', pro_cost: 'Only ≈ 2.9¢ per recipient' },
+                'bn': { standard: 'B$15', premium: 'B$29', pro: 'B$58', standard_cost: '≈ 4.5¢ per recipient', premium_cost: 'Only ≈ 3.8¢ per recipient', pro_cost: 'Only ≈ 2.9¢ per recipient' },
+                'au': { standard: 'A$16', premium: 'A$32', pro: 'A$64', standard_cost: '≈ 4.8¢ per recipient', premium_cost: 'Only ≈ 4.2¢ per recipient', pro_cost: 'Only ≈ 3.2¢ per recipient' }
+            };
+
+            function updatePrices(country) {
+                const prices = pricingData[country];
+                if (prices) {
+                    standardPriceEl.textContent = prices.standard;
+                    premiumPriceEl.textContent = prices.premium;
+                    proPriceEl.textContent = prices.pro;
+                    standardCostEl.textContent = prices.standard_cost;
+                    premiumCostEl.textContent = prices.premium_cost;
+                    proCostEl.textContent = prices.pro_cost;
+                }
+            }
+
+            // Set initial price on page load
+            updatePrices(countrySelect.value);
+
+            // Update prices on country change
+            countrySelect.addEventListener('change', (event) => {
+                updatePrices(event.target.value);
+            });
+        });
+    </script>
+</body>
+</html>

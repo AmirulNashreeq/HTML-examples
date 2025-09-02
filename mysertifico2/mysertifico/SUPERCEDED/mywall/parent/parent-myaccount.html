@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - MyWall</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/images/logos/favicon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        // Ocean Aqua & Sunset Orange Palette
+                        'primary': {
+                            'DEFAULT': '#14B8A6',       // Ocean Aqua (Teal-500)
+                            '50': '#f0fdfa',
+                            '100': '#ccfbf1',
+                            '200': '#99f6e4',
+                            '300': '#5eead4',
+                            '400': '#2dd4bf',
+                            '500': '#14b8a6',
+                            '600': '#0d9488',
+                            '700': '#0f766e',
+                            '800': '#115e59',
+                            '900': '#134E4A',    // Dark Aqua (Teal-900)
+                        },
+                        'accent': {
+                            'DEFAULT': '#F97316',        // Sunset Orange (Orange-500)
+                            'hover': '#EA580C',  // Warm Orange for hover (Orange-600)
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Modal transition */
+        .modal-panel {
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+        .modal.hidden .modal-panel {
+            transform: scale(0.95);
+            opacity: 0;
+        }
+        /* Custom radio button for payment methods */
+        .payment-radio:checked + label {
+            border-color: #F97316; /* accent color */
+            background-color: rgba(249, 115, 22, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-primary-900 to-primary text-white flex flex-col min-h-screen">
+
+    <!-- Header & Navbar -->
+    <header class="bg-white shadow-md text-gray-800 fixed w-full top-0 z-50">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <a href="parent-wall.html" class="flex items-center gap-2">
+                    <img src="../../assets/images/logos/logo.png" alt="MyWall Logo" class="h-10 w-10 rounded-full">
+                    <span class="font-poppins font-bold text-2xl text-primary">MyWall</span>
+                </a>
+
+                <!-- Profile Icon & Dropdown -->
+                <div class="relative">
+                    <button id="profile-menu-button" class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary hover:border-primary-600 transition-all">
+                        <img src="../../assets/images/users/aliyah.png" 
+                             onerror="this.onerror=null;this.src='https://placehold.co/40x40/134E4A/FFFFFF?text=A';"
+                             alt="User Avatar" class="w-full h-full object-cover">
+                    </button>
+                    <div id="profile-menu" class="hidden absolute top-full right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 z-50">
+                        <a href="parent-myprofile.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-user-line mr-3"></i>My Profile</a>
+                        <a href="parent-myaccount.html" class="flex items-center px-4 py-2 text-sm text-primary font-bold bg-primary-50"><i class="ri-settings-3-line mr-3"></i>My Account</a>
+                        <a href="parent-resume.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-article-line mr-3"></i>My Resume</a>
+                        <a href="parent-wall.html#achievements" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-award-line mr-3"></i>My Achievements</a>
+                        <div class="border-t my-1 border-gray-200"></div>
+                        <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-logout-box-r-line mr-3"></i>Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="pt-24 pb-12 flex-grow">
+        <section class="py-16">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h1 class="text-4xl md:text-5xl font-bold font-poppins text-white">My Account & Subscription</h1>
+                    <p class="text-lg text-primary-200 mt-4 max-w-3xl mx-auto">Manage your plan, payment details, usage, and view your billing history.</p>
+                </div>
+
+                <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    
+                    <div class="lg:col-span-1 space-y-8">
+                        <div class="bg-white/10 backdrop-blur-sm rounded-2xl shadow-lg p-6">
+                            <h3 class="text-xl font-bold text-primary-300 mb-4">Current Plan</h3>
+                            <div id="current-plan-summary">
+                                <!-- Summary is rendered by JS -->
+                            </div>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-sm rounded-2xl shadow-lg p-6">
+                            <h3 class="text-xl font-bold text-primary-300 mb-4">Payment Method</h3>
+                            <div class="flex items-center gap-4">
+                                <i class="ri-visa-line text-4xl text-white"></i>
+                                <div>
+                                    <p class="font-semibold text-white">Visa ending in 1234</p>
+                                    <p class="text-sm text-primary-300">Expires 12/2028</p>
+                                </div>
+                            </div>
+                            <button id="update-payment-button" class="w-full mt-6 bg-primary/50 hover:bg-primary/80 text-white font-semibold py-2 px-5 rounded-full transition-colors">
+                                Update Payment Method
+                            </button>
+                        </div>
+                        <div class="bg-red-900/20 border border-red-500/50 rounded-2xl shadow-lg p-6">
+                            <h3 class="text-xl font-bold text-red-300 mb-2">Danger Zone</h3>
+                            <p class="text-red-200/80 text-sm mb-4">
+                                If you cancel, your subscription will remain active until the end of the current billing period on July 15, 2026. This action cannot be undone.
+                            </p>
+                            <button id="cancel-subscription-button" class="w-full md:w-auto px-6 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors">
+                                Cancel Subscription
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-2 space-y-8">
+                         <div class="bg-white/10 backdrop-blur-sm rounded-2xl shadow-lg p-6">
+                            <h3 class="text-2xl font-bold text-white mb-6">Change Your Plan</h3>
+                            <div id="plan-options" class="space-y-4">
+                                <!-- Plan options will be dynamically generated here -->
+                            </div>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-sm rounded-2xl shadow-lg p-6">
+                            <h3 class="text-2xl font-bold text-white mb-6">Billing History</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-left">
+                                    <thead class="text-xs text-primary-200 uppercase border-b border-primary-700/50">
+                                        <tr>
+                                            <th scope="col" class="px-4 py-3">Date</th>
+                                            <th scope="col" class="px-4 py-3">Description</th>
+                                            <th scope="col" class="px-4 py-3">Amount</th>
+                                            <th scope="col" class="px-4 py-3">Invoice</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="billing-history-body">
+                                        <!-- Billing history rows will be dynamically generated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                            <nav id="billing-pagination" class="flex justify-between items-center pt-4" aria-label="Table navigation">
+                                <!-- Pagination will be dynamically generated here -->
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modals -->
+    <div id="confirmation-modal" class="modal hidden fixed inset-0 z-[60] flex items-center justify-center p-4">
+        <div class="modal-backdrop absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+        <div class="modal-panel relative bg-white/10 border border-primary-500/50 rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col scale-95 opacity-0">
+            <div class="p-6 text-center">
+                <div id="modal-icon" class="text-5xl text-primary-400 mb-4"><i class="ri-question-line"></i></div>
+                <h3 id="modal-title" class="text-lg font-bold text-white">Confirm Plan Change</h3>
+                <p id="modal-text" class="text-sm text-primary-200 mt-2">Are you sure you want to switch to the [Plan Name] plan?</p>
+            </div>
+            <div class="p-4 flex justify-center items-center gap-4 border-t border-primary-800/50 bg-white/5">
+                <button type="button" class="modal-close-button px-6 py-2 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600 transition-colors">Cancel</button>
+                <button type="button" id="confirm-change-button" class="px-6 py-2 bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover transition-colors">Yes, Change Plan</button>
+            </div>
+        </div>
+    </div>
+    <div id="cancel-modal" class="modal hidden fixed inset-0 z-[60] flex items-center justify-center p-4">
+        <div class="modal-backdrop absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+        <div class="modal-panel relative bg-white/10 border border-red-500/50 rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col scale-95 opacity-0">
+            <div class="p-6 text-center">
+                <div class="text-5xl text-red-400 mb-4"><i class="ri-error-warning-line"></i></div>
+                <h3 class="text-lg font-bold text-white">Are you sure you want to cancel?</h3>
+                <p class="text-sm text-primary-200 mt-2">Your plan will be active until July 15, 2026. You will lose access to Premium features after this date.</p>
+            </div>
+            <div class="p-4 flex justify-center items-center gap-4 border-t border-primary-800/50 bg-white/5">
+                <button type="button" class="modal-close-button px-6 py-2 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600 transition-colors">Nevermind</button>
+                <button type="button" id="confirm-cancel-button" class="px-6 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors">Yes, Cancel</button>
+            </div>
+        </div>
+    </div>
+    <div id="update-payment-modal" class="modal hidden fixed inset-0 z-[60] flex items-center justify-center p-4">
+        <div class="modal-backdrop absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+        <div class="modal-panel relative bg-white/10 border border-primary-500/50 rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col scale-95 opacity-0">
+            <form id="payment-form">
+                <div class="flex justify-between items-center p-4 border-b border-primary-800/50">
+                    <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="ri-bank-card-line"></i> Update Payment Method</h3>
+                    <button type="button" class="modal-close-button text-primary-200 hover:text-white text-2xl"><i class="ri-close-line"></i></button>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div>
+                        <label for="card-number" class="block text-sm font-medium text-primary-200 mb-1">Card Number</label>
+                        <input type="text" id="card-number" class="w-full bg-white/10 border border-primary-700 rounded-lg px-3 py-2 text-white focus:ring-accent focus:border-accent" placeholder="•••• •••• •••• 1234">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label for="expiry-date" class="block text-sm font-medium text-primary-200 mb-1">Expiry Date</label>
+                            <input type="text" id="expiry-date" class="w-full bg-white/10 border border-primary-700 rounded-lg px-3 py-2 text-white focus:ring-accent focus:border-accent" placeholder="MM / YY">
+                        </div>
+                        <div>
+                            <label for="cvc" class="block text-sm font-medium text-primary-200 mb-1">CVC</label>
+                            <input type="text" id="cvc" class="w-full bg-white/10 border border-primary-700 rounded-lg px-3 py-2 text-white focus:ring-accent focus:border-accent" placeholder="•••">
+                        </div>
+                    </div>
+                </div>
+                 <div class="p-4 flex justify-end items-center gap-4 border-t border-primary-800/50">
+                    <button type="button" class="modal-close-button px-6 py-2 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600 transition-colors">Cancel</button>
+                    <button type="submit" class="px-6 py-2 bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover transition-colors">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const body = document.body;
+            const profileMenuButton = document.getElementById('profile-menu-button');
+            const profileMenu = document.getElementById('profile-menu');
+            if (profileMenuButton) {
+                profileMenuButton.addEventListener('click', (e) => { e.stopPropagation(); profileMenu.classList.toggle('hidden'); });
+            }
+             window.addEventListener('click', (event) => {
+                if (profileMenu && !profileMenu.classList.contains('hidden') && !profileMenuButton.contains(event.target)) {
+                    profileMenu.classList.add('hidden');
+                }
+            });
+            
+            const modals = {};
+            function setupModal(modalId) {
+                const modal = document.getElementById(modalId);
+                if (!modal) return null;
+                const closeButtons = modal.querySelectorAll('.modal-close-button');
+                const backdrop = modal.querySelector('.modal-backdrop');
+                const panel = modal.querySelector('.modal-panel');
+                const open = () => {
+                    modal.classList.remove('hidden');
+                    body.style.overflow = 'hidden';
+                    setTimeout(() => panel.classList.remove('scale-95', 'opacity-0'), 10);
+                };
+                const close = () => {
+                    panel.classList.add('scale-95', 'opacity-0');
+                    setTimeout(() => {
+                        modal.classList.add('hidden');
+                        if (!document.querySelector('.modal:not(.hidden)')) body.style.overflow = '';
+                    }, 300);
+                };
+                const modalInstance = { open, close, modal, panel };
+                closeButtons.forEach(btn => btn.addEventListener('click', close));
+                if (backdrop) backdrop.addEventListener('click', close);
+                modals[modalId] = modalInstance;
+                return modalInstance;
+            }
+            
+            const confirmationModal = setupModal('confirmation-modal');
+            const cancelModal = setupModal('cancel-modal');
+            const paymentModal = setupModal('update-payment-modal');
+
+            document.getElementById('cancel-subscription-button')?.addEventListener('click', () => cancelModal?.open());
+            document.getElementById('update-payment-button')?.addEventListener('click', () => paymentModal?.open());
+            
+            document.getElementById('confirm-cancel-button')?.addEventListener('click', () => {
+                alert('Subscription cancelled successfully. This is a demo.');
+                cancelModal?.close();
+            });
+
+            document.getElementById('payment-form')?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('Payment method updated successfully. This is a demo.');
+                paymentModal?.close();
+            });
+            
+            // --- Subscription Plan Logic ---
+            const plans = [
+                { id: 'basic', name: 'Basic', price: 'Free', priceValue: 0, level: 0, description: 'Link 1 child, 10 uploads.' },
+                { id: 'standard', name: 'Standard', price: 'RM5', priceSuffix: '/year', priceValue: 5, level: 1, description: 'Link up to 3 children, 20 uploads.' },
+                { id: 'premium', name: 'Premium', price: 'RM10', priceSuffix: '/year', priceValue: 10, level: 2, description: 'Link up to 5 children, 50 uploads.' },
+                { id: 'parent-pro', name: 'Parent Pro', price: 'RM50', priceSuffix: '/year', priceValue: 50, level: 3, description: 'Link up to 10 children, 150 uploads.' }
+            ];
+            let currentPlanId = 'premium';
+            let targetPlanId = null;
+
+            const planOptionsContainer = document.getElementById('plan-options');
+            const summaryContainer = document.getElementById('current-plan-summary');
+
+            function renderPlans() {
+                planOptionsContainer.innerHTML = '';
+                const currentPlan = plans.find(p => p.id === currentPlanId);
+
+                plans.forEach(plan => {
+                    const isCurrent = plan.id === currentPlanId;
+                    let buttonHtml = '';
+
+                    if (isCurrent) {
+                        buttonHtml = `<button class="mt-2 px-6 py-2 bg-primary text-white font-semibold rounded-lg cursor-not-allowed opacity-50">Selected</button>`;
+                    } else if (plan.level < currentPlan.level) {
+                        buttonHtml = `<button data-plan-id="${plan.id}" class="plan-change-button mt-2 px-6 py-2 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600 transition-colors">Downgrade</button>`;
+                    } else {
+                        buttonHtml = `<button data-plan-id="${plan.id}" class="plan-change-button mt-2 px-6 py-2 bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover transition-colors">Upgrade</button>`;
+                    }
+                    
+                    const planCard = `
+                        <div id="plan-card-${plan.id}" class="plan-card border-2 ${isCurrent ? 'border-accent' : 'border-primary-700/50'} rounded-lg p-5 flex flex-col md:flex-row justify-between items-center relative transition-all">
+                            ${isCurrent ? '<span class="absolute -top-3 bg-accent text-white px-3 py-1 text-xs font-bold rounded-full">Current Plan</span>' : ''}
+                            <div>
+                                <h4 class="text-xl font-bold text-white">${plan.name}</h4>
+                                <p class="text-primary-200">${plan.description}</p>
+                            </div>
+                            <div class="text-center md:text-right mt-4 md:mt-0">
+                                <p class="text-2xl font-bold text-white">${plan.price}<span class="text-base text-primary-300">${plan.priceSuffix || ''}</span></p>
+                                ${buttonHtml}
+                            </div>
+                        </div>
+                    `;
+                    planOptionsContainer.innerHTML += planCard;
+                });
+
+                attachPlanButtonListeners();
+            }
+
+            function updateSummary() {
+                const plan = plans.find(p => p.id === currentPlanId);
+                summaryContainer.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-3xl font-poppins font-bold text-white">${plan.name}</h2>
+                        <span class="bg-green-500/20 text-green-300 text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1"><i class="ri-checkbox-circle-fill"></i>Active</span>
+                    </div>
+                    <p class="text-3xl font-bold text-white mt-4">${plan.price}<span class="text-lg text-primary-300">${plan.priceSuffix || ''}</span></p>
+                    <p class="text-sm text-primary-300 mt-2">Your plan renews on July 15, 2026.</p>
+                `;
+            }
+
+            function attachPlanButtonListeners() {
+                document.querySelectorAll('.plan-change-button').forEach(button => {
+                    button.addEventListener('click', function() {
+                        targetPlanId = this.dataset.planId;
+                        const targetPlan = plans.find(p => p.id === targetPlanId);
+                        document.getElementById('modal-title').textContent = `Confirm Plan Change`;
+                        document.getElementById('modal-text').textContent = `Are you sure you want to switch to the ${targetPlan.name} plan?`;
+                        confirmationModal.open();
+                    });
+                });
+            }
+
+            document.getElementById('confirm-change-button')?.addEventListener('click', () => {
+                currentPlanId = targetPlanId;
+                alert(`Plan changed to ${plans.find(p => p.id === currentPlanId).name}! This is a demo.`);
+                confirmationModal.close();
+                renderPlans();
+                updateSummary();
+            });
+
+            // --- Billing History Pagination ---
+            const billingData = [
+                { date: 'July 15, 2025', desc: 'Premium Plan - Annual', amount: 'RM10.00' },
+                { date: 'June 10, 2025', desc: 'Top-up: 25 Uploads', amount: 'RM10.00' },
+                { date: 'May 5, 2025', desc: 'Top-up: 10 Uploads', amount: 'RM5.00' },
+                { date: 'July 15, 2024', desc: 'Premium Plan - Annual', amount: 'RM10.00' },
+                { date: 'March 2, 2024', desc: 'Top-up: 10 Uploads', amount: 'RM5.00' },
+                { date: 'July 15, 2023', desc: 'Standard Plan - Annual', amount: 'RM5.00' },
+            ];
+            let currentPage = 1;
+            const rowsPerPage = 4;
+
+            function renderBillingHistory() {
+                const tbody = document.getElementById('billing-history-body');
+                tbody.innerHTML = '';
+                const startIndex = (currentPage - 1) * rowsPerPage;
+                const endIndex = startIndex + rowsPerPage;
+                const paginatedItems = billingData.slice(startIndex, endIndex);
+
+                paginatedItems.forEach(item => {
+                    const row = `
+                        <tr class="border-b border-primary-800/50 hover:bg-white/5">
+                            <td class="px-4 py-3 font-medium text-white whitespace-nowrap">${item.date}</td>
+                            <td class="px-4 py-3">${item.desc}</td>
+                            <td class="px-4 py-3">${item.amount}</td>
+                            <td class="px-4 py-3"><a href="#" class="text-accent hover:text-accent-hover font-medium">Invoice <i class="ri-download-2-line"></i></a></td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                });
+                renderPaginationControls();
+            }
+
+            function renderPaginationControls() {
+                const nav = document.getElementById('billing-pagination');
+                const pageCount = Math.ceil(billingData.length / rowsPerPage);
+                nav.innerHTML = `
+                    <span class="text-sm font-normal text-primary-300">
+                        Showing <span class="font-semibold text-white">${(currentPage - 1) * rowsPerPage + 1}-${Math.min(currentPage * rowsPerPage, billingData.length)}</span> of <span class="font-semibold text-white">${billingData.length}</span>
+                    </span>
+                    <div class="inline-flex items-center -space-x-px">
+                        <button id="prev-page" class="px-3 h-8 ms-0 leading-tight text-primary-300 bg-white/10 border border-primary-700 rounded-s-lg hover:bg-white/20 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed">
+                            Prev
+                        </button>
+                        <button id="next-page" class="px-3 h-8 leading-tight text-primary-300 bg-white/10 border border-primary-700 rounded-e-lg hover:bg-white/20 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed">
+                            Next
+                        </button>
+                    </div>
+                `;
+                
+                const prevButton = document.getElementById('prev-page');
+                const nextButton = document.getElementById('next-page');
+
+                prevButton.disabled = currentPage === 1;
+                nextButton.disabled = currentPage === pageCount;
+
+                prevButton.addEventListener('click', () => {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        renderBillingHistory();
+                    }
+                });
+                nextButton.addEventListener('click', () => {
+                    if (currentPage < pageCount) {
+                        currentPage++;
+                        renderBillingHistory();
+                    }
+                });
+            }
+
+            window.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                   const visibleModals = document.querySelectorAll('.modal:not(.hidden)');
+                   if (visibleModals.length > 0) {
+                       const topModalId = visibleModals[visibleModals.length - 1].id;
+                       if (modals[topModalId]) modals[topModalId].close();
+                   }
+                }
+            });
+
+            // Initial render
+            renderPlans();
+            updateSummary();
+            renderBillingHistory();
+        });
+    </script>
+</body>
+</html>

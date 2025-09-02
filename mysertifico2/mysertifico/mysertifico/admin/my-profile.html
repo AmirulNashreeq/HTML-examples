@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - MySertifico</title>
+    <link rel="icon" type="image/png" href="../../src/images/logos/favicon.png" onerror="this.onerror=null;this.src='https://placehold.co/32x32/0d9488/ffffff?text=M';">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': {
+                            'DEFAULT': '#0d9488', // Teal-600
+                            'dark': '#0f766e', // Teal-700
+                            'light': '#ccfbf1', // Teal-100
+                        },
+                        'accent': {
+                            'DEFAULT': '#f59e0b', // Amber-500
+                            'hover': '#d97706', // Amber-600
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .sidebar { scrollbar-width: none; }
+        .sidebar::-webkit-scrollbar { display: none; }
+        .toast-enter {
+            opacity: 0;
+            transform: translateX(100%);
+        }
+        .toast-enter-active {
+            opacity: 1;
+            transform: translateX(0);
+            transition: opacity 300ms, transform 300ms;
+        }
+        .toast-exit {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .toast-exit-active {
+            opacity: 0;
+            transform: translateX(100%);
+            transition: opacity 300ms, transform 300ms;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-5 right-5 z-[150] space-y-3 w-full max-w-xs"></div>
+
+    <!-- ===== Sidebar Start ===== -->
+    <aside id="sidebar" class="sidebar fixed top-0 left-0 z-50 h-full w-64 bg-gray-800 dark:bg-gray-950 text-white transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto">
+        <!-- Sidebar Header -->
+        <div class="flex items-center justify-between p-6">
+             <h2 class="font-poppins text-2xl font-bold text-white">Menu</h2>
+             <button id="close-sidebar" class="text-gray-400 hover:text-white">
+                 <i class="ri-close-line text-2xl"></i>
+             </button>
+        </div>
+        <!-- Sidebar Navigation -->
+        <nav class="p-4">
+            <ul class="space-y-2">
+                <li>
+                    <a href="dashboard.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white">
+                        <i class="ri-dashboard-3-line mr-3 text-lg"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <button data-collapse-toggle="submenu-gallery" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white transition-colors">
+                        <span class="flex items-center"><i class="ri-gallery-line mr-3 text-lg"></i><span>Gallery</span></span>
+                        <i class="ri-arrow-down-s-line transition-transform duration-200"></i>
+                    </button>
+                    <ul id="submenu-gallery" class="hidden py-2 space-y-1 pl-8">
+                        <li><a href="templates-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Templates</a></li>
+                        <li><a href="logos-badges.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Logos & Badges</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="certificate-list.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white transition-colors">
+                        <i class="ri-award-line mr-3 text-lg"></i>
+                        <span>Certificates</span>
+                    </a>
+                </li>
+                 <li>
+                    <button data-collapse-toggle="submenu-settings" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white transition-colors">
+                        <span class="flex items-center"><i class="ri-settings-3-line mr-3 text-lg"></i><span>Settings</span></span>
+                        <i class="ri-arrow-down-s-line transition-transform duration-200"></i>
+                    </button>
+                    <ul id="submenu-settings" class="hidden py-2 space-y-1 pl-8">
+                        <li><a href="organisation.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Organisation</a></li>
+                        <li><a href="logo-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Logos</a></li>
+                        <li><a href="selected-template-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Selected Templates</a></li>
+                        <li><a href="user-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Users</a></li>
+                        <li class="px-4"><hr class="border-gray-700 my-1"></li>
+                        <li><a href="account.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Account</a></li>
+                    </ul>
+                </li>
+                <li class="pt-4 mt-4 border-t border-gray-700">
+                    <a href="#" id="logout-sidebar" class="flex items-center py-2.5 px-4 rounded-lg text-red-400 hover:bg-red-500 hover:text-white transition-colors">
+                        <i class="ri-logout-box-r-line mr-3 text-lg"></i>
+                        <span>Log Out</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+    <!-- ===== Sidebar End ===== -->
+    
+    <!-- ===== Main Content Start ===== -->
+    <div id="main-content" class="relative min-h-screen transition-all duration-300 ease-in-out">
+        <!-- ===== Navbar Start ===== -->
+        <header class="sticky top-0 z-30 bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between p-4">
+                <div class="flex items-center space-x-4">
+                    <button id="sidebar-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
+                        <i class="ri-menu-line text-2xl"></i>
+                    </button>
+                    <a href="dashboard.html" class="flex items-center gap-x-2">
+                        <img src="../../src/images/logos/logo.png" alt="MySertifico Logo" class="h-8 w-8 rounded-lg" onerror="this.onerror=null;this.src='https://placehold.co/32x32/0d9488/ffffff?text=M';">
+                        <span class="font-poppins text-2xl font-bold text-primary hidden sm:block">MySertifico</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-moon-line block dark:hidden"></i><i class="ri-sun-line hidden dark:block"></i></button>
+                    <div class="relative">
+                        <button id="profile-menu-button" class="flex items-center space-x-2">
+                             <img id="navbar-profile-img" class="h-9 w-9 rounded-full object-cover" src="https://i.pravatar.cc/150?u=admin" alt="Admin" onerror="this.onerror=null;this.src='https://placehold.co/40x40/0d9488/ffffff?text=A';">
+                             <div class="hidden md:block text-left">
+                                 <div id="navbar-user-name" class="text-sm font-semibold text-gray-800 dark:text-white">Fikri Nabil</div>
+                                 <div id="navbar-user-role" class="text-xs text-gray-500 dark:text-gray-400">Super Admin</div>
+                             </div>
+                        </button>
+                        <div id="profile-menu" class="hidden absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <div class="py-1">
+                                <a href="my-profile.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-user-line mr-3"></i>My Profile</a>
+                                <a href="change-password.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-lock-password-line mr-3"></i>Change Password</a>
+                                <hr class="border-gray-200 dark:border-gray-700 my-1">
+                                <a href="#" id="logout-navbar" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-logout-box-r-line mr-3"></i>Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- ===== Navbar End ===== -->
+        
+        <!-- ===== Page Content Start ===== -->
+        <main class="p-6 sm:p-8">
+            <div class="max-w-4xl mx-auto">
+                 <div class="mb-6">
+                    <h1 class="text-2xl font-bold text-gray-800 dark:text-white">My Profile</h1>
+                    <p class="text-gray-500 dark:text-gray-400 mt-1">Update your profile information.</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Left Column: Profile Picture -->
+                    <div class="md:col-span-1">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 text-center">
+                            <h3 class="text-lg font-semibold text-gray-800 dark:text-white mb-4">Profile Picture</h3>
+                            <div class="relative w-32 h-32 mx-auto">
+                                <img id="profile-image-preview" src="https://i.pravatar.cc/150?u=admin" alt="Profile Picture" class="w-32 h-32 rounded-full object-cover shadow-lg">
+                                <label for="profile-image-upload" class="absolute bottom-0 right-0 bg-primary text-white rounded-full p-2 cursor-pointer hover:bg-primary-dark transition-colors">
+                                    <i class="ri-camera-line"></i>
+                                    <input type="file" id="profile-image-upload" class="hidden" accept="image/jpeg, image/png">
+                                </label>
+                            </div>
+                            <button id="save-picture-btn" class="mt-4 w-full bg-primary text-white font-semibold py-2 px-4 rounded-lg hover:bg-primary-dark transition-colors hidden">Save Picture</button>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">JPG or PNG. Max size of 2MB.</p>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Profile Details -->
+                    <div class="md:col-span-2">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md">
+                            <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+                                <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Account Details</h3>
+                            </div>
+                            <form id="profile-form" class="p-6 space-y-4" novalidate>
+                                <div>
+                                    <label for="full-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Full Name</label>
+                                    <input type="text" id="full-name" value="Fikri Nabil" class="mt-1 block w-full px-4 py-2.5 border border-gray-400 dark:border-gray-500 rounded-md shadow-sm focus:border-primary focus:ring-primary bg-white dark:bg-gray-700">
+                                    <small id="name-error" class="text-red-500 mt-1 hidden">Full name cannot be empty.</small>
+                                </div>
+                                <div>
+                                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email Address</label>
+                                    <input type="email" id="email" value="fikri.nabil@example.com" disabled class="mt-1 block w-full px-4 py-2.5 border border-gray-400 dark:border-gray-500 rounded-md shadow-sm bg-gray-100 dark:bg-gray-700/50 cursor-not-allowed">
+                                </div>
+                                <div>
+                                    <label for="role" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Role</label>
+                                    <input type="text" id="role" value="Super Admin" disabled class="mt-1 block w-full px-4 py-2.5 border border-gray-400 dark:border-gray-500 rounded-md shadow-sm bg-gray-100 dark:bg-gray-700/50 cursor-not-allowed">
+                                </div>
+                                <div class="pt-2 text-right">
+                                    <button type="submit" class="bg-primary text-white font-semibold py-2 px-6 rounded-lg hover:bg-primary-dark transition-colors">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- ===== Page Content End ===== -->
+    </div>
+    <!-- ===== Main Content End ===== -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggleBtn = document.getElementById('sidebar-toggle');
+            const closeSidebarBtn = document.getElementById('close-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            function openSidebar() {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            }
+
+            function closeSidebar() {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+            
+            sidebarToggleBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openSidebar();
+            });
+            
+            closeSidebarBtn.addEventListener('click', closeSidebar);
+            overlay.addEventListener('click', closeSidebar);
+            
+            document.querySelectorAll('[data-collapse-toggle]').forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.getAttribute('data-collapse-toggle');
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.classList.toggle('hidden');
+                        const arrowIcon = button.querySelector('.ri-arrow-down-s-line');
+                        if(arrowIcon) arrowIcon.classList.toggle('rotate-180');
+                    }
+                });
+            });
+
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const applyTheme = () => {
+                if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            };
+            applyTheme();
+            themeToggleBtn.addEventListener('click', () => {
+                const isDark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('color-theme', isDark ? 'dark' : 'light');
+            });
+
+            const profileMenuButton = document.getElementById('profile-menu-button');
+            const profileMenu = document.getElementById('profile-menu');
+            profileMenuButton?.addEventListener('click', (e) => {
+                e.stopPropagation(); 
+                profileMenu.classList.toggle('hidden');
+            });
+            window.addEventListener('click', (e) => {
+                if (profileMenu && !profileMenu.classList.contains('hidden') && !profileMenuButton.contains(e.target) && !profileMenu.contains(e.target)) {
+                    profileMenu.classList.add('hidden');
+                }
+            });
+
+            // --- Logout Logic ---
+            const logoutBtnSidebar = document.getElementById('logout-sidebar');
+            const logoutBtnNavbar = document.getElementById('logout-navbar');
+
+            function logout() {
+                window.location.href = "../landing/home.html";
+            }
+
+            logoutBtnSidebar.addEventListener('click', (e) => { e.preventDefault(); logout(); });
+            logoutBtnNavbar.addEventListener('click', (e) => { e.preventDefault(); logout(); });
+            
+            // --- My Profile Page Logic ---
+            const toastContainer = document.getElementById('toast-container');
+            const profileImageUpload = document.getElementById('profile-image-upload');
+            const profileImagePreview = document.getElementById('profile-image-preview');
+            const navbarProfileImg = document.getElementById('navbar-profile-img');
+            const savePictureBtn = document.getElementById('save-picture-btn');
+            const profileForm = document.getElementById('profile-form');
+            const fullNameInput = document.getElementById('full-name');
+            const nameError = document.getElementById('name-error');
+            const navbarUserName = document.getElementById('navbar-user-name');
+
+            function showToast(message, type = 'success') {
+                const toast = document.createElement('div');
+                toast.className = `flex items-center w-full max-w-xs p-4 space-x-4 rtl:space-x-reverse divide-x rtl:divide-x-reverse rounded-lg shadow space-x text-white ${type === 'success' ? 'bg-green-600 divide-green-500' : 'bg-red-600 divide-red-500'}`;
+                toast.innerHTML = `
+                    <div class="text-xl">${type === 'success' ? '<i class="ri-checkbox-circle-fill"></i>' : '<i class="ri-error-warning-fill"></i>'}</div>
+                    <div class="ps-4 text-sm font-normal">${message}</div>
+                `;
+                
+                toastContainer.appendChild(toast);
+                
+                // Animate in
+                setTimeout(() => toast.classList.add('toast-enter-active'), 10);
+
+                // Auto-dismiss
+                setTimeout(() => {
+                    toast.classList.add('toast-exit-active');
+                    toast.addEventListener('transitionend', () => toast.remove());
+                }, 3000);
+            }
+
+            profileImageUpload.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    // Validation
+                    const allowedTypes = ['image/jpeg', 'image/png'];
+                    const maxSize = 2 * 1024 * 1024; // 2MB
+
+                    if (!allowedTypes.includes(file.type)) {
+                        showToast('Invalid file type. Please select a JPG or PNG image.', 'error');
+                        event.target.value = ''; // Reset file input
+                        return;
+                    }
+
+                    if (file.size > maxSize) {
+                        showToast('File size exceeds 2MB. Please select a smaller image.', 'error');
+                        event.target.value = ''; // Reset file input
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        profileImagePreview.src = e.target.result;
+                        savePictureBtn.classList.remove('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            savePictureBtn.addEventListener('click', () => {
+                // In a real application, you would upload the file to the server here.
+                navbarProfileImg.src = profileImagePreview.src;
+                showToast('Profile picture updated successfully!');
+                savePictureBtn.classList.add('hidden');
+            });
+
+            profileForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const newName = fullNameInput.value.trim();
+
+                if (!newName) {
+                    nameError.classList.remove('hidden');
+                    fullNameInput.classList.add('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
+                    return;
+                }
+                
+                nameError.classList.add('hidden');
+                fullNameInput.classList.remove('border-red-500', 'focus:border-red-500', 'focus:ring-red-500');
+                
+                navbarUserName.textContent = newName;
+                showToast('Profile details saved successfully!');
+            });
+        });
+    </script>
+
+</body>
+</html>

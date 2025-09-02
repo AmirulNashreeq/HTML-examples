@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - MyWall</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/images/logos/favicon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        // Ocean Aqua & Sunset Orange Palette
+                        'primary': {
+                            'DEFAULT': '#14B8A6',       // Ocean Aqua (Teal-500)
+                            '50': '#f0fdfa',
+                            '100': '#ccfbf1',
+                            '200': '#99f6e4',
+                            '300': '#5eead4',
+                            '400': '#2dd4bf',
+                            '500': '#14b8a6',
+                            '600': '#0d9488',
+                            '700': '#0f766e',
+                            '800': '#115e59',
+                            '900': '#134E4A',    // Dark Aqua (Teal-900)
+                        },
+                        'accent': {
+                            'DEFAULT': '#F97316',        // Sunset Orange (Orange-500)
+                            'hover': '#EA580C',  // Warm Orange for hover (Orange-600)
+                        },
+                        'dark-bg': '#134E4A',       // Very Dark Aqua for footer (Teal-900)
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-primary-900 to-primary text-white overflow-x-hidden">
+
+    <!-- Header & Navbar -->
+    <header class="bg-white shadow-md text-gray-800 fixed w-full top-0 z-50">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <a href="mywall.html" class="flex items-center gap-2">
+                    <img src="../assets/images/logos/logo.png" alt="MyWall Logo" class="h-10 w-10 rounded-full">
+                    <span class="font-poppins font-bold text-2xl text-primary">MyWall</span>
+                </a>
+
+                <!-- Profile Icon & Dropdown -->
+                <div class="relative">
+                    <button id="profile-menu-button" class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary hover:border-primary-600 transition-all">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200&auto=format&fit=crop" 
+                             onerror="this.onerror=null;this.src='https://placehold.co/40x40/134E4A/FFFFFF?text=A';"
+                             alt="User Avatar" class="w-full h-full object-cover">
+                    </button>
+                    <!-- Dropdown Menu -->
+                    <div id="profile-menu" class="hidden absolute top-full right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 z-50">
+                        <a href="myprofile.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-user-line mr-3"></i>My Profile</a>
+                        <a href="myaccount.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-settings-3-line mr-3"></i>My Account</a>
+                        <a href="resume.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-article-line mr-3"></i>My Resume</a>
+                        <a href="mywall.html#achievements" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-award-line mr-3"></i>My Achievements</a>
+                        <div class="border-t my-1 border-gray-200"></div>
+                        <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-logout-box-r-line mr-3"></i>Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="pt-24 pb-12">
+        <!-- =============================================================== -->
+        <!--                  START: PAGE CONTENT HERE                       -->
+        <!-- =============================================================== -->
+
+        <section class="py-16">
+            <div class="container mx-auto px-6">
+                <div class="max-w-4xl mx-auto bg-white/10 backdrop-blur-sm rounded-2xl shadow-lg p-8 md:p-12 text-primary-100">
+                    
+                    <div class="text-center mb-10">
+                        <h1 class="text-4xl md:text-5xl font-bold font-poppins text-white">Terms of Service</h1>
+                        <p class="text-lg text-primary-200 mt-2">Last Updated: July 12, 2025</p>
+                    </div>
+
+                    <div class="prose prose-lg max-w-none prose-invert prose-headings:text-white prose-headings:font-semibold prose-a:text-accent hover:prose-a:text-accent-hover">
+                        <p>Welcome to MyWall! These are the rules of the road for using our service. By using MyWall, you agree to these terms, so please read them carefully.</p>
+                        
+                        <h2 class="text-2xl font-bold text-white mt-8">1. Your Account</h2>
+                        <p>You are responsible for your account and everything that happens on it. Keep your password safe and don't share it with anyone. You must be at least 13 years old to use MyWall, or have permission from a parent or guardian.</p>
+
+                        <h2 class="text-2xl font-bold text-white mt-8">2. What You Can (and Can't) Do</h2>
+                        <p>MyWall is for showcasing your achievements. Please use it responsibly.</p>
+                        <ul>
+                            <li><strong>Do:</strong> Upload your own certificates, keep your profile up-to-date, and share your awesome accomplishments.</li>
+                            <li><strong>Don't:</strong> Don't upload anything that isn't yours, is illegal, offensive, or violates someone else's rights. Don't try to hack or disrupt our service.</li>
+                        </ul>
+                        <p>If you don't follow these rules, we may need to suspend or close your account to protect our community.</p>
+
+                        <h2 class="text-2xl font-bold text-white mt-8">3. Your Content</h2>
+                        <p>You own all the content you upload to MyWall, like your certificates and profile picture. You're just giving us permission to store it and show it back to you. We will never use your content for anything else without your permission.</p>
+
+                        <h2 class="text-2xl font-bold text-white mt-8">4. Subscription Plans</h2>
+                        <p>MyWall offers different subscription plans, including a free trial and paid plans like Standard, Premium, and Parent. Each plan has different features, like the number of external certificates you can upload.</p>
+                        <ul>
+                            <li>Payments are for a full year and will renew automatically unless you cancel.</li>
+                            <li>You can manage your subscription from your 'My Account' page.</li>
+                            <li>Top-ups for extra uploads are a one-time purchase and are not refundable.</li>
+                        </ul>
+
+                        <h2 class="text-2xl font-bold text-white mt-8">5. Our Service</h2>
+                        <p>We do our best to keep MyWall running smoothly, but we can't guarantee it will be perfect all the time. The service is provided "as is." This means we are not liable for any data loss or other issues that might happen, although we work hard to prevent them.</p>
+
+                        <h2 class="text-2xl font-bold text-white mt-8">6. Changes to These Terms</h2>
+                        <p>We may update these terms from time to time. If we do, we'll let you know. By continuing to use MyWall after the changes, you agree to the new terms.</p>
+
+                        <h2 class="text-2xl font-bold text-white mt-8">Questions?</h2>
+                        <p>If you have any questions about these terms, please contact us at <a href="mailto:support@mywall.com">support@mywall.com</a>.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- =============================================================== -->
+        <!--                   END: PAGE CONTENT HERE                        -->
+        <!-- =============================================================== -->
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark-bg/50 text-white">
+        <div class="container mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+            <!-- Info -->
+            <div>
+                <h3 class="text-xl font-bold font-poppins mb-4 text-primary-300">MyWall</h3>
+                <p class="text-sm text-primary-200">MyWall is your personal digital wall for all your certificates and qualifications. Collect, manage, showcase, and share your achievements securely.</p>
+            </div>
+            <!-- Links -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4 text-primary-300">Links</h4>
+                <ul class="space-y-2 text-sm text-primary-200">
+                    <li><a href="mywall.html" class="hover:text-white">MyWall</a></li>
+                    <li><a href="myprofile.html" class="hover:text-white">My Profile</a></li>
+                    <li><a href="myaccount.html" class="hover:text-white">My Account</a></li>
+                </ul>
+            </div>
+            <!-- Policies -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4 text-primary-300">Terms & Policies</h4>
+                <ul class="space-y-2 text-sm text-primary-200">
+                    <li><a href="mywall-privacy-policy.html" class="hover:text-white">Privacy Policy</a></li>
+                    <li><a href="mywall-terms-of-service.html" class="hover:text-white">Terms of Service</a></li>
+                </ul>
+            </div>
+            <!-- Social -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4 text-primary-300">Follow Us</h4>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-primary-200 hover:text-white text-xl" title="Facebook"><i class="ri-facebook-fill"></i></a>
+                    <a href="#" class="text-primary-200 hover:text-white text-xl" title="Instagram"><i class="ri-instagram-fill"></i></a>
+                    <a href="#" class="text-primary-200 hover:text-white text-xl" title="TikTok"><i class="ri-tiktok-fill"></i></a>
+                    <a href="#" class="text-primary-200 hover:text-white text-xl" title="YouTube"><i class="ri-youtube-fill"></i></a>
+                </div>
+            </div>
+        </div>
+        <!-- Divider + Copyright -->
+        <div class="border-t border-primary-800/50">
+            <div class="container mx-auto px-6 py-4 text-center text-sm text-primary-300">&copy; 2025 MyWall. All rights reserved by Webapp Studio Sdn. Bhd.</div>
+        </div>
+    </footer>
+
+    <!-- Main Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- Profile Menu Toggle ---
+            const profileMenuButton = document.getElementById('profile-menu-button');
+            const profileMenu = document.getElementById('profile-menu');
+
+            if (profileMenuButton) {
+                profileMenuButton.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    profileMenu.classList.toggle('hidden');
+                });
+            }
+            
+            // --- General Click Handlers ---
+            window.addEventListener('click', (event) => {
+                // Close profile dropdown
+                if (profileMenu && !profileMenu.classList.contains('hidden') && !profileMenuButton.contains(event.target)) {
+                    profileMenu.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

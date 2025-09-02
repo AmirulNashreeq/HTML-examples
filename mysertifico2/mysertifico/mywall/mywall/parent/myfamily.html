@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Family - MyWall</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../src/images/logos/favicon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': {
+                            'DEFAULT': '#14B8A6',
+                            '50': '#f0fdfa',
+                            '100': '#ccfbf1',
+                            '200': '#99f6e4',
+                            '300': '#5eead4',
+                            '400': '#2dd4bf',
+                            '500': '#14b8a6',
+                            '600': '#0d9488',
+                            '700': '#0f766e',
+                            '800': '#115e59',
+                            '900': '#134E4A',
+                        },
+                        'accent': {
+                            'DEFAULT': '#F97316',
+                            'hover': '#EA580C',
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .modal-panel { transition: transform 0.3s ease-out, opacity 0.3s ease-out; }
+        .modal.hidden .modal-panel { transform: scale(0.95); opacity: 0; }
+        #toast-notification.show { transform: translateY(0); opacity: 1; }
+        .input-error { border-color: #EF4444 !important; }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-primary-900 to-primary text-white flex flex-col min-h-screen">
+
+    <!-- Header & Navbar -->
+    <header class="bg-white shadow-md text-gray-800 fixed w-full top-0 z-50">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex items-center justify-between">
+                <a href="parent-wall.html" class="flex items-center gap-2">
+                    <img src="../../src/images/logos/logo.png" alt="MyWall Logo" class="h-10 w-10 rounded-full">
+                    <span class="font-poppins font-bold text-2xl text-primary">MyWall</span>
+                </a>
+                <div class="relative">
+                    <button id="profile-menu-button" class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-300 hover:border-primary transition-all">
+                        <img src="../../src/images/users/aliyah.png" 
+                             onerror="this.onerror=null;this.src='https://placehold.co/40x40/134E4A/FFFFFF?text=A';"
+                             alt="User Avatar" class="w-full h-full object-cover">
+                    </button>
+                    <div id="profile-menu" class="hidden absolute top-full right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 z-50">
+                        <a href="parent-wall.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-layout-grid-fill mr-3"></i>MyWall</a>
+                        <a href="parent-myprofile.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-user-line mr-3"></i>MyProfile</a>
+                        <a href="myfamily.html" class="flex items-center px-4 py-2 text-sm text-primary font-bold bg-primary-50"><i class="ri-group-line mr-3"></i>MyFamily</a>
+                        <a href="parent-myaccount.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-settings-3-line mr-3"></i>MyAccount</a>
+                        <a href="parent-resume.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-article-line mr-3"></i>MyResume</a>
+                        <div class="border-t my-1 border-gray-200"></div>
+                        <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-logout-box-r-line mr-3"></i>Logout</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="pt-24 pb-12 flex-grow">
+        <section class="py-16">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col sm:flex-row justify-between items-center mb-12">
+                    <div class="text-center sm:text-left">
+                        <h1 class="text-4xl md:text-5xl font-bold font-poppins text-white">My Family</h1>
+                        <p class="text-lg text-primary-200 mt-4 max-w-3xl">Manage your family members' profiles and access their walls.</p>
+                    </div>
+                    <button id="add-member-button" class="mt-6 sm:mt-0 bg-accent hover:bg-accent-hover text-white font-bold py-3 px-6 rounded-full shadow-lg transform transition-all duration-300 ease-in-out hover:scale-105 flex items-center gap-2">
+                        <i class="ri-user-add-line"></i>
+                        <span>Add Family Member</span>
+                    </button>
+                </div>
+
+                <div id="family-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Family Member Card 1 -->
+                    <div class="bg-white/10 backdrop-blur-sm rounded-2xl shadow-lg p-6 flex flex-col items-center text-center" data-id="1" data-name="Nabil bin Ahmad" data-nid="090315-10-1234" data-relation="Child">
+                        <img src="../../src/images/users/nabil.png" alt="Ali bin Ahmad" class="w-24 h-24 rounded-full border-4 border-primary-400 mb-4">
+                        <h3 class="text-xl font-bold text-white">Ali bin Ahmad</h3>
+                        <p class="text-primary-200">Child</p>
+                        <p class="text-sm text-primary-300 mt-2">National ID: 090315-10-1234</p>
+                        <div class="mt-6 flex gap-3">
+                            <button class="edit-member-button flex-1 px-4 py-2 text-sm bg-primary/80 text-white font-semibold rounded-lg hover:bg-primary transition-colors">Edit</button>
+                            <button class="delete-member-button flex-1 px-4 py-2 text-sm bg-red-600/80 text-white font-semibold rounded-lg hover:bg-red-600 transition-colors">Delete</button>
+                        </div>
+                    </div>
+                    <!-- Family Member Card 2 -->
+                    <div class="bg-white/10 backdrop-blur-sm rounded-2xl shadow-lg p-6 flex flex-col items-center text-center" data-id="2" data-name="Siti binti Ahmad" data-nid="121101-10-5678" data-relation="Child">
+                        <img src="../../src/images/users/lee.png" alt="Siti binti Ahmad" class="w-24 h-24 rounded-full border-4 border-accent mb-4">
+                        <h3 class="text-xl font-bold text-white">Siti binti Ahmad</h3>
+                        <p class="text-primary-200">Child</p>
+                        <p class="text-sm text-primary-300 mt-2">National ID: 121101-10-5678</p>
+                        <div class="mt-6 flex gap-3">
+                            <button class="edit-member-button flex-1 px-4 py-2 text-sm bg-primary/80 text-white font-semibold rounded-lg hover:bg-primary transition-colors">Edit</button>
+                            <button class="delete-member-button flex-1 px-4 py-2 text-sm bg-red-600/80 text-white font-semibold rounded-lg hover:bg-red-600 transition-colors">Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Add/Edit Member Modal -->
+    <div id="member-modal" class="modal hidden fixed inset-0 z-[60] flex items-center justify-center p-4">
+        <div class="modal-backdrop absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+        <div class="modal-panel relative bg-white/10 border border-primary-500/50 rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] flex flex-col scale-95 opacity-0">
+            <form id="member-form" novalidate>
+                <input type="hidden" id="member-id" name="member-id">
+                <div class="flex justify-between items-center p-4 border-b border-primary-800/50">
+                    <h3 id="modal-title" class="text-lg font-bold text-white">Add Family Member</h3>
+                    <button type="button" class="modal-close-button text-primary-200 hover:text-white text-2xl"><i class="ri-close-line"></i></button>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div>
+                        <label for="member-name" class="block text-sm font-medium text-primary-200 mb-1">Full Name</label>
+                        <input type="text" id="member-name" name="name" required class="w-full px-4 py-2 bg-white/20 text-white rounded-lg border-2 border-transparent focus:border-primary-300 focus:outline-none">
+                    </div>
+                    <div>
+                        <label for="member-nid" class="block text-sm font-medium text-primary-200 mb-1">National ID</label>
+                        <input type="text" id="member-nid" name="nid" required placeholder="e.g., 090315-10-1234" class="w-full px-4 py-2 bg-white/20 text-white rounded-lg border-2 border-transparent focus:border-primary-300 focus:outline-none">
+                    </div>
+                    <div>
+                        <label for="member-relation" class="block text-sm font-medium text-primary-200 mb-1">Relationship</label>
+                        <select id="member-relation" name="relation" required class="w-full px-4 py-2 bg-white/20 text-white rounded-lg border-2 border-transparent focus:border-primary-300 focus:outline-none appearance-none" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' width=\'24\' height=\'24\' fill=\'%2399f6e4\'%3E%3Cpath d=\'M12 16L6 10H18L12 16Z\'%3E%3C/path%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 0.75rem center; background-size: 1.2em;">
+                            <option value="Child">Child</option>
+                            <option value="Spouse">Spouse</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="p-4 flex justify-end items-center gap-4 border-t border-primary-800/50">
+                    <button type="button" class="modal-close-button px-6 py-2 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600">Cancel</button>
+                    <button type="submit" class="px-6 py-2 bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover">Save Member</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="modal hidden fixed inset-0 z-[60] flex items-center justify-center p-4">
+        <div class="modal-backdrop absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+        <div class="modal-panel relative bg-white/10 border border-primary-500/50 rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] flex flex-col scale-95 opacity-0">
+             <div class="p-6 text-center">
+                <div class="text-5xl text-red-400 mb-4"><i class="ri-error-warning-line"></i></div>
+                <h3 class="text-lg font-bold text-white">Are you sure?</h3>
+                <p id="delete-modal-text" class="text-sm text-primary-200 mt-2">Do you really want to remove this family member? This action cannot be undone.</p>
+            </div>
+            <div class="p-4 flex justify-center items-center gap-4 border-t border-primary-800/50 bg-white/5">
+                <button type="button" class="modal-close-button px-6 py-2 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600">Cancel</button>
+                <button type="button" id="confirm-delete-button" class="px-6 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700">Yes, Delete</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Custom Toast/Popup Notification -->
+    <div id="toast-notification" class="hidden fixed bottom-10 right-10 bg-accent text-white px-6 py-3 rounded-full shadow-lg transform transition-all duration-300 translate-y-20 opacity-0 flex items-center gap-2 z-[90]">
+        <i id="toast-icon" class="ri-checkbox-circle-line"></i>
+        <span id="toast-message"></span>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const body = document.body;
+
+            // --- Toast Notification ---
+            function showToast(message, isError = false) {
+                const toast = document.getElementById('toast-notification');
+                const toastMessage = document.getElementById('toast-message');
+                const toastIcon = document.getElementById('toast-icon');
+                if (!toast || !toastMessage || !toastIcon) return;
+
+                toastMessage.textContent = message;
+                toast.classList.remove('bg-accent', 'bg-red-500'); 
+                toast.classList.add(isError ? 'bg-red-500' : 'bg-accent');
+                toastIcon.className = isError ? 'ri-error-warning-line' : 'ri-checkbox-circle-line';
+
+                toast.classList.remove('hidden');
+                setTimeout(() => toast.classList.add('show'), 10);
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.classList.add('hidden'), 500);
+                }, 3000);
+            }
+
+            // --- Profile Menu Toggle ---
+            const profileMenuButton = document.getElementById('profile-menu-button');
+            const profileMenu = document.getElementById('profile-menu');
+            if (profileMenuButton) {
+                profileMenuButton.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    profileMenu.classList.toggle('hidden');
+                });
+            }
+            window.addEventListener('click', (event) => {
+                if (profileMenu && !profileMenu.classList.contains('hidden') && !profileMenuButton.contains(event.target)) {
+                    profileMenu.classList.add('hidden');
+                }
+            });
+
+            // --- Modal System ---
+            const modals = {};
+            function setupModal(modalId) {
+                const modal = document.getElementById(modalId);
+                if (!modal) return null;
+                
+                const closeButtons = modal.querySelectorAll('.modal-close-button');
+                const backdrop = modal.querySelector('.modal-backdrop');
+                const panel = modal.querySelector('.modal-panel');
+
+                const open = () => {
+                    modal.classList.remove('hidden');
+                    body.style.overflow = 'hidden';
+                    setTimeout(() => panel.classList.remove('scale-95', 'opacity-0'), 10);
+                };
+
+                const close = () => {
+                    panel.classList.add('scale-95', 'opacity-0');
+                    setTimeout(() => {
+                        modal.classList.add('hidden');
+                        if (!document.querySelector('.modal:not(.hidden)')) {
+                            body.style.overflow = '';
+                        }
+                    }, 300);
+                };
+                
+                closeButtons.forEach(btn => btn.addEventListener('click', close));
+                if(backdrop) backdrop.addEventListener('click', close);
+                
+                modals[modalId] = { open, close, modal };
+                return modals[modalId];
+            }
+
+            const memberModal = setupModal('member-modal');
+            const deleteModal = setupModal('delete-modal');
+
+            // --- CRUD Logic ---
+            const addMemberButton = document.getElementById('add-member-button');
+            const memberForm = document.getElementById('member-form');
+            const familyList = document.getElementById('family-list');
+            let memberToDelete = null;
+
+            // Open "Add" modal
+            addMemberButton.addEventListener('click', () => {
+                memberForm.reset();
+                document.getElementById('member-id').value = '';
+                document.getElementById('modal-title').textContent = 'Add Family Member';
+                document.getElementById('member-nid').readOnly = false;
+                memberModal.open();
+            });
+
+            // Open "Edit" modal
+            familyList.addEventListener('click', (e) => {
+                if (e.target.closest('.edit-member-button')) {
+                    const card = e.target.closest('.bg-white\\/10');
+                    document.getElementById('member-id').value = card.dataset.id;
+                    document.getElementById('member-name').value = card.dataset.name;
+                    document.getElementById('member-nid').value = card.dataset.nid;
+                    document.getElementById('member-nid').readOnly = true; // National ID is a key, shouldn't be changed
+                    document.getElementById('member-relation').value = card.dataset.relation;
+                    document.getElementById('modal-title').textContent = 'Edit Family Member';
+                    memberModal.open();
+                }
+            });
+            
+            // Open "Delete" confirmation
+            familyList.addEventListener('click', (e) => {
+                if (e.target.closest('.delete-member-button')) {
+                    memberToDelete = e.target.closest('.bg-white\\/10');
+                    const name = memberToDelete.dataset.name;
+                    document.getElementById('delete-modal-text').textContent = `Do you really want to remove ${name}? This action cannot be undone.`;
+                    deleteModal.open();
+                }
+            });
+
+            // Handle form submission (Add/Edit)
+            memberForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const id = document.getElementById('member-id').value;
+                const name = document.getElementById('member-name').value;
+                if (!name.trim()) {
+                    showToast('Full Name is required.', true);
+                    return;
+                }
+                if (id) {
+                    showToast(`Updated details for ${name}.`);
+                } else {
+                    showToast(`${name} has been added to your family.`);
+                }
+                memberModal.close();
+            });
+
+            // Handle delete confirmation
+            document.getElementById('confirm-delete-button').addEventListener('click', () => {
+                if (memberToDelete) {
+                    const name = memberToDelete.dataset.name;
+                    memberToDelete.remove();
+                    showToast(`${name} has been removed from your family.`);
+                    memberToDelete = null;
+                }
+                deleteModal.close();
+            });
+        });
+    </script>
+</body>
+</html>

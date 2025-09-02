@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySertifico Back Office - MyWall Plans</title>
+    <link rel="icon" type="image/png" href="../src/images/logos/favicon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- Konfigurasi Tambahan untuk Tailwind -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#0d9488', // Teal-600
+                        'primary-dark': '#0f766e', // Teal-700
+                        'accent': '#f59e0b', // Amber-500
+                        'accent-dark': '#d97706', // Amber-600
+                        'bo-bg-light': '#f8fafc', // Slate-50
+                        'bo-bg-dark': '#020617', // Slate-950
+                        'bo-surface-light': '#ffffff',
+                        'bo-surface-dark': '#1e293b', // Slate-800
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .sidebar { scrollbar-width: none; }
+        .sidebar::-webkit-scrollbar { display: none; }
+         /* Style for select dropdown arrow */
+        select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        .dark select {
+             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23d1d5db' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        }
+    </style>
+</head>
+<body class="bg-bo-bg-light dark:bg-bo-bg-dark text-gray-800 dark:text-gray-200 transition-colors duration-300">
+
+    <!-- ===== Sidebar Start ===== -->
+    <aside id="sidebar" class="sidebar fixed top-0 left-0 z-50 h-full w-64 bg-gray-900 text-white transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto">
+        <!-- Sidebar Header -->
+        <div class="flex items-center justify-between p-5 border-b border-gray-800">
+             <a href="dashboard.html" class="flex items-center gap-3">
+                <img src="../src/images/logos/logo.png" class="h-8 w-8 rounded-lg" alt="Logo" onerror="this.onerror=null;this.src='https://placehold.co/32x32/111827/ffffff?text=M';">
+                <h2 class="font-poppins text-xl font-bold text-white">MySertifico</h2>
+             </a>
+             <button id="close-sidebar" class="text-gray-400 hover:text-white">
+                 <i class="ri-close-line text-2xl"></i>
+             </button>
+        </div>
+        
+        <!-- Navigation Menu -->
+        <nav class="p-4">
+            <ul class="space-y-1">
+                <li class="px-4 text-xs text-gray-400 uppercase font-semibold tracking-wider my-4">Menu</li>
+                <li><a href="dashboard.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700/50 text-gray-300 hover:text-white"><i class="ri-dashboard-3-line mr-3 text-lg"></i><span>Dashboard</span></a></li>
+                <li><a href="templates.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700/50 text-gray-300 hover:text-white"><i class="ri-layout-3-line mr-3 text-lg"></i><span>Templates</span></a></li>
+                <li><a href="logos-badges.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700/50 text-gray-300 hover:text-white"><i class="ri-medal-line mr-3 text-lg"></i><span>Logos & Badges</span></a></li>
+                <li><a href="certificates.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700/50 text-gray-300 hover:text-white"><i class="ri-award-line mr-3 text-lg"></i><span>Certificates</span></a></li>
+                <li>
+                    <button data-collapse-toggle="submenu-users" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg hover:bg-gray-700/50 text-gray-300 hover:text-white">
+                        <span class="flex items-center"><i class="ri-group-line mr-3 text-lg"></i><span>Users</span></span>
+                        <i class="ri-arrow-down-s-line transition-transform duration-200"></i>
+                    </button>
+                    <ul id="submenu-users" class="hidden py-1 space-y-1 pl-8">
+                        <li><a href="organizations.html" class="flex items-center gap-3 block py-2 px-4 rounded-lg text-sm text-gray-300 hover:bg-gray-700"><i class="ri-school-line"></i>Organizations</a></li>
+                        <li><a href="school-users.html" class="flex items-center gap-3 block py-2 px-4 rounded-lg text-sm text-gray-300 hover:bg-gray-700"><i class="ri-user-2-line"></i>School Users</a></li>
+                        <li><a href="mywall-users.html" class="flex items-center gap-3 block py-2 px-4 rounded-lg text-sm text-gray-300 hover:bg-gray-700"><i class="ri-user-star-line"></i>MyWall Users</a></li>
+                    </ul>
+                </li>
+                <li class="px-4 text-xs text-gray-400 uppercase font-semibold tracking-wider pt-6 pb-2">Administration</li>
+                <li>
+                    <button data-collapse-toggle="submenu-admin" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg bg-gray-700/30 text-white">
+                        <span class="flex items-center"><i class="ri-settings-3-line mr-3 text-lg"></i><span>Settings</span></span>
+                        <i class="ri-arrow-down-s-line transition-transform duration-200 rotate-180"></i>
+                    </button>
+                    <ul id="submenu-admin" class="py-1 space-y-1 pl-8">
+                        <li><a href="bo-users.html" class="flex items-center gap-3 block py-2 px-4 rounded-lg text-sm text-gray-300 hover:bg-gray-700"><i class="ri-user-settings-line"></i>Staff</a></li>
+                        <li>
+                            <button data-collapse-toggle="submenu-plans" type="button" class="w-full flex items-center justify-between py-2 px-4 rounded-lg text-sm text-white">
+                                <span class="flex items-center gap-3"><i class="ri-price-tag-3-line"></i><span>Plans & Subscriptions</span></span>
+                                <i class="ri-arrow-down-s-line transition-transform duration-200 rotate-180"></i>
+                            </button>
+                             <ul id="submenu-plans" class="py-1 space-y-1 pl-8">
+                                <li><a href="mysertifico-plans.html" class="block py-2 px-4 rounded-lg text-xs text-gray-300 hover:bg-gray-700">MySertifico Plans</a></li>
+                                <li><a href="mywall-plans.html" class="block py-2 px-4 rounded-lg text-xs text-primary bg-primary/10">MyWall Plans</a></li>
+                             </ul>
+                        </li>
+                        <li><a href="support-help.html" class="flex items-center gap-3 block py-2 px-4 rounded-lg text-sm text-gray-300 hover:bg-gray-700"><i class="ri-question-line"></i>Support & Help</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+    <!-- ===== Sidebar End ===== -->
+    
+    <!-- ===== Main Content Start ===== -->
+    <div id="main-content" class="relative min-h-screen transition-all duration-300 ease-in-out">
+        <!-- ===== Navbar Start ===== -->
+        <header class="sticky top-0 z-30 bg-bo-surface-light/80 dark:bg-bo-surface-dark/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between p-4 h-20">
+                <!-- Left Navbar Section -->
+                <div class="flex items-center space-x-4">
+                    <button id="sidebar-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
+                        <i class="ri-menu-line text-2xl"></i>
+                    </button>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">MyWall Plans</h1>
+                </div>
+
+                <!-- Right Navbar Section -->
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-xl"><i class="ri-moon-line block dark:hidden"></i><i class="ri-sun-line hidden dark:block"></i></button>
+                    
+                    <!-- Profile Dropdown Menu -->
+                    <div class="relative">
+                        <button id="profile-menu-button" class="flex items-center space-x-2">
+                             <img class="h-9 w-9 rounded-full object-cover" src="https://i.pravatar.cc/150?u=admin" alt="Admin" onerror="this.onerror=null;this.src='https://placehold.co/36x36/1e293b/ffffff?text=A';">
+                             <div class="hidden md:block text-left">
+                                 <div class="text-sm font-semibold text-gray-800 dark:text-white">Masta Rob</div>
+                                 <div class="text-xs text-gray-500 dark:text-gray-400">Super Admin</div>
+                             </div>
+                             <i class="ri-arrow-down-s-line text-gray-500 dark:text-gray-400 hidden md:block"></i>
+                        </button>
+                        <div id="profile-menu" class="hidden absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-bo-surface-light dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <div class="py-1">
+                                <a href="my-profile.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-user-line mr-3"></i>My Profile</a>
+                                <a href="change-password.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-lock-password-line mr-3"></i>Change Password</a>
+                                <hr class="border-gray-200 dark:border-gray-700 my-1">
+                                <a href="sign-in.html" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-logout-box-r-line mr-3"></i>Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- ===== Navbar End ===== -->
+        
+        <!-- ===== Page Content Start ===== -->
+        <main class="p-6 sm:p-8">
+            <div class="max-w-7xl mx-auto">
+                <!-- Header -->
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200">MyWall Subscription Plans</h2>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage all MyWall subscription plans.</p>
+                    </div>
+                     <button id="add-plan-btn" class="bg-primary hover:bg-primary-dark text-white font-bold py-2.5 px-4 rounded-lg inline-flex items-center gap-2 transition-colors w-full sm:w-auto">
+                        <i class="ri-add-line"></i>
+                        <span>Add New Plan</span>
+                    </button>
+                </div>
+
+                <!-- Main Content Card -->
+                <div class="bg-bo-surface-light dark:bg-bo-surface-dark rounded-xl shadow-md">
+                    <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex flex-col md:flex-row items-center gap-4">
+                        <div class="relative w-full md:w-auto md:flex-grow">
+                            <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                            <input type="text" id="search-input" placeholder="Search by plan name..." class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-bo-bg-light dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary">
+                        </div>
+                        <select id="country-filter" class="w-full md:w-40 py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-bo-bg-light dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option value="all">All Countries</option>
+                        </select>
+                        <select id="plan-filter" class="w-full md:w-40 py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-bo-bg-light dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option value="all">All Plans</option>
+                        </select>
+                         <select id="status-filter" class="w-full md:w-40 py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-bo-bg-light dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option value="all">All Statuses</option>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Plans List -->
+                    <div id="plans-container" class="overflow-x-auto">
+                       <!-- Plans table will be rendered here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- ===== Page Content End ===== -->
+    </div>
+    <!-- ===== Main Content End ===== -->
+
+    <!-- Add/Edit Plan Modal -->
+    <div id="plan-modal" class="fixed inset-0 bg-black/60 z-[120] hidden items-center justify-center p-4 overflow-y-auto">
+        <div id="plan-modal-panel" class="bg-bo-surface-light dark:bg-bo-surface-dark rounded-2xl shadow-2xl w-full max-w-lg transform transition-all opacity-0 scale-95 my-auto">
+            <form id="plan-form">
+                <input type="hidden" id="plan-id">
+                <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+                    <h3 id="plan-modal-title" class="font-poppins font-bold text-lg text-gray-800 dark:text-white">Edit Plan</h3>
+                    <button type="button" id="close-plan-modal-btn" class="text-gray-400 hover:text-gray-600 dark:hover:text-white"><i class="ri-close-line text-2xl"></i></button>
+                </div>
+                <div id="plan-modal-body" class="p-6 space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                         <div>
+                            <label for="plan-country" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Country</label>
+                            <select id="plan-country" class="w-full py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-bo-bg-light dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                                <!-- Populated by JS -->
+                            </select>
+                        </div>
+                        <div>
+                            <label for="plan-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Plan Name</label>
+                            <select id="plan-name" class="w-full py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-bo-bg-light dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                                <option value="Trial">Trial</option>
+                                <option value="Standard">Standard</option>
+                                <option value="Premium">Premium</option>
+                                <option value="Pro">Pro</option>
+                                <option value="Family">Family</option>
+                                <option value="Pilot">Pilot</option>
+                            </select>
+                        </div>
+                    </div>
+                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="plan-total-price" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Total Price (<span id="currency-symbol"></span>)</label>
+                            <input type="number" id="plan-total-price" step="0.01" class="w-full py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-bo-bg-light dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                        </div>
+                         <div>
+                            <label for="plan-subscription-fee" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Subscription Fee (<span id="currency-symbol-sub"></span>)</label>
+                            <input type="number" id="plan-subscription-fee" step="0.01" class="w-full py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-bo-bg-light dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                        </div>
+                    </div>
+                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="plan-token-fee" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Token Fee (Calculated)</label>
+                            <input type="text" id="plan-token-fee" class="w-full py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-800 focus:outline-none" readonly>
+                        </div>
+                        <div>
+                            <label for="plan-price-per-token" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Price per Token (<span id="currency-symbol-token"></span>)</label>
+                            <input type="number" id="plan-price-per-token" step="0.01" class="w-full py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-bo-bg-light dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="plan-token-allocation" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Token Allocation (Calculated)</label>
+                            <input type="text" id="plan-token-allocation" class="w-full py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-800 focus:outline-none" readonly>
+                        </div>
+                        <div>
+                            <label for="plan-status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
+                            <select id="plan-status" class="w-full py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-bo-bg-light dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="px-6 py-4 bg-gray-50 dark:bg-slate-900/50 border-t border-gray-200 dark:border-gray-700 flex justify-end items-center space-x-3">
+                     <button type="button" id="cancel-plan-modal-btn" class="bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors">Cancel</button>
+                     <button type="submit" id="save-plan-btn" class="bg-primary text-white font-semibold py-2 px-4 rounded-lg hover:bg-primary-dark transition-colors">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="fixed inset-0 bg-black/60 z-[130] hidden items-center justify-center p-4">
+        <div id="confirmation-panel" class="bg-bo-surface-light dark:bg-bo-surface-dark rounded-2xl shadow-2xl w-full max-w-sm transform transition-all opacity-0 scale-95">
+            <div class="p-6 text-center">
+                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
+                    <i class="ri-delete-bin-line text-4xl text-red-600 dark:text-red-400"></i>
+                </div>
+                <h3 id="confirmation-title" class="text-lg font-semibold text-gray-900 dark:text-gray-100">Delete Plan?</h3>
+                <p id="confirmation-message" class="mt-2 text-sm text-gray-500 dark:text-gray-400"></p>
+            </div>
+            <div class="px-6 py-4 bg-gray-50 dark:bg-slate-900/50 border-t border-gray-200 dark:border-gray-700 flex justify-center space-x-3">
+                <button id="cancel-confirmation-btn" class="bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors w-full">Cancel</button>
+                <button id="confirm-action-btn" class="text-white font-semibold py-2 px-4 rounded-lg w-full bg-red-600 hover:bg-red-700">Yes, Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Sidebar, Theme, Profile Menu Logic (unchanged) ---
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggleBtn = document.getElementById('sidebar-toggle');
+            const closeSidebarBtn = document.getElementById('close-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const mainContent = document.getElementById('main-content');
+            
+            function openSidebar() {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                if (window.innerWidth >= 1024) { mainContent.classList.add('lg:ml-64'); }
+            }
+            function closeSidebar() {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+                mainContent.classList.remove('lg:ml-64');
+            }
+            sidebarToggleBtn.addEventListener('click', (e) => { e.stopPropagation(); openSidebar(); });
+            closeSidebarBtn.addEventListener('click', (e) => { e.stopPropagation(); closeSidebar(); });
+            overlay.addEventListener('click', closeSidebar);
+            document.querySelectorAll('[data-collapse-toggle]').forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.getAttribute('data-collapse-toggle');
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.classList.toggle('hidden');
+                        const arrowIcon = button.querySelector('.ri-arrow-down-s-line');
+                        if(arrowIcon) arrowIcon.classList.toggle('rotate-180');
+                    }
+                });
+            });
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+            themeToggleBtn.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                localStorage.setItem('color-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+            });
+            const profileMenuButton = document.getElementById('profile-menu-button');
+            const profileMenu = document.getElementById('profile-menu');
+            profileMenuButton?.addEventListener('click', (e) => { e.stopPropagation(); profileMenu.classList.toggle('hidden'); });
+            window.addEventListener('click', (e) => {
+                if (profileMenu && !profileMenu.classList.contains('hidden') && !profileMenuButton.contains(e.target)) {
+                    profileMenu.classList.add('hidden');
+                }
+            });
+
+            // --- MyWall Plans Page Logic ---
+            const plansContainer = document.getElementById('plans-container');
+            const statusFilter = document.getElementById('status-filter');
+            const searchInput = document.getElementById('search-input');
+            const countryFilter = document.getElementById('country-filter');
+            const planFilter = document.getElementById('plan-filter');
+            
+            let planData = [
+                { id: 1, country: 'Malaysia', currency: 'MYR', name: 'Trial', totalPrice: 0, subscriptionFee: 0, pricePerToken: 0, tokenAllocation: 30, status: 'Active' },
+                { id: 2, country: 'Malaysia', currency: 'MYR', name: 'Standard', totalPrice: 10, subscriptionFee: 5, pricePerToken: 0.20, tokenAllocation: 25, status: 'Active' },
+                { id: 3, country: 'Malaysia', currency: 'MYR', name: 'Premium', totalPrice: 20, subscriptionFee: 5, pricePerToken: 0.18, tokenAllocation: 83, status: 'Active' },
+                { id: 4, country: 'Malaysia', currency: 'MYR', name: 'Pro', totalPrice: 30, subscriptionFee: 5, pricePerToken: 0.15, tokenAllocation: 166, status: 'Active' },
+                { id: 5, country: 'Malaysia', currency: 'MYR', name: 'Family', totalPrice: 30, subscriptionFee: 15, pricePerToken: 0.20, tokenAllocation: 75, status: 'Active' },
+                { id: 6, country: 'Malaysia', currency: 'MYR', name: 'Pilot', totalPrice: 0, subscriptionFee: 0, pricePerToken: 0, tokenAllocation: 0, status: 'Inactive' },
+            ];
+            let displayedData = [...planData];
+
+            function populateFilters() {
+                const countries = [...new Set(planData.map(p => p.country))].sort();
+                const planNames = [...new Set(planData.map(p => p.name))].sort();
+
+                countryFilter.innerHTML = '<option value="all">All Countries</option>';
+                countries.forEach(c => countryFilter.innerHTML += `<option value="${c}">${c}</option>`);
+
+                planFilter.innerHTML = '<option value="all">All Plans</option>';
+                planNames.forEach(n => planFilter.innerHTML += `<option value="${n}">${n}</option>`);
+            }
+            
+            function renderPlans() {
+                if (displayedData.length === 0) {
+                    plansContainer.innerHTML = `
+                        <div class="text-center py-16 px-4">
+                            <i class="ri-search-eye-line text-6xl text-gray-400 mb-4"></i>
+                            <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-200">No Plans Found</h3>
+                            <p class="text-gray-500 dark:text-gray-400 mt-1">Your search or filter did not match any plans.</p>
+                        </div>`;
+                    return;
+                }
+
+                plansContainer.innerHTML = `
+                    <div class="hidden md:block">
+                        <table class="w-full text-sm text-left">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <tr>
+                                    <th class="px-6 py-3">#</th>
+                                    <th class="px-6 py-3">Country</th>
+                                    <th class="px-6 py-3">Plan Name</th>
+                                    <th class="px-6 py-3">Total Price (/year)</th>
+                                    <th class="px-6 py-3">Subscription Fee</th>
+                                    <th class="px-6 py-3">Token Allocation</th>
+                                    <th class="px-6 py-3">Status</th>
+                                    <th class="px-6 py-3 text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            ${displayedData.map((plan, index) => `
+                                <tr class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600/20">
+                                    <td class="px-6 py-4">${index + 1}</td>
+                                    <td class="px-6 py-4">${plan.country}</td>
+                                    <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">${plan.name}</td>
+                                    <td class="px-6 py-4">${plan.currency} ${plan.totalPrice.toFixed(2)}</td>
+                                    <td class="px-6 py-4">${plan.currency} ${plan.subscriptionFee.toFixed(2)}</td>
+                                    <td class="px-6 py-4">${plan.tokenAllocation.toLocaleString()}</td>
+                                    <td class="px-6 py-4">
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full ${plan.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'}">${plan.status}</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <div class="flex items-center justify-end gap-x-1">
+                                            <button class="edit-plan-btn p-2 text-gray-500 hover:text-primary dark:hover:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700" title="Edit Plan" data-id="${plan.id}">
+                                                <i class="ri-pencil-line"></i>
+                                            </button>
+                                            <button class="delete-plan-btn p-2 text-gray-500 hover:text-red-500 rounded-lg hover:bg-red-100 dark:hover:bg-red-500/10" title="Delete Plan" data-id="${plan.id}">
+                                                <i class="ri-delete-bin-line"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="block md:hidden divide-y divide-gray-200 dark:divide-gray-700">
+                    ${displayedData.map(plan => `
+                        <div class="p-4 flex justify-between items-start">
+                            <div>
+                                <div class="font-medium text-gray-900 dark:text-white">${plan.name} (${plan.country})</div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400">
+                                    <span class="font-semibold">${plan.currency} ${plan.totalPrice.toFixed(2)}</span> | Tokens: ${plan.tokenAllocation.toLocaleString()}
+                                </div>
+                                <div class="mt-2">
+                                    <span class="px-2 py-1 text-xs font-semibold rounded-full ${plan.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'}">${plan.status}</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <button class="edit-plan-btn p-2" title="Edit Plan" data-id="${plan.id}"><i class="ri-pencil-line text-lg"></i></button>
+                                <button class="delete-plan-btn p-2" title="Delete Plan" data-id="${plan.id}"><i class="ri-delete-bin-line text-lg text-red-500"></i></button>
+                            </div>
+                        </div>
+                    `).join('')}
+                    </div>
+                `;
+            }
+            
+            function applyFilters() {
+                const selectedStatus = statusFilter.value;
+                const searchTerm = searchInput.value.toLowerCase();
+                const selectedCountry = countryFilter.value;
+                const selectedPlan = planFilter.value;
+
+                displayedData = planData.filter(plan => 
+                    (selectedStatus === 'all' || plan.status === selectedStatus) &&
+                    (selectedCountry === 'all' || plan.country === selectedCountry) &&
+                    (selectedPlan === 'all' || plan.name === selectedPlan) &&
+                    (plan.name.toLowerCase().includes(searchTerm))
+                );
+                renderPlans();
+            }
+
+            [statusFilter, searchInput, countryFilter, planFilter].forEach(el => el.addEventListener('input', applyFilters));
+
+            // --- Add/Edit Plan Modal Logic ---
+            const planModal = document.getElementById('plan-modal');
+            const planModalPanel = document.getElementById('plan-modal-panel');
+            const planModalTitle = document.getElementById('plan-modal-title');
+            const closePlanModalBtn = document.getElementById('close-plan-modal-btn');
+            const cancelPlanModalBtn = document.getElementById('cancel-plan-modal-btn');
+            const planForm = document.getElementById('plan-form');
+            const planIdInput = document.getElementById('plan-id');
+            const planNameSelect = document.getElementById('plan-name');
+            const planCountrySelect = document.getElementById('plan-country');
+            const planTotalPriceInput = document.getElementById('plan-total-price');
+            const planSubscriptionFeeInput = document.getElementById('plan-subscription-fee');
+            const planTokenFeeInput = document.getElementById('plan-token-fee');
+            const planPricePerTokenInput = document.getElementById('plan-price-per-token');
+            const planTokenAllocationInput = document.getElementById('plan-token-allocation');
+            const planStatusSelect = document.getElementById('plan-status');
+            const savePlanBtn = document.getElementById('save-plan-btn');
+            const currencySymbol = document.getElementById('currency-symbol');
+            const currencySymbolSub = document.getElementById('currency-symbol-sub');
+            const currencySymbolToken = document.getElementById('currency-symbol-token');
+
+            const countryCurrencyMap = {
+                'Malaysia': 'MYR',
+                'Singapore': 'SGD',
+                'Indonesia': 'IDR',
+                'Brunei': 'BND'
+            };
+
+            function updateCurrency() {
+                const selectedCountry = planCountrySelect.value;
+                const currency = countryCurrencyMap[selectedCountry] || '';
+                currencySymbol.textContent = currency;
+                currencySymbolSub.textContent = currency;
+                currencySymbolToken.textContent = currency;
+            }
+
+            function calculateAllocation() {
+                const totalPrice = parseFloat(planTotalPriceInput.value) || 0;
+                const subFee = parseFloat(planSubscriptionFeeInput.value) || 0;
+                const pricePerToken = parseFloat(planPricePerTokenInput.value) || 0;
+
+                const tokenFee = totalPrice - subFee;
+                planTokenFeeInput.value = tokenFee >= 0 ? tokenFee.toFixed(2) : '0.00';
+
+                if (tokenFee > 0 && pricePerToken > 0) {
+                    const allocation = Math.floor(tokenFee / pricePerToken);
+                    planTokenAllocationInput.value = allocation.toLocaleString();
+                } else {
+                    planTokenAllocationInput.value = '0';
+                }
+            }
+            
+            [planTotalPriceInput, planSubscriptionFeeInput, planPricePerTokenInput].forEach(input => {
+                input.addEventListener('input', calculateAllocation);
+            });
+            planCountrySelect.addEventListener('change', updateCurrency);
+
+            function openPlanModal(planId = null) {
+                planForm.reset();
+                planCountrySelect.innerHTML = Object.keys(countryCurrencyMap).map(c => `<option value="${c}">${c}</option>`).join('');
+
+                if (planId !== null) { // Edit mode
+                    const plan = planData.find(p => p.id === planId);
+                    if (!plan) return;
+                    planModalTitle.textContent = 'Edit Plan';
+                    savePlanBtn.textContent = 'Save Changes';
+                    planIdInput.value = plan.id;
+                    planNameSelect.value = plan.name;
+                    planCountrySelect.value = plan.country;
+                    planTotalPriceInput.value = plan.totalPrice;
+                    planSubscriptionFeeInput.value = plan.subscriptionFee;
+                    planPricePerTokenInput.value = plan.pricePerToken;
+                    planStatusSelect.value = plan.status;
+                } else { // Add mode
+                    planModalTitle.textContent = 'Add New Plan';
+                    savePlanBtn.textContent = 'Add Plan';
+                    planIdInput.value = '';
+                }
+                
+                updateCurrency();
+                calculateAllocation();
+
+                planModal.classList.remove('hidden');
+                planModal.classList.add('flex');
+                setTimeout(() => planModalPanel.classList.remove('opacity-0', 'scale-95'), 10);
+            }
+
+            function closePlanModal() {
+                planModalPanel.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => {
+                    planModal.classList.add('hidden');
+                    planModal.classList.remove('flex');
+                }, 200);
+            }
+
+            planForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const planId = planIdInput.value ? parseInt(planIdInput.value) : null;
+                const tokenAllocation = parseInt(planTokenAllocationInput.value.replace(/,/g, '')) || 0;
+                
+                const planDetails = {
+                    name: planNameSelect.value,
+                    country: planCountrySelect.value,
+                    currency: countryCurrencyMap[planCountrySelect.value],
+                    totalPrice: parseFloat(planTotalPriceInput.value),
+                    subscriptionFee: parseFloat(planSubscriptionFeeInput.value),
+                    pricePerToken: parseFloat(planPricePerTokenInput.value),
+                    tokenAllocation: tokenAllocation,
+                    status: planStatusSelect.value,
+                };
+
+                if (planId) { // Update
+                    const planIndex = planData.findIndex(p => p.id === planId);
+                    if (planIndex > -1) {
+                        planData[planIndex] = { ...planData[planIndex], ...planDetails };
+                    }
+                } else { // Add
+                    const newId = Math.max(0, ...planData.map(p => p.id)) + 1;
+                    planData.push({ id: newId, ...planDetails });
+                }
+                
+                populateFilters();
+                applyFilters();
+                closePlanModal();
+            });
+            
+            closePlanModalBtn.addEventListener('click', closePlanModal);
+            cancelPlanModalBtn.addEventListener('click', closePlanModal);
+            document.getElementById('add-plan-btn').addEventListener('click', () => openPlanModal());
+
+            // --- Confirmation Modal Logic ---
+            const confirmationModal = document.getElementById('confirmation-modal');
+            const confirmationPanel = document.getElementById('confirmation-panel');
+            const confirmationMessage = document.getElementById('confirmation-message');
+            const cancelConfirmationBtn = document.getElementById('cancel-confirmation-btn');
+            const confirmActionBtn = document.getElementById('confirm-action-btn');
+            let planToDeleteId = null;
+
+            function openConfirmationModal(planId) {
+                const plan = planData.find(p => p.id === planId);
+                if (!plan) return;
+                planToDeleteId = planId;
+                confirmationMessage.textContent = `Are you sure you want to delete the "${plan.name}" plan? This action cannot be undone.`;
+                confirmationModal.classList.remove('hidden');
+                confirmationModal.classList.add('flex');
+                setTimeout(() => confirmationPanel.classList.remove('opacity-0', 'scale-95'), 10);
+            }
+
+            function closeConfirmationModal() {
+                confirmationPanel.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => {
+                    confirmationModal.classList.add('hidden');
+                    confirmationModal.classList.remove('flex');
+                    planToDeleteId = null;
+                }, 200);
+            }
+
+            cancelConfirmationBtn.addEventListener('click', closeConfirmationModal);
+            confirmActionBtn.addEventListener('click', () => {
+                if (planToDeleteId !== null) {
+                    planData = planData.filter(p => p.id !== planToDeleteId);
+                    populateFilters();
+                    applyFilters();
+                    closeConfirmationModal();
+                }
+            });
+
+            document.body.addEventListener('click', function(e) {
+                const deleteBtn = e.target.closest('.delete-plan-btn');
+                if (deleteBtn) {
+                    openConfirmationModal(parseInt(deleteBtn.dataset.id));
+                }
+                const editBtn = e.target.closest('.edit-plan-btn');
+                if (editBtn) {
+                    openPlanModal(parseInt(editBtn.dataset.id));
+                }
+            });
+            
+            // Initial render
+            populateFilters();
+            applyFilters();
+        });
+    </script>
+
+</body>
+</html>

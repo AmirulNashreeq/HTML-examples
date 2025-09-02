@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Preview - MyWall</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../src/images/logos/favicon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+
+    <!-- html2pdf.js CDN for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" xintegrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#0f766e', // Teal-700
+                        'dark': '#1f2937',    // Gray-800
+                        'medium': '#4b5563',  // Gray-600
+                        'light': '#f3f4f6',   // Gray-100
+                        'accent': '#F97316',
+                        'accent-hover': '#EA580C',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* A4 paper size: 210mm x 297mm */
+        .a4-container {
+            width: 210mm;
+            /* min-height is removed to prevent forced overflow */
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-200">
+
+    <!-- Action Bar -->
+    <div class="bg-white shadow-md w-full py-4 px-6 flex justify-center items-center gap-4 fixed bottom-0 z-50">
+        <a href="parent-myaccount.html" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-6 rounded-full transition-colors flex items-center gap-2">
+            <i class="ri-arrow-left-line"></i>
+            <span>Back to Account</span>
+        </a>
+        <button id="download-pdf-button" class="bg-accent hover:bg-accent-hover text-white font-semibold py-2 px-6 rounded-full transition-colors flex items-center gap-2">
+            <i class="ri-download-2-line"></i>
+            <span>Download PDF</span>
+        </button>
+    </div>
+
+    <!-- Main content is the invoice preview itself -->
+    <main class="py-12">
+        <!-- A4 Aspect Ratio Container for PDF generation -->
+        <div id="invoice-content" class="a4-container bg-white shadow-lg text-dark">
+            <div class="p-[16mm]"> <!-- Padding is applied here to act as the margin inside the PDF -->
+                <!-- Invoice Header -->
+                <header class="flex justify-between items-start pb-8 border-b">
+                    <div>
+                        <img src="../../src/images/logos/logo.png" alt="MyWall Logo" class="h-16 w-16 mb-4">
+                        <h1 class="text-4xl font-bold font-poppins text-dark">INVOICE</h1>
+                        <p class="text-medium">#INV-2025-07-001</p>
+                    </div>
+                    <div class="text-right">
+                        <h2 class="text-xl font-semibold">Webapp Studio Sdn. Bhd.</h2>
+                        <p class="text-sm text-medium">B-05-01, Level 5, Block B, CoPlace 2,</p>
+                        <p class="text-sm text-medium">2270, Jalan Usahawan 2, 63000 Cyberjaya,</p>
+                        <p class="text-sm text-medium">Selangor, Malaysia.</p>
+                        <p class="text-sm text-medium mt-2">hello@webappstudio.com</p>
+                    </div>
+                </header>
+
+                <!-- Billing Details -->
+                <section class="flex justify-between items-start mt-8">
+                    <div>
+                        <h3 class="font-semibold text-medium uppercase tracking-wider text-sm">Bill To</h3>
+                        <p class="font-bold text-lg mt-1">Aliyah Zawaton binti Muhammad</p>
+                        <p class="text-medium text-sm">A-12-01, The Horizon Residence,</p>
+                        <p class="text-medium text-sm">Jalan Tun Razak, 50400 Kuala Lumpur</p>
+                    </div>
+                    <div class="text-right">
+                        <h3 class="font-semibold text-medium uppercase tracking-wider text-sm">Details</h3>
+                        <p class="text-dark text-sm mt-1"><span class="font-semibold">Date of Issue:</span> July 15, 2025</p>
+                        <p class="text-dark text-sm"><span class="font-semibold">Due Date:</span> July 30, 2025</p>
+                    </div>
+                </section>
+
+                <!-- Invoice Table -->
+                <section class="mt-10">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="bg-light">
+                                <th class="p-3 text-sm font-semibold uppercase tracking-wider">Description</th>
+                                <th class="p-3 text-sm font-semibold uppercase tracking-wider text-center">Qty</th>
+                                <th class="p-3 text-sm font-semibold uppercase tracking-wider text-right">Unit Price</th>
+                                <th class="p-3 text-sm font-semibold uppercase tracking-wider text-right">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="p-3">Standard Plan - Annual Subscription (2025-2026)</td>
+                                <td class="p-3 text-center">1</td>
+                                <td class="p-3 text-right">RM 10.00</td>
+                                <td class="p-3 text-right">RM 10.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- Totals -->
+                <section class="flex justify-end mt-8">
+                    <div class="w-full max-w-xs space-y-3">
+                        <div class="flex justify-between text-medium">
+                            <span>Subtotal</span>
+                            <span>RM 10.00</span>
+                        </div>
+                        <div class="flex justify-between text-medium">
+                            <span>SST (8%)</span>
+                            <span>RM 0.80</span>
+                        </div>
+                        <div class="flex justify-between text-dark font-bold text-xl border-t pt-3">
+                            <span>Grand Total</span>
+                            <span>RM 10.80</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Footer Notes -->
+                <footer class="mt-16 pt-8 border-t">
+                    <h4 class="font-semibold text-medium mb-2">Notes</h4>
+                    <p class="text-xs text-gray-500">Thank you for your business. Please make the payment by the due date. This is a computer-generated invoice and no signature is required.</p>
+                </footer>
+            </div>
+        </div>
+    </main>
+
+    <!-- Main Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- PDF Download Functionality ---
+            const downloadButton = document.getElementById('download-pdf-button');
+            if (downloadButton) {
+                downloadButton.addEventListener('click', () => {
+                    const element = document.getElementById('invoice-content');
+                    const opt = {
+                      margin:       0, // Margin is handled by the padding of the element itself
+                      filename:     'Invoice-INV-2025-07-001.pdf',
+                      image:        { type: 'jpeg', quality: 1.0 },
+                      html2canvas:  { scale: 4, useCORS: true, logging: false }, // Increased scale for better quality
+                      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                    };
+
+                    html2pdf().set(opt).from(element).save();
+                });
+            }
+        });
+    </script>
+</body>
+</html>

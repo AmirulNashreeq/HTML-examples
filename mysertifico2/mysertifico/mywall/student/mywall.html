@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyWall - Your Digital Portfolio</title>
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="../../src/images/logos/favicon.png">
+
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Remix Icon CDN -->
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+<!-- Google Fonts: Inter & Poppins -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+
+<!-- QR Code Library -->
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator/qrcode.js"></script>
+
+<!-- jsPDF Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<!-- Custom Tailwind Config -->
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        poppins: ['Poppins', 'sans-serif'],
+      },
+      colors: {
+        'primary': {
+          'DEFAULT': '#14B8A6',
+          '50': '#f0fdfa',
+          '100': '#ccfbf1',
+          '200': '#99f6e4',
+          '300': '#5eead4',
+          '400': '#2dd4bf',
+          '500': '#14b8a6',
+          '600': '#0d9488',
+          '700': '#0f766e',
+          '800': '#115e59',
+          '900': '#134E4A',
+        },
+        'accent': {
+          'DEFAULT': '#F97316',
+          'hover': '#EA580C',
+        },
+        'dark-bg': '#134E4A',
+      }
+    }
+  }
+}
+</script>
+
+<style>
+.preserve-3d { transform-style: preserve-3d; perspective: 1000px; }
+#autocomplete-results::-webkit-scrollbar { display: none; }
+#autocomplete-results { -ms-overflow-style: none; scrollbar-width: none; }
+.custom-select {
+  -webkit-appearance: none; -moz-appearance: none; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24' fill='%2399f6e4'%3E%3Cpath d='M12 16L6 10H18L12 16Z'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 0.75rem center; background-size: 1.2em;
+}
+.modal-panel { transition: transform 0.3s ease-out, opacity 0.3s ease-out; }
+.modal.hidden .modal-panel { transform: scale(0.95); opacity: 0; }
+.custom-checkbox {
+  appearance: none; background-color: rgba(255, 255, 255, 0.2); border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 0.375rem; width: 1.5rem; height: 1.5rem; display: inline-block; position: relative; cursor: pointer; transition: all 0.2s;
+}
+.custom-checkbox:checked { background-color: #F97316; border-color: #F97316; }
+.custom-checkbox:checked::after {
+  content: ''; position: absolute; left: 0.45rem; top: 0.2rem; width: 0.5rem; height: 0.8rem;
+  border: solid white; border-width: 0 3px 3px 0; transform: rotate(45deg);
+}
+.drop-zone { border: 2px dashed rgba(255, 255, 255, 0.4); transition: background-color 0.2s, border-color 0.2s; }
+.drop-zone.dragover { background-color: rgba(255, 255, 255, 0.1); border-color: #F97316; }
+#toast-notification.show { transform: translateY(0); opacity: 1; }
+
+/* QR image responsive inside its card */
+#modal-qrcode img { display:block; max-width: 88%; height:auto; margin: 0 auto; }
+</style>
+</head>
+
+<body class="bg-gradient-to-br from-primary-900 to-primary text-white overflow-x-hidden">
+
+<!-- Header & Navbar -->
+<header class="bg-white shadow-md text-gray-800 fixed w-full top-0 z-50">
+  <nav class="container mx-auto px-6 py-3">
+    <div class="flex items-center justify-between">
+      <!-- Logo -->
+      <a href="mywall.html" class="flex items-center gap-2">
+        <img src="../../src/images/logos/logo.png" alt="MyWall Logo" class="h-10 w-10 rounded-full">
+        <span class="font-poppins font-bold text-2xl text-primary">MyWall</span>
+      </a>
+
+      <!-- Profile Icon & Dropdown -->
+      <div class="relative">
+        <button id="profile-menu-button" class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-300 hover:border-primary transition-all">
+          <img src="../../src/images/users/nabil.png"
+               onerror="this.onerror=null;this.src='https://placehold.co/40x40/134E4A/FFFFFF?text=A';"
+               alt="User Avatar" class="w-full h-full object-cover">
+        </button>
+        <!-- Dropdown Menu -->
+        <div id="profile-menu" class="hidden absolute top-full right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 z-50">
+          <a href="mywall.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-layout-grid-fill mr-3"></i>MyWall</a>
+          <a href="myprofile.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-user-line mr-3"></i>MyProfile</a>
+          <a href="myaccount.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-settings-3-line mr-3"></i>MyAccount</a>
+          <a href="resume.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-article-line mr-3"></i>MyResume</a>
+          <div class="border-t my-1 border-gray-200"></div>
+          <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-logout-box-r-line mr-3"></i>Logout</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main class="pt-24 pb-12">
+<section class="py-16">
+<div class="container mx-auto px-6">
+  <!-- Section Header -->
+  <div class="text-center mb-8">
+    <h1 class="text-4xl md:text-5xl font-bold font-poppins text-white">MyWall Showcase</h1>
+    <p class="text-lg text-primary-200 mt-4 max-w-3xl mx-auto">A personal gallery of your achievements and qualifications. Find, filter, and share your certificates below.</p>
+  </div>
+
+  <!-- Filters and Search Section -->
+  <div class="max-w-4xl mx-auto mb-12">
+    <!-- Search Box -->
+    <div class="relative mb-4">
+      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+        <i class="ri-search-line text-primary-200"></i>
+      </div>
+      <input type="text" id="search-box" placeholder="Search for a certificate by title..." class="w-full pl-12 pr-4 py-3 bg-white/20 text-white placeholder-primary-200 rounded-full border-2 border-transparent focus:border-primary-300 focus:bg-white/30 focus:outline-none transition-all">
+      <div id="autocomplete-results" class="hidden absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl overflow-hidden z-40 max-h-60 overflow-y-auto"></div>
+    </div>
+    <!-- Filter & Action Buttons -->
+    <div class="flex flex-col sm:flex-row gap-4">
+      <div class="flex-1 relative">
+        <select id="source-filter" class="custom-select w-full px-4 py-3 bg-white/20 text-primary-200 rounded-full border-2 border-transparent focus:border-primary-300 focus:bg-white/30 focus:outline-none transition-all">
+          <option value="all">All Sources</option>
+          <option value="mysertifico">MySertifico</option>
+          <option value="external">External</option>
+        </select>
+      </div>
+      <button id="upload-cert-button" class="bg-accent hover:bg-accent-hover text-white font-semibold py-3 px-6 rounded-full transition-colors flex items-center justify-center gap-2">
+        <i class="ri-upload-cloud-2-line"></i>
+        <span>Upload External Certificate</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- No Results Message -->
+  <div id="no-results-message" class="hidden text-center text-primary-200 py-10">
+    <i class="ri-search-eye-line text-4xl mb-4 text-primary-300"></i>
+    <h3 class="text-xl font-semibold text-white">No Certificates Found</h3>
+    <p>We couldn't find any certificates matching your filters. Please try other keywords or broaden your filters.</p>
+  </div>
+
+  <!-- Certificate Showcase Grid -->
+  <div id="certificate-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 preserve-3d">
+
+    <!-- Certificate Card 1 (Landscape) -->
+    <div class="certificate-card bg-white/10 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden group flex flex-col transform transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-primary/30 hover:-translate-y-2" data-title="Graduation Certificate 2025" data-source="mysertifico" data-id="cert001">
+      <div class="relative h-48 overflow-hidden bg-black/20 p-2">
+        <img src="../../src/images/templates/cllc-purple-005.svg" onerror="this.onerror=null;this.src='https://placehold.co/800x600/0f766e/FFFFFF?text=Cert+Image';" alt="Certificate thumbnail" class="w-full h-full object-contain transition-all duration-500 group-hover:scale-110 cert-bg-img">
+        <div class="absolute inset-0 cert-overlay-container pointer-events-none"></div>
+        <input type="checkbox" class="custom-checkbox absolute bottom-3 left-3 z-10">
+        <div class="absolute top-2 left-2 bg-primary rounded-full p-2 text-white z-10" title="MySertifico Certificate"><i class="ri-shield-star-fill"></i></div>
+        <div class="absolute top-2 right-2 bg-accent rounded-full p-2 text-white z-10" title="Verified"><i class="ri-verified-badge-fill"></i></div>
+      </div>
+      <div class="p-5 flex flex-col flex-grow">
+        <div class="flex-grow">
+          <h3 class="text-lg font-bold text-white truncate">Graduation Certificate 2025</h3>
+          <p class="text-sm text-primary-200 mt-1">Issued by SMK Saujana Utama</p>
+          <p class="text-xs text-primary-300 mt-2">Date: 15 Jun 2024</p>
+        </div>
+        <div class="mt-4 flex items-center justify-between gap-2">
+          <button class="view-cert-button flex-1 text-center px-3 py-2 text-sm bg-primary/80 text-white font-semibold rounded-lg hover:bg-primary transition-colors flex items-center justify-center gap-1"><i class="ri-eye-line"></i> View</button>
+          <button class="download-cert-button flex-1 text-center px-3 py-2 text-sm bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover transition-colors flex items-center justify-center gap-1"><i class="ri-download-2-line"></i> Download</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Certificate Card 2 (Portrait) -->
+    <div class="certificate-card bg-white/10 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden group flex flex-col transform transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-primary/30 hover:-translate-y-2" data-title="AWS Certified Cloud Practitioner" data-source="mysertifico" data-id="cert002">
+      <div class="relative h-48 overflow-hidden bg-black/20 p-2">
+        <img src="../../src/images/templates/mdpl-green-001.svg" onerror="this.onerror=null;this.src='https://placehold.co/600x800/0f766e/FFFFFF?text=Cert+Image';" alt="Certificate thumbnail" class="w-full h-full object-contain transition-all duration-500 group-hover:scale-110 cert-bg-img">
+        <div class="absolute inset-0 cert-overlay-container pointer-events-none"></div>
+        <input type="checkbox" class="custom-checkbox absolute bottom-3 left-3 z-10">
+        <div class="absolute top-2 left-2 bg-primary rounded-full p-2 text-white z-10" title="MySertifico Certificate"><i class="ri-shield-star-fill"></i></div>
+        <div class="absolute top-2 right-2 bg-accent rounded-full p-2 text-white z-10" title="Verified"><i class="ri-verified-badge-fill"></i></div>
+      </div>
+      <div class="p-5 flex flex-col flex-grow">
+        <div class="flex-grow">
+          <h3 class="text-lg font-bold text-white truncate">AWS Certified Cloud Practitioner</h3>
+          <p class="text-sm text-primary-200 mt-1">Issued by Amazon Web Services</p>
+          <p class="text-xs text-primary-300 mt-2">Date: 22 Feb 2024</p>
+        </div>
+        <div class="mt-4 flex items-center justify-between gap-2">
+          <button class="view-cert-button flex-1 text-center px-3 py-2 text-sm bg-primary/80 text-white font-semibold rounded-lg hover:bg-primary transition-colors flex items-center justify-center gap-1"><i class="ri-eye-line"></i> View</button>
+          <button class="download-cert-button flex-1 text-center px-3 py-2 text-sm bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover transition-colors flex items-center justify-center gap-1"><i class="ri-download-2-line"></i> Download</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Certificate Card 3 (Portrait) -->
+    <div class="certificate-card bg-white/10 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden group flex flex-col transform transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-primary/30 hover:-translate-y-2" data-title="Certified Digital Marketer" data-source="external" data-id="cert003">
+      <div class="relative h-48 overflow-hidden bg-black/20 p-2">
+        <img src="../../src/images/templates/mdpc-gold-002.svg" onerror="this.onerror=null;this.src='https://placehold.co/800x600/0f766e/FFFFFF?text=Cert+Image';" alt="Certificate thumbnail" class="w-full h-full object-contain transition-all duration-500 group-hover:scale-110 cert-bg-img">
+        <div class="absolute inset-0 cert-overlay-container pointer-events-none"></div>
+        <input type="checkbox" class="custom-checkbox absolute bottom-3 left-3 z-10">
+        <div class="absolute top-2 left-2 bg-gray-500 rounded-full p-2 text-white z-10" title="Externally Uploaded"><i class="ri-upload-cloud-2-line"></i></div>
+        <div class="absolute top-2 right-2 bg-gray-400 rounded-full p-2 text-white z-10" title="Pending Verification"><i class="ri-time-line"></i></div>
+      </div>
+      <div class="p-5 flex flex-col flex-grow">
+        <div class="flex-grow">
+          <h3 class="text-lg font-bold text-white truncate">Certified Digital Marketer</h3>
+          <p class="text-sm text-primary-200 mt-1">Issued by Google</p>
+          <p class="text-xs text-primary-300 mt-2">Date: 10 Jan 2024</p>
+        </div>
+        <div class="mt-4 flex items-center justify-between gap-2">
+          <button class="view-cert-button flex-1 text-center px-3 py-2 text-sm bg-primary/80 text-white font-semibold rounded-lg hover:bg-primary transition-colors flex items-center justify-center gap-1"><i class="ri-eye-line"></i> View</button>
+          <button class="download-cert-button flex-1 text-center px-3 py-2 text-sm bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover transition-colors flex items-center justify-center gap-1"><i class="ri-download-2-line"></i> Download</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Certificate Card 4 (Landscape) -->
+    <div class="certificate-card bg-white/10 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden group flex flex-col transform transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-primary/30 hover:-translate-y-2" data-title="Project Management Professional" data-source="mysertifico" data-id="cert004">
+      <div class="relative h-48 overflow-hidden bg-black/20 p-2">
+        <img src="../../src/images/templates/cllr-black-006.svg" onerror="this.onerror=null;this.src='https://placehold.co/800x600/0f766e/FFFFFF?text=Cert+Image';" alt="Certificate thumbnail" class="w-full h-full object-contain transition-all duration-500 group-hover:scale-110 cert-bg-img">
+        <div class="absolute inset-0 cert-overlay-container pointer-events-none"></div>
+        <input type="checkbox" class="custom-checkbox absolute bottom-3 left-3 z-10">
+        <div class="absolute top-2 left-2 bg-primary rounded-full p-2 text-white z-10" title="MySertifico Certificate"><i class="ri-shield-star-fill"></i></div>
+        <div class="absolute top-2 right-2 bg-accent rounded-full p-2 text-white z-10" title="Verified"><i class="ri-verified-badge-fill"></i></div>
+      </div>
+      <div class="p-5 flex flex-col flex-grow">
+        <div class="flex-grow">
+          <h3 class="text-lg font-bold text-white truncate">Project Management Professional</h3>
+          <p class="text-sm text-primary-200 mt-1">Issued by PMI</p>
+          <p class="text-xs text-primary-300 mt-2">Date: 05 Nov 2023</p>
+        </div>
+        <div class="mt-4 flex items-center justify-between gap-2">
+          <button class="view-cert-button flex-1 text-center px-3 py-2 text-sm bg-primary/80 text-white font-semibold rounded-lg hover:bg-primary transition-colors flex items-center justify-center gap-1"><i class="ri-eye-line"></i> View</button>
+          <button class="download-cert-button flex-1 text-center px-3 py-2 text-sm bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover transition-colors flex items-center justify-center gap-1"><i class="ri-download-2-line"></i> Download</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Action bar for selected certificates -->
+  <div id="selection-action-bar" class="hidden fixed bottom-10 left-1/2 -translate-x-1/2 bg-white/20 backdrop-blur-md rounded-full shadow-lg p-2 flex items-center gap-2 z-40">
+    <span id="selection-count" class="text-white font-semibold px-4">0 selected</span>
+    <button id="create-collection-button" class="px-4 py-2 bg-primary text-white rounded-full hover:bg-primary-600 transition-colors flex items-center gap-2"><i class="ri-add-box-line"></i> Create Collection</button>
+    <button id="clear-selection-button" class="p-2 text-white hover:bg-white/20 rounded-full transition-colors"><i class="ri-close-line text-2xl"></i></button>
+  </div>
+
+  <!-- View More Button -->
+  <div id="view-more-container" class="text-center mt-12">
+    <button id="view-more-button" class="bg-gradient-to-br from-primary-400 to-primary-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-xl hover:shadow-primary/30 flex items-center justify-center mx-auto gap-2">
+      <i class="ri-add-line"></i>
+      <span>View More</span>
+    </button>
+  </div>
+
+</div>
+</section>
+</main>
+
+<!-- Certificate Viewer Modal -->
+<div id="certificate-modal" class="modal hidden fixed inset-0 z-[60] flex items-center justify-center p-4">
+  <div id="modal-backdrop" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+  <div class="modal-panel relative bg-white/10 border border-primary-500/50 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col scale-95 opacity-0">
+    <div class="flex justify-between items-center p-4 border-b border-primary-800/50">
+      <h3 id="modal-cert-title" class="text-lg font-bold text-white">Certificate Details</h3>
+      <button class="modal-close-button text-primary-200 hover:text-white text-2xl"><i class="ri-close-line"></i></button>
+    </div>
+
+    <div class="p-6 flex-grow overflow-auto flex flex-col md:flex-row gap-6">
+      <div class="flex-grow flex items-center justify-center">
+        <!-- Image kept for path integrity; SVG overlay preview will be injected alongside -->
+        <img id="modal-cert-image" src="" alt="Certificate" class="max-w-full max-h-full object-contain rounded-lg shadow-lg hidden">
+        <div id="modal-cert-svg-holder" class="w-full h-full flex items-center justify-center"></div>
+      </div>
+
+      <!-- RIGHT PANE: Verify & Share (wider) -->
+      <div class="w-full md:w-72 flex-shrink-0 flex flex-col gap-4">
+        <h4 class="font-bold text-white text-center md:text-left">Verify & Share</h4>
+
+        <!-- Bigger 1:1 QR card, centered content -->
+        <div id="modal-qrcode-card" class="bg-white rounded-xl shadow-md p-4 aspect-square w-full mx-auto flex items-center justify-center">
+          <div id="modal-qrcode" class="w-full h-full flex items-center justify-center"></div>
+        </div>
+        <p class="text-xs text-primary-200 text-center">Scan to verify certificate</p>
+
+        <button id="share-linkedin" class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-[#0077B5] text-white rounded-lg hover:opacity-90 transition-opacity"><i class="ri-linkedin-box-fill"></i> Share on LinkedIn</button>
+        <button id="copy-link" class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"><i class="ri-link"></i> Copy Link</button>
+      </div>
+    </div>
+
+    <div class="p-4 text-right border-t border-primary-800/50">
+      <button class="modal-close-button px-6 py-2 bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover transition-colors">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Upload Certificate Modal -->
+<div id="upload-modal" class="modal hidden fixed inset-0 z-[60] flex items-center justify-center p-4">
+  <div id="modal-backdrop" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+  <div class="modal-panel relative bg-white/10 border border-primary-500/50 rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col scale-95 opacity-0">
+    <form id="upload-form">
+      <div class="flex justify-between items-center p-4 border-b border-primary-800/50">
+        <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="ri-upload-cloud-2-line"></i> Upload New Certificate</h3>
+        <button type="button" class="modal-close-button text-primary-200 hover:text-white text-2xl"><i class="ri-close-line"></i></button>
+      </div>
+      <div class="p-6 flex-grow overflow-auto space-y-4">
+        <div>
+          <label for="upload-title" class="block text-sm font-medium text-primary-200 mb-1">Certificate Title</label>
+          <input type="text" id="upload-title" name="title" required class="w-full px-4 py-2 bg-white/20 text-white placeholder-primary-200 rounded-lg border-2 border-transparent focus:border-primary-300 focus:bg-white/30 focus:outline-none transition-all">
+        </div>
+        <div>
+          <label for="upload-issuer" class="block text-sm font-medium text-primary-200 mb-1">Issuing Organization</label>
+          <input type="text" id="upload-issuer" name="issuer" required class="w-full px-4 py-2 bg-white/20 text-white placeholder-primary-200 rounded-lg border-2 border-transparent focus:border-primary-300 focus:outline-none transition-all">
+        </div>
+        <div>
+          <label for="upload-date" class="block text-sm font-medium text-primary-200 mb-1">Date Issued</label>
+          <input type="date" id="upload-date" name="date" required class="w-full px-4 py-2 bg-white/20 text-white placeholder-primary-200 rounded-lg border-2 border-transparent focus:border-primary-300 focus:outline-none transition-all">
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-primary-200 mb-1">Certificate File (PDF, JPG, PNG)</label>
+          <div id="drop-zone" class="drop-zone w-full p-6 text-center rounded-lg cursor-pointer">
+            <i class="ri-file-upload-line text-4xl text-primary-300"></i>
+            <p class="mt-2 text-primary-200">Drag & drop file here, or <span class="font-bold text-accent">click to browse</span></p>
+            <p id="file-name" class="text-sm text-white mt-2"></p>
+          </div>
+          <input type="file" id="file-input" class="hidden" accept=".pdf,.jpg,.jpeg,.png">
+        </div>
+      </div>
+      <div class="p-4 flex justify-end items-center gap-4 border-t border-primary-800/50">
+        <button type="button" class="modal-close-button px-6 py-2 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600 transition-colors">Cancel</button>
+        <button type="submit" class="px-6 py-2 bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover transition-colors">Upload Certificate</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Custom Toast/Popup Notification -->
+<div id="toast-notification" class="hidden fixed bottom-10 right-10 bg-accent text-white px-6 py-3 rounded-full shadow-lg transform transition-all duration-300 translate-y-20 opacity-0 flex items-center gap-2 z-[70]">
+  <i class="ri-link"></i>
+  <span id="toast-message"></span>
+</div>
+
+<!-- Main Scripts -->
+<script>
+/* =========================================================
+0) KONFIG UMUM + UTIL ORIENTASI & VERIFIKASI DINAMIK
+========================================================= */
+
+// Saiz asas sistem koordinat
+const BASE_SIZES = {
+  landscape: { w: 1123, h: 794 },
+  portrait:  { w: 794,  h: 1123 }
+};
+
+// Overlay LANDSCAPE (contoh)
+const overlayElementsLandscape = [
+  { element_id: "logo", type: "image", content: "../../src/images/logos-badges/logo-srsa.svg", position_x: 561, position_y: 70, width: 140, height: 140, visible: true, aspect_ratio: 1 },
+  { element_id: "organization_name", type: "text", content: "SEKOLAH RENDAH SRI ANGKASA", position_x: 561, position_y: 200, font_family: "Montserrat", font_size: 16, font_weight: "600", color: "#111827", visible: true },
+  { element_id: "address_1", type: "text", content: "Jalan Sultan Yahya Petra", position_x: 561, position_y: 230, font_family: "Montserrat", font_size: 14, font_weight: "normal", color: "#374151", visible: true },
+  { element_id: "address_2", type: "text", content: "Kota Bharu, Kelantan", position_x: 561, position_y: 255, font_family: "Montserrat", font_size: 14, font_weight: "normal", color: "#374151", visible: true },
+  { element_id: "certificate_title", type: "text", content: "SIJIL GRADUASI", position_x: 561, position_y: 310, font_family: "EB Garamond", font_size: 46, font_weight: "bold", color: "#B8860B", visible: true },
+  { element_id: "certificate_body", type: "text", content: "Dengan bangganya dianugerahkan kepada", position_x: 561, position_y: 410, font_family: "Montserrat", font_size: 14, font_weight: "normal", color: "#374151", visible: true },
+  { element_id: "recipient_name", type: "text", content: "[RECIPIENT_NAME]", position_x: 561, position_y: 450, font_family: "Montserrat", font_size: 20, font_weight: "bold", color: "#000000", visible: true },
+  { element_id: "event_description", type: "text", content: "kerana telah menamatkan persekolahan rendah", position_x: 561, position_y: 500, font_family: "Montserrat", font_size: 14, font_weight: "normal", color: "#374151", visible: true },
+  { element_id: "event_date", type: "text", content: "Kohort 2020 - 2025", position_x: 561, position_y: 530, font_family: "Montserrat", font_size: 16, font_weight: "600", color: "#111827", visible: true },
+  { element_id: "signature_image", type: "image", content: "../../src/images/signatures/sample-signature.svg", position_x: 300, position_y: 580, width: 200, height: 90, visible: true, aspect_ratio: 90/200 },
+  { element_id: "signatory_name", type: "text", content: "Fadzil Hajazi Ismail", position_x: 300, position_y: 640, font_family: "Montserrat", font_size: 14, font_weight: "500", color: "#000000", visible: true },
+  { element_id: "signatory_position", type: "text", content: "Guru Besar", position_x: 300, position_y: 665, font_family: "Montserrat", font_size: 14, font_weight: "normal", color: "#374151", visible: true },
+  { element_id: "signature_image_2", type: "image", content: "../../src/images/signatures/sample-signature2.svg", position_x: 822, position_y: 580, width: 200, height: 90, visible: true, aspect_ratio: 90/200 },
+  { element_id: "signatory_name_2", type: "text", content: "Datin Edriana Suhaili", position_x: 822, position_y: 640, font_family: "Montserrat", font_size: 14, font_weight: "500", color: "#000000", visible: true },
+  { element_id: "signatory_position_2", type: "text", content: "GPK Pentadbiran", position_x: 822, position_y: 665, font_family: "Montserrat", font_size: 14, font_weight: "normal", color: "#374151", visible: true },
+  { element_id: "signed_date", type: "text", content: "31 Disember 2025", position_x: 300, position_y: 700, font_family: "Montserrat", font_size: 12, font_weight: "normal", color: "#374151", visible: true },
+  { element_id: "qr_code", type: "image", content: "../../src/images/qrcodes/sample-qrcode.svg", position_x: 561, position_y: 645, width: 100, height: 100, visible: true, aspect_ratio: 1 }
+];
+
+/* Derive portrait */
+function derivePortraitFromLandscape(list) {
+  const sx = BASE_SIZES.portrait.w / BASE_SIZES.landscape.w;
+  const sy = BASE_SIZES.portrait.h / BASE_SIZES.landscape.h;
+  const s = Math.min(sx, sy);
+  return list.map(el => {
+    const c = { ...el };
+    c.position_x = (el.position_x || 0) * sx;
+    c.position_y = (el.position_y || 0) * sy;
+    if (el.type === 'image') {
+      const w = (el.width || 0) * s;
+      const h = (el.height || 0) * s;
+      c.width  = w;
+      c.height = h;
+    } else if (el.type === 'text') {
+      c.font_size = Math.round((el.font_size || 14) * s);
+    }
+    return c;
+  });
+}
+const overlayElementsPortrait = derivePortraitFromLandscape(overlayElementsLandscape);
+
+function pickOverlayAndBase(orientation) {
+  if (orientation === 'portrait') return { elements: overlayElementsPortrait, base: BASE_SIZES.portrait };
+  return { elements: overlayElementsLandscape, base: BASE_SIZES.landscape };
+}
+function inferOrientationFromSrc(src) {
+  const s = (src || '').toLowerCase();
+  if (s.includes('/mdp') || s.includes('-p-') || s.includes('portrait')) return 'portrait';
+  return 'landscape';
+}
+function getImageOrientation(src) {
+  return new Promise(resolve => {
+    const probe = new Image();
+    probe.onload = () => {
+      if (probe.naturalWidth && probe.naturalHeight) {
+        resolve(probe.naturalWidth >= probe.naturalHeight ? 'landscape' : 'portrait');
+      } else { resolve(inferOrientationFromSrc(src)); }
+    };
+    probe.onerror = () => resolve(inferOrientationFromSrc(src));
+    probe.src = src;
+  });
+}
+const VERIFY_BASE = 'https://des.mysertifico.com/verify.html?id=';
+function buildVerificationUrl(cardEl) {
+  const verifyId = cardEl?.dataset.verifyId || cardEl?.dataset.id || '';
+  return VERIFY_BASE + encodeURIComponent(verifyId);
+}
+
+/* SVG builder */
+function buildCertificateSVG(bgSrc, elements, base) {
+  const xmlns = 'http://www.w3.org/2000/svg';
+  const xlink = 'http://www.w3.org/1999/xlink';
+  const svg = document.createElementNS(xmlns, 'svg');
+  svg.setAttribute('viewBox', `0 0 ${base.w} ${base.h}`);
+  svg.setAttribute('width', '100%'); svg.setAttribute('height', '100%');
+  svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+  svg.style.display = 'block';
+
+  const bg = document.createElementNS(xmlns, 'image');
+  bg.setAttributeNS(xlink, 'href', bgSrc);
+  bg.setAttribute('x', '0'); bg.setAttribute('y', '0');
+  bg.setAttribute('width', base.w); bg.setAttribute('height', base.h);
+  bg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+  svg.appendChild(bg);
+
+  elements.filter(el => el.visible !== false).forEach(el => {
+    if (el.type === 'image') {
+      const img = document.createElementNS(xmlns, 'image');
+      img.setAttributeNS(xlink, 'href', el.content);
+      const x = (el.position_x || 0) - (el.width || 0) / 2;
+      const y = (el.position_y || 0) - (el.height || 0) / 2;
+      img.setAttribute('x', x); img.setAttribute('y', y);
+      if (el.width) img.setAttribute('width', el.width);
+      if (el.height) img.setAttribute('height', el.height);
+      svg.appendChild(img);
+    } else if (el.type === 'text') {
+      const t = document.createElementNS(xmlns, 'text');
+      t.setAttribute('x', el.position_x || 0);
+      t.setAttribute('y', el.position_y || 0);
+      t.setAttribute('text-anchor', 'middle');
+      t.setAttribute('dominant-baseline', 'middle');
+      t.textContent = el.content || '';
+      const style = [];
+      if (el.font_family) style.push(`font-family:${el.font_family}`);
+      if (el.font_size) style.push(`font-size:${el.font_size}px`);
+      if (el.font_weight) style.push(`font-weight:${el.font_weight}`);
+      if (el.color) style.push(`fill:${el.color}`);
+      t.setAttribute('style', style.join(';'));
+      svg.appendChild(t);
+    }
+  });
+
+  return svg;
+}
+
+/* =========================================================
+2) APP SCRIPT
+========================================================= */
+document.addEventListener('DOMContentLoaded', function () {
+  const body = document.body;
+
+  // Toast
+  function showToast(message, isError = false) {
+    const toast = document.getElementById('toast-notification');
+    const toastMessage = document.getElementById('toast-message');
+    if (!toast || !toastMessage) return;
+    toastMessage.textContent = message;
+    toast.classList.remove('bg-accent','bg-red-500');
+    toast.classList.add(isError ? 'bg-red-500' : 'bg-accent');
+    toast.classList.remove('hidden');
+    setTimeout(() => { toast.classList.add('show'); }, 10);
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => { toast.classList.add('hidden'); }, 500);
+    }, 3000);
+  }
+
+  /* Inject SVG to thumbnails */
+  document.querySelectorAll('.certificate-card .cert-overlay-container').forEach(async (overlayContainer) => {
+    const wrapper = overlayContainer.closest('.relative');
+    const bgImg = wrapper?.querySelector('img.cert-bg-img');
+    if (!bgImg) return;
+    const src = bgImg.getAttribute('src');
+    const orientation = await getImageOrientation(src);
+    const { elements, base } = pickOverlayAndBase(orientation);
+    const svg = buildCertificateSVG(src, elements, base);
+    overlayContainer.innerHTML = '';
+    overlayContainer.appendChild(svg);
+  });
+
+  /* UI: menus, search, filter */
+  const profileMenuButton = document.getElementById('profile-menu-button');
+  const profileMenu = document.getElementById('profile-menu');
+  if (profileMenuButton) {
+    profileMenuButton.addEventListener('click', (e) => { e.stopPropagation(); profileMenu.classList.toggle('hidden'); });
+  }
+
+  const searchBox = document.getElementById('search-box');
+  const sourceFilter = document.getElementById('source-filter');
+  const autocompleteResults = document.getElementById('autocomplete-results');
+  const certificateGrid = document.getElementById('certificate-grid');
+  const allCertificates = Array.from(certificateGrid.getElementsByClassName('certificate-card'));
+  const noResultsMessage = document.getElementById('no-results-message');
+  const viewMoreContainer = document.getElementById('view-more-container');
+
+  window.addEventListener('click', (event) => {
+    if (profileMenu && !profileMenu.classList.contains('hidden') && !profileMenuButton.contains(event.target)) profileMenu.classList.add('hidden');
+    if (searchBox && !searchBox.contains(event.target)) autocompleteResults.classList.add('hidden');
+  });
+
+  const certificateData = allCertificates.map(cert => ({
+    element: cert,
+    title: (cert.dataset.title || '').toLowerCase(),
+    source: cert.dataset.source
+  }));
+
+  function filterAndDisplay() {
+    const q = (searchBox.value || '').toLowerCase();
+    const selected = sourceFilter.value;
+    let visible = 0;
+    certificateData.forEach(c => {
+      const okTitle = c.title.includes(q);
+      const okSource = (selected === 'all') || (c.source === selected);
+      c.element.style.display = (okTitle && okSource) ? 'flex' : 'none';
+      if (okTitle && okSource) visible++;
+    });
+    viewMoreContainer.style.display = (q || selected !== 'all') ? 'none' : 'block';
+    noResultsMessage.classList.toggle('hidden', visible > 0);
+  }
+
+  function updateAutocomplete() {
+    const q = (searchBox.value || '').toLowerCase();
+    if (!q) { autocompleteResults.innerHTML = ''; autocompleteResults.classList.add('hidden'); return; }
+    const titles = certificateData.map(c => c.element.dataset.title).filter(t => (t||'').toLowerCase().includes(q));
+    if (titles.length) {
+      autocompleteResults.innerHTML = titles.map(t => `<div class="px-4 py-2 text-gray-800 hover:bg-primary-50 cursor-pointer">${t}</div>`).join('');
+      autocompleteResults.classList.remove('hidden');
+    } else {
+      autocompleteResults.innerHTML = '';
+      autocompleteResults.classList.add('hidden');
+    }
+  }
+
+  searchBox.addEventListener('input', () => { filterAndDisplay(); updateAutocomplete(); });
+  sourceFilter.addEventListener('change', filterAndDisplay);
+  autocompleteResults.addEventListener('click', (e) => {
+    if (e.target && e.target.matches('div.cursor-pointer')) {
+      searchBox.value = e.target.textContent;
+      autocompleteResults.classList.add('hidden');
+      filterAndDisplay();
+    }
+  });
+
+  /* ---------- Modal (View / Preview) ---------- */
+  function setupModal(modalId) {
+    const modal = document.getElementById(modalId);
+    if (!modal) return;
+    const closeButtons = modal.querySelectorAll('.modal-close-button');
+    const backdrop = modal.querySelector('#modal-backdrop');
+    const panel = modal.querySelector('.modal-panel');
+
+    const open = (data) => {
+      modal.classList.remove('hidden');
+      body.style.overflow = 'hidden';
+      setTimeout(() => { panel.classList.remove('scale-95','opacity-0'); }, 10);
+
+      if (modalId === 'certificate-modal' && data) {
+        const { imageSrc, title, id, cardEl } = data;
+        const holder = modal.querySelector('#modal-cert-svg-holder');
+        holder.innerHTML = '';
+
+        // Inject SVG preview
+        getImageOrientation(imageSrc).then(orientation => {
+          const { elements, base } = pickOverlayAndBase(orientation);
+          const svg = buildCertificateSVG(imageSrc, elements, base);
+          svg.style.maxWidth = '100%';
+          svg.style.maxHeight = '70vh';
+          holder.appendChild(svg);
+        });
+
+        modal.querySelector('#modal-cert-title').textContent = title;
+
+        // QR dynamic (bigger, centered in 1:1 card)
+        const qrContainer = modal.querySelector('#modal-qrcode');
+        qrContainer.innerHTML = '';
+        const qr = qrcode(0, 'L');
+        const verificationUrl = buildVerificationUrl(cardEl);
+        qr.addData(verificationUrl); 
+        qr.make();
+        // Larger module size; image will still scale to fit the card
+        qrContainer.innerHTML = qr.createImgTag(8);
+
+        modal.querySelector('#share-linkedin').onclick = () =>
+          window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(verificationUrl)}`,'_blank');
+        modal.querySelector('#copy-link').onclick = () => {
+          const ta = document.createElement('textarea'); ta.value = verificationUrl; document.body.appendChild(ta);
+          ta.select();
+          try { document.execCommand('copy'); showToast('Link copied to clipboard!'); }
+          catch { showToast('Failed to copy link.', true); }
+          document.body.removeChild(ta);
+        };
+      }
+    };
+
+    const close = () => {
+      panel.classList.add('scale-95','opacity-0');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+        if (!document.querySelector('.modal:not(.hidden)')) body.style.overflow = '';
+      }, 300);
+    };
+
+    closeButtons.forEach(btn => btn.addEventListener('click', close));
+    if (backdrop) backdrop.addEventListener('click', close);
+    return { open, close };
+  }
+
+  const certificateModal = setupModal('certificate-modal');
+  const uploadModal = setupModal('upload-modal');
+
+  document.querySelectorAll('.view-cert-button').forEach(button => {
+    button.addEventListener('click', function() {
+      const card = this.closest('.certificate-card');
+      certificateModal.open({
+        imageSrc: card.querySelector('img.cert-bg-img').src,
+        title: card.dataset.title,
+        id: card.dataset.id,
+        cardEl: card
+      });
+    });
+  });
+
+  /* Download PDF */
+  document.querySelectorAll('.download-cert-button').forEach(button => {
+    button.addEventListener('click', function () {
+      const originalBtnHtml = this.innerHTML;
+      this.innerHTML = `<i class="ri-loader-4-line animate-spin"></i> Processing...`;
+      this.disabled = true;
+
+      const card = this.closest('.certificate-card');
+      const bgImgEl = card.querySelector('img.cert-bg-img');
+      const imageSrc = bgImgEl?.src;
+      const title = card.dataset.title || 'certificate';
+
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.src = imageSrc;
+
+      img.onload = () => {
+        (async () => {
+          try {
+            const orientation =
+              (img.naturalWidth && img.naturalHeight)
+                ? (img.naturalWidth >= img.naturalHeight ? 'landscape' : 'portrait')
+                : inferOrientationFromSrc(imageSrc);
+
+            const { elements, base } = pickOverlayAndBase(orientation);
+
+            const srcW = img.naturalWidth || base.w;
+            const srcH = img.naturalHeight || base.h;
+            const MAX_DIM = 2200;
+            let w = srcW, h = srcH;
+            const r = w / h;
+            if (w > MAX_DIM || h > MAX_DIM) {
+              if (r >= 1) { w = MAX_DIM; h = Math.round(w / r); }
+              else { h = MAX_DIM; w = Math.round(h * r); }
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = w; canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, w, h);
+
+            const s = Math.min(w / base.w, h / base.h);
+            const fittedW = base.w * s;
+            const fittedH = base.h * s;
+            const offsetX = (w - fittedW) / 2;
+            const offsetY = (h - fittedH) / 2;
+
+            for (const el of elements) {
+              if (el.visible === false) continue;
+              if (el.type === 'image') {
+                const drawW = (el.width || 0) * s;
+                const drawH = (el.height || 0) * s;
+                const drawX = offsetX + ((el.position_x - (el.width || 0) / 2) * s);
+                const drawY = offsetY + ((el.position_y - (el.height || 0) / 2) * s);
+                await new Promise(resolve => {
+                  const overlayImg = new Image();
+                  overlayImg.crossOrigin = 'anonymous';
+                  overlayImg.onload = () => { ctx.drawImage(overlayImg, drawX, drawY, drawW, drawH); resolve(); };
+                  overlayImg.onerror = () => resolve();
+                  overlayImg.src = el.content;
+                });
+              } else if (el.type === 'text') {
+                ctx.save();
+                const px = (el.font_size || 14) * s;
+                ctx.font = `${el.font_weight || 'normal'} ${px}px ${el.font_family || 'sans-serif'}`;
+                ctx.fillStyle = el.color || '#000';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                const cx = offsetX + (el.position_x || 0) * s;
+                const cy = offsetY + (el.position_y || 0) * s;
+                ctx.fillText(el.content || '', cx, cy);
+                ctx.restore();
+              }
+            }
+
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({ orientation: orientation === 'landscape' ? 'l' : 'p', unit: 'mm', format: 'a4' });
+            const pageW = pdf.internal.pageSize.getWidth();
+            const pageH = pdf.internal.pageSize.getHeight();
+
+            const imgRatio = w / h;
+            let drawW = pageW;
+            let drawH = drawW / imgRatio;
+            if (drawH > pageH) { drawH = pageH; drawW = drawH * imgRatio; }
+            const x = (pageW - drawW) / 2;
+            const y = (pageH - drawH) / 2;
+
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.95);
+            pdf.addImage(dataUrl, 'JPEG', x, y, drawW, drawH);
+            pdf.save(`${title}.pdf`);
+          } catch (err) {
+            console.error('PDF Generation Error:', err);
+            showToast('Failed to generate PDF.', true);
+          } finally {
+            this.innerHTML = originalBtnHtml;
+            this.disabled = false;
+          }
+        })();
+      };
+
+      img.onerror = () => {
+        showToast('Error loading certificate image.', true);
+        this.innerHTML = originalBtnHtml;
+        this.disabled = false;
+      };
+    });
+  });
+
+  // Shortcuts & UI
+  document.getElementById('upload-cert-button')?.addEventListener('click', () => uploadModal.open());
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') document.querySelectorAll('.modal:not(.hidden)').forEach(m => setupModal(m.id).close());
+  });
+
+  // Selection bar
+  const selectionBar = document.getElementById('selection-action-bar');
+  const selectionCountSpan = document.getElementById('selection-count');
+  const clearSelectionButton = document.getElementById('clear-selection-button');
+  const createCollectionButton = document.getElementById('create-collection-button');
+  let selectedCertificates = new Set();
+
+  certificateGrid.addEventListener('change', (e) => {
+    if (e.target.matches('.custom-checkbox')) {
+      const card = e.target.closest('.certificate-card');
+      const certId = card.dataset.id;
+      if (e.target.checked) { selectedCertificates.add(certId); card.classList.add('ring-2','ring-accent'); }
+      else { selectedCertificates.delete(certId); card.classList.remove('ring-2','ring-accent'); }
+      updateSelectionBar();
+    }
+  });
+
+  function updateSelectionBar() {
+    const n = selectedCertificates.size;
+    if (n > 0) { selectionCountSpan.textContent = `${n} selected`; selectionBar.classList.remove('hidden'); }
+    else { selectionBar.classList.add('hidden'); }
+  }
+
+  clearSelectionButton.addEventListener('click', () => {
+    document.querySelectorAll('.custom-checkbox:checked').forEach(cb => {
+      cb.checked = false;
+      cb.closest('.certificate-card').classList.remove('ring-2','ring-accent');
+    });
+    selectedCertificates.clear();
+    updateSelectionBar();
+  });
+
+  createCollectionButton.addEventListener('click', () => {
+    if (selectedCertificates.size > 0) {
+      alert(`Creating a collection with ${selectedCertificates.size} certificates: ${Array.from(selectedCertificates).join(', ')}`);
+    }
+  });
+
+  // Upload drag & drop
+  const dropZone = document.getElementById('drop-zone');
+  const fileInput = document.getElementById('file-input');
+  const fileNameDisplay = document.getElementById('file-name');
+  const uploadForm = document.getElementById('upload-form');
+
+  if (dropZone) {
+    dropZone.addEventListener('click', () => fileInput.click());
+    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault(); dropZone.classList.remove('dragover');
+      const files = e.dataTransfer.files;
+      if (files.length) { fileInput.files = files; fileNameDisplay.textContent = files[0].name; }
+    });
+    fileInput.addEventListener('change', () => { if (fileInput.files.length) fileNameDisplay.textContent = fileInput.files[0].name; });
+  }
+
+  if (uploadForm) {
+    uploadForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Submitting form data...');
+      uploadModal.close();
+    });
+  }
+
+  document.getElementById('view-more-button')?.addEventListener('click', () => alert('Loading more certificates...'));
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyWall - Digital Certificate Platform</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../assets/images/logos/favicon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        // Palet Aqua Lautan & Oren Senja
+                        'primary': {
+                            'DEFAULT': '#14B8A6',       // Aqua Lautan (Teal-500)
+                            '50': '#f0fdfa',
+                            '100': '#ccfbf1',
+                            '200': '#99f6e4',
+                            '300': '#5eead4',
+                            '400': '#2dd4bf',
+                            '500': '#14b8a6',
+                            '600': '#0d9488',
+                            '700': '#0f766e',
+                            '800': '#115e59',
+                            '900': '#134E4A',    // Aqua Gelap (Teal-900)
+                        },
+                        'accent': {
+                            'DEFAULT': '#F97316',        // Oren Senja (Orange-500)
+                            'hover': '#EA580C',  // Oren Hangat untuk hover (Orange-600)
+                        },
+                        'dark-bg': '#134E4A',       // Aqua Sangat Gelap untuk footer (Teal-900)
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 text-gray-800 overflow-x-hidden">
+
+    <!-- Header & Navbar -->
+    <header class="bg-white shadow-md text-gray-800 fixed w-full top-0 z-50">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <a href="home.html" class="flex items-center gap-2">
+                    <img src="../../assets/images/logos/logo.png" alt="Logo" class="h-10 w-10">
+                    <span class="font-poppins font-bold text-2xl text-primary">MyWall</span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="home.html" class="text-primary font-semibold">Home</a>
+                    <a href="about.html" class="hover:text-primary font-medium">About</a>
+                    <a href="price.html" class="hover:text-primary font-medium">Pricing</a>
+                    <a href="contact-us.html" class="hover:text-primary font-medium">Contact Us</a>
+                </div>
+                
+                <!-- Login Buttons for Desktop -->
+                 <div class="hidden md:flex items-center space-x-2">
+                    <a href="sign-in.html" class="px-4 py-2 text-sm bg-primary text-white font-semibold rounded-lg hover:bg-primary-600">Sign In</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="menu-toggle" class="text-gray-800 focus:outline-none">
+                        <i id="icon-open" class="ri-menu-line text-2xl"></i>
+                        <i id="icon-close" class="ri-close-line text-2xl hidden"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden mt-4">
+                <a href="home.html" class="block py-2 text-sm text-primary font-semibold">Home</a>
+                <a href="about.html" class="block py-2 text-sm hover:text-primary">About</a>
+                <a href="price.html" class="block py-2 text-sm hover:text-primary">Pricing</a>
+                <a href="contact-us.html" class="block py-2 text-sm hover:text-primary">Contact Us</a>
+                 <div class="border-t my-4"></div>
+                 <a href="sign-in.html" class="block w-full text-center py-2 text-sm bg-primary text-white font-semibold rounded-lg hover:bg-primary-600">Sign In</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="bg-gradient-to-br from-primary-900 to-primary text-white pt-32 pb-20">
+            <div class="container mx-auto text-center px-6">
+                <h1 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight">MyWall</h1>
+                <p class="text-lg md:text-xl text-primary-100 mb-10 max-w-3xl mx-auto">Build your Digital Portfolio. Start with MyWall.</p>
+                
+                <img src="../../assets/images/frontend/hero-mywall.png" onerror="this.onerror=null; this.src='https://placehold.co/1024x576/ffffff/9ca3af?text=Image+Error';" alt="Hero Image" class="mx-auto max-w-full md:max-w-3xl mb-12 rounded-lg shadow-2xl">
+
+                <div class="flex flex-col sm:flex-row sm:justify-center gap-4">
+                    <a href="sign-in.html" class="bg-white text-primary-600 font-semibold py-3 px-8 rounded-lg w-full sm:w-auto transform hover:scale-105 transition-transform">Sign In</a>
+                    <a href="sign-up.html" class="border-2 border-white text-white font-semibold py-3 px-8 rounded-lg w-full sm:w-auto transform hover:scale-105 transition-transform hover:bg-white hover:text-primary-600">Try for Free!</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark-bg text-white">
+        <div class="container mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+            <!-- Info -->
+            <div>
+                <h3 class="text-xl font-bold font-poppins mb-4 text-primary-300">MyWall</h3>
+                <p class="text-sm text-primary-200">MyWall is your personal digital wall for all your certificates and qualifications. Collect, manage, showcase, and share your achievements securely.</p>
+            </div>
+            <!-- Links -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4 text-primary-300">Links</h4>
+                <ul class="space-y-2 text-sm text-primary-200">
+                    <li><a href="home.html" class="hover:text-white">Home</a></li>
+                    <li><a href="about.html" class="hover:text-white">About</a></li>
+                    <li><a href="price.html" class="hover:text-white">Pricing</a></li>
+                    <li><a href="contact-us.html" class="hover:text-white">Contact Us</a></li>
+                </ul>
+            </div>
+            <!-- Policies -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4 text-primary-300">Terms & Policies</h4>
+                <ul class="space-y-2 text-sm text-primary-200">
+                    <li><a href="privacy-policy.html" class="hover:text-white">Privacy Policy</a></li>
+                    <li><a href="terms-of-service.html" class="hover:text-white">Terms of Service</a></li>
+                    <li><a href="security-policy.html" class="hover:text-white">Security Policy</a></li>
+                </ul>
+            </div>
+            <!-- Social -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4 text-primary-300">Follow Us</h4>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-primary-200 hover:text-white text-xl" title="Facebook"><i class="ri-facebook-fill"></i></a>
+                    <a href="#" class="text-primary-200 hover:text-white text-xl" title="Instagram"><i class="ri-instagram-fill"></i></a>
+                    <a href="#" class="text-primary-200 hover:text-white text-xl" title="TikTok"><i class="ri-tiktok-fill"></i></a>
+                    <a href="#" class="text-primary-200 hover:text-white text-xl" title="YouTube"><i class="ri-youtube-fill"></i></a>
+                </div>
+            </div>
+        </div>
+        <!-- Divider + Copyright -->
+        <div class="border-t border-primary-800">
+            <div class="container mx-auto px-6 py-4 text-center text-sm text-primary-300">&copy; 2025 MyWall. All rights reserved by Webapp Studio Sdn. Bhd.</div>
+        </div>
+    </footer>
+
+    <!-- Main Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- Navbar Toggle for Mobile ---
+            const menuToggle = document.getElementById('menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const iconOpen = document.getElementById('icon-open');
+            const iconClose = document.getElementById('icon-close');
+
+            menuToggle.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                iconOpen.classList.toggle('hidden');
+                iconClose.classList.toggle('hidden');
+            });
+        });
+    </script>
+</body>
+</html>

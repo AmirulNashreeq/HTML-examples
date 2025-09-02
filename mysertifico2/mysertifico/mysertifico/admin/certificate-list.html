@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Issuance List - MySertifico</title>
+    <link rel="icon" type="image/png" href="../../src/images/logos/favicon.png" onerror="this.onerror=null;this.src='https://placehold.co/32x32/0d9488/ffffff?text=M';">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&family=Pinyon+Script&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                        script: ['Pinyon Script', 'cursive'],
+                        montserrat: ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': {
+                            'DEFAULT': '#0d9488', // Teal-600
+                            'dark': '#0f766e', // Teal-700
+                            'light': '#ccfbf1', // Teal-100
+                        },
+                        'accent': {
+                            'DEFAULT': '#f59e0b', // Amber-500
+                            'hover': '#d97706', // Amber-600
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .sidebar { scrollbar-width: none; }
+        .sidebar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+
+    <aside id="sidebar" class="sidebar fixed top-0 left-0 z-50 h-full w-64 bg-gray-800 dark:bg-gray-950 text-white transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto">
+        <div class="flex items-center justify-between p-6">
+             <h2 class="font-poppins text-2xl font-bold text-white">Menu</h2>
+             <button id="close-sidebar" class="text-gray-400 hover:text-white">
+                 <i class="ri-close-line text-2xl"></i>
+             </button>
+        </div>
+        <nav class="p-4">
+            <ul class="space-y-2">
+                <li>
+                    <a href="dashboard.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white">
+                        <i class="ri-dashboard-3-line mr-3 text-lg"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <button data-collapse-toggle="submenu-gallery" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white transition-colors">
+                        <span class="flex items-center"><i class="ri-gallery-line mr-3 text-lg"></i><span>Gallery</span></span>
+                        <i class="ri-arrow-down-s-line transition-transform duration-200"></i>
+                    </button>
+                    <ul id="submenu-gallery" class="hidden py-2 space-y-1 pl-8">
+                        <li><a href="templates-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Templates</a></li>
+                        <li><a href="logos-badges.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Logos & Badges</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="certificate-list.html" class="flex items-center py-2.5 px-4 rounded-lg bg-primary text-white transition-colors">
+                        <i class="ri-award-line mr-3 text-lg"></i>
+                        <span>Certificates</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="find-certificate.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white">
+                        <i class="ri-user-search-line mr-3 text-lg"></i>
+                        <span>Find Certificate</span>
+                    </a>
+                </li>
+                <li>
+                    <button data-collapse-toggle="submenu-settings" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white transition-colors">
+                        <span class="flex items-center"><i class="ri-settings-3-line mr-3 text-lg"></i><span>Settings</span></span>
+                        <i class="ri-arrow-down-s-line transition-transform duration-200"></i>
+                    </button>
+                    <ul id="submenu-settings" class="hidden py-2 space-y-1 pl-8">
+                        <li><a href="organisation.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Organisation</a></li>
+                        <li><a href="logo-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Logos</a></li>
+                        <li><a href="selected-template-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Selected Templates</a></li>
+                        <li><a href="user-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Users</a></li>
+                        <li class="px-4"><hr class="border-gray-700 my-1"></li>
+                        <li><a href="account.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Account</a></li>
+                    </ul>
+                </li>
+                <li class="pt-4 mt-4 border-t border-gray-700">
+                    <a href="#" id="logout-sidebar" class="flex items-center py-2.5 px-4 rounded-lg text-red-400 hover:bg-red-500 hover:text-white transition-colors">
+                        <i class="ri-logout-box-r-line mr-3 text-lg"></i>
+                        <span>Log Out</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+    <div id="main-content" class="relative min-h-screen transition-all duration-300 ease-in-out">
+        <header class="sticky top-0 z-30 bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between p-4">
+                <div class="flex items-center space-x-4">
+                    <button id="sidebar-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
+                        <i class="ri-menu-line text-2xl"></i>
+                    </button>
+                    <a href="dashboard.html" class="flex items-center gap-x-2">
+                        <img src="../../src/images/logos/logo.png" alt="MySertifico Logo" class="h-8 w-8 rounded-lg" onerror="this.onerror=null;this.src='https://placehold.co/32x32/0d9488/ffffff?text=M';">
+                        <span class="font-poppins text-2xl font-bold text-primary hidden sm:block">MySertifico</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-moon-line block dark:hidden"></i><i class="ri-sun-line hidden dark:block"></i></button>
+                    <div class="relative">
+                        <button id="profile-menu-button" class="flex items-center space-x-2">
+                             <img class="h-9 w-9 rounded-full object-cover" src="https://i.pravatar.cc/150?u=admin" alt="Admin" onerror="this.onerror=null;this.src='https://placehold.co/40x40/0d9488/ffffff?text=A';">
+                             <div class="hidden md:block text-left">
+                                 <div class="text-sm font-semibold text-gray-800 dark:text-white">Fikri Nabil</div>
+                                 <div class="text-xs text-gray-500 dark:text-gray-400">Super Admin</div>
+                             </div>
+                        </button>
+                        <div id="profile-menu" class="hidden absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <div class="py-1">
+                                <a href="my-profile.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-user-line mr-3"></i>My Profile</a>
+                                <a href="change-password.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-lock-password-line mr-3"></i>Change Password</a>
+                                <hr class="border-gray-200 dark:border-gray-700 my-1">
+                                <a href="#" id="logout-navbar" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-logout-box-r-line mr-3"></i>Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main class="p-6 sm:p-8">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">Certificate Issuance</h1>
+                    <a href="create-certificate.html" class="w-full md:w-auto justify-center px-4 py-2 text-sm bg-primary text-white rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-4 focus:ring-primary/50 flex items-center transition-colors" title="Issue Certificate"><i class="ri-add-line mr-2"></i>Create New Certificate</a>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-xl shadow-md">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0 mb-6">
+                        <div class="relative w-full md:w-1/3">
+                            <input type="text" id="search-input" placeholder="Search by name or creator..." class="w-full pl-10 pr-4 py-2 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary">
+                            <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        </div>
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 w-full md:w-auto">
+                           <select id="status-filter" class="w-full sm:w-auto border rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary">
+                               <option value="all">All Status</option>
+                               <option value="draft">Draft</option>
+                               <option value="pending">Pending</option>
+                               <option value="approved">Approved</option>
+                               <option value="scheduled">Scheduled</option>
+                               <option value="processing">Processing</option>
+                               <option value="completed">Completed</option>
+                               <option value="failed">Failed</option>
+                               <option value="canceled">Canceled</option>
+                               <option value="archived">Archived</option>
+                               <option value="expired">Expired</option>
+                           </select>
+                        </div>
+                    </div>
+
+                    <div id="desktop-view" class="hidden md:block">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-300">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">#</th>
+                                        <th scope="col" class="px-6 py-3">Certificate Name</th>
+                                        <th scope="col" class="px-6 py-3">Creator</th>
+                                        <th scope="col" class="px-6 py-3">Created Date</th>
+                                        <th scope="col" class="px-6 py-3">Recipients</th>
+                                        <th scope="col" class="px-6 py-3">Status</th>
+                                        <th scope="col" class="px-6 py-3 text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="certificate-table-body">
+                                    </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="mobile-view" class="block md:hidden space-y-4">
+                        </div>
+                    
+                    <div id="no-results-message" class="hidden text-center py-16 text-gray-500 dark:text-gray-400">
+                        <i class="ri-search-eye-line text-5xl mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">No Certificates Found</h3>
+                        <p class="mt-2">Your search or filter did not match any certificate batches.</p>
+                    </div>
+                    
+                    <nav id="pagination-container" class="flex flex-col items-center justify-center p-4" aria-label="Table navigation">
+                        </nav>
+                </div>
+            </div>
+        </main>
+        </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Sidebar, Theme, Profile Menu, Logout Logic (unchanged) ---
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggleBtn = document.getElementById('sidebar-toggle');
+            const closeSidebarBtn = document.getElementById('close-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            function openSidebar() { sidebar.classList.remove('-translate-x-full'); overlay.classList.remove('hidden');}
+            function closeSidebar() { sidebar.classList.add('-translate-x-full'); overlay.classList.add('hidden'); }
+            sidebarToggleBtn.addEventListener('click', (e) => { e.stopPropagation(); openSidebar(); });
+            closeSidebarBtn.addEventListener('click', closeSidebar);
+            overlay.addEventListener('click', closeSidebar);
+            document.querySelectorAll('[data-collapse-toggle]').forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.getAttribute('data-collapse-toggle');
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.classList.toggle('hidden');
+                        const arrowIcon = button.querySelector('.ri-arrow-down-s-line');
+                        if(arrowIcon) arrowIcon.classList.toggle('rotate-180');
+                    }
+                });
+            });
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const applyTheme = () => {
+                if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                } else { document.documentElement.classList.remove('dark'); }
+            };
+            applyTheme();
+            themeToggleBtn.addEventListener('click', () => {
+                const isDark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('color-theme', isDark ? 'dark' : 'light');
+            });
+            const profileMenuButton = document.getElementById('profile-menu-button');
+            const profileMenu = document.getElementById('profile-menu');
+            profileMenuButton?.addEventListener('click', (e) => { e.stopPropagation(); profileMenu.classList.toggle('hidden'); });
+            window.addEventListener('click', (e) => {
+                if (profileMenu && !profileMenu.classList.contains('hidden') && !profileMenuButton.contains(e.target) && !profileMenu.contains(e.target)) {
+                    profileMenu.classList.add('hidden');
+                }
+            });
+            const logoutBtnSidebar = document.getElementById('logout-sidebar');
+            const logoutBtnNavbar = document.getElementById('logout-navbar');
+            function logout() { window.location.href = "../landing/home.html"; }
+            logoutBtnSidebar.addEventListener('click', (e) => { e.preventDefault(); logout(); });
+            logoutBtnNavbar.addEventListener('click', (e) => { e.preventDefault(); logout(); });
+
+            // --- Data and Rendering Logic ---
+            const certificateData = [
+                { id: 'cert001', name: 'Sijil Graduasi 2025', creator: 'Fikri Nabil', createdDate: '31-12-2025', status: 'pending', recipients: 127 },
+                { id: 'cert002', name: 'Kejohanan Merentas Desa 2025', creator: 'Mirza Amirul Rashid', createdDate: '15-03-2025', status: 'completed', recipients: 450 },
+                { id: 'cert003', name: 'Annual Sports Day 2024', creator: 'Fikri Nabil', createdDate: '2024-11-05', status: 'canceled', recipients: 300 },
+                { id: 'cert004', name: 'Science Fair Winners 2025', creator: 'Jane Doe', createdDate: '2025-06-30', status: 'completed', recipients: 15 },
+                { id: 'cert005', name: 'Debate Club Participation', creator: 'Mirza Amirul Rashid', createdDate: '2025-05-20', status: 'completed', recipients: 32 },
+                { id: 'cert006', name: 'Art Competition 2025', creator: 'Jane Doe', createdDate: '2025-08-01', status: 'pending', recipients: 88 },
+            ];
+
+            let currentPage = 1;
+            const itemsPerPage = 3; 
+            let filteredData = [...certificateData];
+
+            const desktopView = document.getElementById('desktop-view');
+            const desktopTableBody = document.getElementById('certificate-table-body');
+            const mobileViewContainer = document.getElementById('mobile-view');
+            const paginationContainer = document.getElementById('pagination-container');
+            const noResultsMessage = document.getElementById('no-results-message');
+            const searchInput = document.getElementById('search-input');
+            const statusFilter = document.getElementById('status-filter');
+            
+            const statusClasses = {
+                pending: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
+                completed: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
+                canceled: 'bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-300',
+                draft: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
+                approved: 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-300',
+                scheduled: 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
+                processing: 'bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-300',
+                failed: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300',
+                archived: 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300',
+                expired: 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300'
+            };
+
+            function renderPage(page) {
+                currentPage = page;
+                desktopTableBody.innerHTML = '';
+                mobileViewContainer.innerHTML = '';
+
+                const hasResults = filteredData.length > 0;
+                desktopView.style.display = hasResults ? '' : 'none';
+                mobileViewContainer.style.display = hasResults ? '' : 'none';
+                paginationContainer.style.display = hasResults ? 'flex' : 'none';
+                noResultsMessage.style.display = hasResults ? 'none' : 'block';
+
+                if (!hasResults) return;
+
+                const startIndex = (page - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                const paginatedItems = filteredData.slice(startIndex, endIndex);
+
+                paginatedItems.forEach((cert, index) => {
+                    const itemNumber = startIndex + index + 1;
+                    const statusClass = statusClasses[cert.status] || statusClasses.canceled;
+                    const statusText = cert.status.charAt(0).toUpperCase() + cert.status.slice(1);
+
+                    const actionButtonHTML = `<a href="view-certificate-batch.html?id=${cert.id}" class="font-medium text-primary hover:text-primary-dark p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 inline-block"><i class="ri-eye-line text-lg"></i></a>`;
+
+                    const desktopRow = document.createElement('tr');
+                    desktopRow.className = 'bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600';
+                    desktopRow.innerHTML = `
+                        <td class="px-6 py-4">${itemNumber}</td>
+                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">${cert.name}</td>
+                        <td class="px-6 py-4">${cert.creator}</td>
+                        <td class="px-6 py-4">${cert.createdDate}</td>
+                        <td class="px-6 py-4">${cert.recipients}</td>
+                        <td class="px-6 py-4"><span class="text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full ${statusClass}">${statusText}</span></td>
+                        <td class="px-6 py-4 text-right">${actionButtonHTML}</td>
+                    `;
+                    desktopTableBody.appendChild(desktopRow);
+
+                    const mobileCard = document.createElement('div');
+                    mobileCard.className = 'flex justify-between items-center p-4 border-b dark:border-gray-700 last:border-b-0';
+                    mobileCard.innerHTML = `
+                        <div>
+                            <p class="font-medium text-gray-900 dark:text-white">${cert.name}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">${cert.creator} &bull; ${cert.createdDate}</p>
+                            <div class="mt-2">
+                                <span class="text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full ${statusClass}">${statusText}</span>
+                            </div>
+                        </div>
+                        <div class="flex-shrink-0 ml-4">${actionButtonHTML}</div>
+                    `;
+                    mobileViewContainer.appendChild(mobileCard);
+                });
+                renderPagination();
+            }
+            
+            function renderPagination() {
+                paginationContainer.innerHTML = '';
+                const pageCount = Math.ceil(filteredData.length / itemsPerPage);
+                if (pageCount <= 1) return;
+
+                paginationContainer.classList.remove('justify-between');
+                paginationContainer.classList.add('justify-center');
+
+                const ul = document.createElement('ul');
+                ul.className = 'inline-flex items-center -space-x-px';
+
+                const createPageLink = (page, iconClass, isEnabled, clickHandler) => {
+                    const li = document.createElement('li');
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.innerHTML = `<i class="${iconClass} text-lg"></i>`;
+                    button.className = 'flex items-center justify-center h-10 w-10 leading-tight';
+                    if (isEnabled) {
+                        button.className += ' text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white';
+                        button.addEventListener('click', (e) => { e.preventDefault(); clickHandler(page); });
+                    } else {
+                        button.className += ' text-gray-400 bg-gray-50 border border-gray-300 cursor-not-allowed dark:bg-gray-800 dark:border-gray-700 dark:text-gray-500';
+                        button.disabled = true;
+                    }
+                    li.appendChild(button);
+                    return li;
+                };
+                
+                const firstBtn = createPageLink(1, 'ri-skip-left-line', currentPage > 1, renderPage);
+                firstBtn.querySelector('button').classList.add('rounded-l-lg');
+                ul.appendChild(firstBtn);
+                
+                ul.appendChild(createPageLink(currentPage - 1, 'ri-arrow-left-s-line', currentPage > 1, renderPage));
+
+                const pageInfoLi = document.createElement('li');
+                pageInfoLi.innerHTML = `<span class="px-4 py-2 text-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border-y border-gray-300 dark:border-gray-700">Page ${currentPage} of ${pageCount}</span>`;
+                ul.appendChild(pageInfoLi);
+
+                ul.appendChild(createPageLink(currentPage + 1, 'ri-arrow-right-s-line', currentPage < pageCount, renderPage));
+
+                const lastBtn = createPageLink(pageCount, 'ri-skip-right-line', currentPage < pageCount, renderPage);
+                lastBtn.querySelector('button').classList.add('rounded-r-lg');
+                ul.appendChild(lastBtn);
+
+                paginationContainer.appendChild(ul);
+            }
+
+            function handleFilter() {
+                const query = searchInput.value.toLowerCase().trim();
+                const selectedStatus = statusFilter.value;
+                filteredData = certificateData.filter(cert => {
+                    const nameMatch = cert.name.toLowerCase().includes(query);
+                    const creatorMatch = cert.creator.toLowerCase().includes(query);
+                    const statusMatch = (selectedStatus === 'all') || (cert.status === selectedStatus);
+                    return (nameMatch || creatorMatch) && statusMatch;
+                });
+                renderPage(1);
+            }
+            
+            // --- Main Event Listeners ---
+            searchInput.addEventListener('input', handleFilter);
+            statusFilter.addEventListener('change', handleFilter);
+            
+            // Initial render
+            handleFilter();
+        });
+    </script>
+
+</body>
+</html>

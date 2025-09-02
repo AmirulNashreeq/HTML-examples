@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Penciptaan Sijil → JSON (v1.0.1)</title>
+  <!-- TailwindCSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root { color-scheme: light; }
+    .section { @apply bg-white rounded-xl shadow p-6 space-y-4; }
+    .grid2 { @apply grid md:grid-cols-2 gap-4; }
+    .grid3 { @apply grid md:grid-cols-3 gap-4; }
+    .inp { @apply mt-1 w-full border rounded-lg p-2; }
+    .lbl { @apply block text-sm font-medium; }
+    .hint { @apply text-xs text-gray-500; }
+    .btn  { @apply px-3 py-2 rounded-lg border bg-gray-50 hover:bg-gray-100; }
+    .btnp { @apply px-4 py-2 rounded-lg bg-black text-white hover:opacity-90; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+  <header class="sticky top-0 z-10 bg-white border-b">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <h1 class="text-xl font-bold">Penciptaan Sijil → JSON</h1>
+      <div class="text-sm text-gray-500">Skema: <code>1.0.1</code></div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-6 space-y-8">
+
+    <!-- Langkah 1–4 -->
+    <section class="section">
+      <h2 class="text-lg font-semibold">Langkah 1–4: Input Asas</h2>
+      <div class="grid3">
+        <div>
+          <label class="lbl">Nama Fail / Nama Sijil *</label>
+          <input id="nama_sijil" class="inp" placeholder="Sijil Penyertaan – STEM 2025" required>
+        </div>
+        <div>
+          <label class="lbl">cert_batch_id *</label>
+          <input id="cert_batch_id" class="inp" placeholder="batch_2025_07_STEM" required>
+        </div>
+        <div>
+          <label class="lbl">created_by *</label>
+          <input id="created_by" class="inp" placeholder="user_admin_001" required>
+        </div>
+      </div>
+      <div class="grid3">
+        <div>
+          <label class="lbl">Pilih Template</label>
+          <select id="template" class="inp">
+            <option value="blanko" selected>Blanko / Kosong</option>
+          </select>
+        </div>
+        <div>
+          <label class="lbl">Orientasi</label>
+          <select id="orientasi" class="inp">
+            <option>Potret</option>
+            <option selected>Landskap</option>
+          </select>
+          <p class="hint">A4 Potret: 21.0×29.7 cm, Landskap: 29.7×21.0 cm</p>
+        </div>
+        <div>
+          <label class="lbl">Default Alignment</label>
+          <select id="alignment" class="inp">
+            <option>Left</option>
+            <option selected>Center</option>
+            <option>Right</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid3">
+        <div>
+          <label class="lbl">Margin kiri (cm)</label>
+          <input id="m_left" type="number" step="0.1" class="inp" value="1.5">
+        </div>
+        <div>
+          <label class="lbl">Margin kanan (cm)</label>
+          <input id="m_right" type="number" step="0.1" class="inp" value="1.5">
+        </div>
+        <div>
+          <label class="lbl">Margin atas (cm)</label>
+          <input id="m_top" type="number" step="0.1" class="inp" value="2.0">
+        </div>
+        <div>
+          <label class="lbl">Margin bawah (cm)</label>
+          <input id="m_bottom" type="number" step="0.1" class="inp" value="2.0">
+        </div>
+      </div>
+
+      <div class="flex flex-wrap gap-3">
+        <button id="init_auto" class="btn">Auto-add Elemen Lalai</button>
+        <span class="hint">Klik ini untuk mengisi elemen asas (logo, tajuk, tarikh, QR) berdasarkan pilihan anda.</span>
+      </div>
+    </section>
+
+    <!-- Tetapan Lalai Teks & QR -->
+    <section class="section">
+      <h2 class="text-lg font-semibold">Tetapan Lalai</h2>
+      <div class="grid3">
+        <div>
+          <label class="lbl">Font (default teks)</label>
+          <input id="def_font" class="inp" value="Inter">
+        </div>
+        <div>
+          <label class="lbl">Font Size pt (tajuk)</label>
+          <input id="def_title_pt" type="number" class="inp" value="26">
+        </div>
+        <div>
+          <label class="lbl">Font Size pt (badan)</label>
+          <input id="def_body_pt" type="number" class="inp" value="12">
+        </div>
+      </div>
+      <div class="grid3">
+        <div>
+          <label class="lbl">Warna Tajuk</label>
+          <input id="def_title_color" class="inp" value="#222222">
+        </div>
+        <div>
+          <label class="lbl">Warna Teks</label>
+          <input id="def_text_color" class="inp" value="#000000">
+        </div>
+        <div>
+          <label class="lbl">Verification / QR URL</label>
+          <input id="verify_url" class="inp" placeholder="https://verify.example.com/v/...">
+        </div>
+      </div>
+    </section>
+
+    <!-- Elemen Teks -->
+    <section class="section">
+      <h2 class="text-lg font-semibold">Elemen Teks</h2>
+      <div class="grid3">
+        <div>
+          <label class="lbl">Nama Organisasi</label>
+          <input id="org_name" class="inp" placeholder="SMK Cyberjaya">
+          <div class="grid2 mt-2">
+            <input id="org_x" type="number" step="0.1" class="inp" placeholder="X (cm)">
+            <input id="org_y" type="number" step="0.1" class="inp" placeholder="Y (cm)">
+          </div>
+        </div>
+        <div>
+          <label class="lbl">Tajuk Sijil</label>
+          <input id="title_text" class="inp" placeholder="Sijil Penyertaan">
+          <div class="grid2 mt-2">
+            <input id="title_x" type="number" step="0.1" class="inp" placeholder="X (cm)">
+            <input id="title_y" type="number" step="0.1" class="inp" placeholder="Y (cm)">
+          </div>
+        </div>
+        <div>
+          <label class="lbl">Nama Penerima</label>
+          <input id="recipient_name" class="inp" placeholder="Nama Penuh">
+          <div class="grid2 mt-2">
+            <input id="recipient_x" type="number" step="0.1" class="inp" placeholder="X (cm)">
+            <input id="recipient_y" type="number" step="0.1" class="inp" placeholder="Y (cm)">
+          </div>
+        </div>
+      </div>
+
+      <div class="grid3">
+        <div>
+          <label class="lbl">Alamat Baris 1</label>
+          <input id="addr1" class="inp" placeholder="Alamat baris 1">
+          <div class="grid2 mt-2">
+            <input id="addr1_x" type="number" step="0.1" class="inp" placeholder="X (cm)">
+            <input id="addr1_y" type="number" step="0.1" class="inp" placeholder="Y (cm)">
+          </div>
+        </div>
+        <div>
+          <label class="lbl">Alamat Baris 2</label>
+          <input id="addr2" class="inp" placeholder="Alamat baris 2">
+          <div class="grid2 mt-2">
+            <input id="addr2_x" type="number" step="0.1" class="inp" placeholder="X (cm)">
+            <input id="addr2_y" type="number" step="0.1" class="inp" placeholder="Y (cm)">
+          </div>
+        </div>
+        <div>
+          <label class="lbl">Description</label>
+          <input id="desc_text" class="inp" placeholder="Deskripsi ringkas">
+          <div class="grid2 mt-2">
+            <input id="desc_x" type="number" step="0.1" class="inp" placeholder="X (cm)">
+            <input id="desc_y" type="number" step="0.1" class="inp" placeholder="Y (cm)">
+          </div>
+        </div>
+      </div>
+
+      <div class="grid3">
+        <div>
+          <label class="lbl">Event — Nama</label>
+          <input id="event_name" class="inp" placeholder="Nama Acara">
+        </div>
+        <div>
+          <label class="lbl">Event — Tarikh (YYYY-MM-DD)</label>
+          <input id="event_date" class="inp" placeholder="2025-07-21">
+        </div>
+        <div>
+          <label class="lbl">Event — Keputusan/Result</label>
+          <input id="event_result" class="inp" placeholder="Penyertaan / Johan / ...">
+        </div>
+      </div>
+      <div class="grid2">
+        <div>
+          <label class="lbl">Event — Description</label>
+          <input id="event_desc" class="inp" placeholder="Deskripsi acara">
+        </div>
+        <div>
+          <label class="lbl">Event — Posisi (cm)</label>
+          <div class="grid2">
+            <input id="event_x" type="number" step="0.1" class="inp" placeholder="X (cm)">
+            <input id="event_y" type="number" step="0.1" class="inp" placeholder="Y (cm)">
+          </div>
+        </div>
+      </div>
+
+      <div class="grid3">
+        <div>
+          <label class="lbl">Tarikh Diterbitkan (teks)</label>
+          <input id="issued_text" class="inp" placeholder="06 Ogos 2025">
+          <div class="grid2 mt-2">
+            <input id="issued_x" type="number" step="0.1" class="inp" placeholder="X (cm)">
+            <input id="issued_y" type="number" step="0.1" class="inp" placeholder="Y (cm)">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Elemen Imej: Logo + QR -->
+    <section class="section">
+      <h2 class="text-lg font-semibold flex items-center justify-between">
+        Imej: Logo (boleh banyak) & QR
+        <button id="add_logo" class="btn">Tambah Logo</button>
+      </h2>
+      <div id="logos_wrap" class="space-y-4"></div>
+
+      <div class="grid3 pt-2">
+        <div>
+          <label class="lbl">QR / Verification URL</label>
+          <input id="qr_url" class="inp" placeholder="https://verify.example.com/v/...">
+        </div>
+        <div>
+          <label class="lbl">QR Posisi (cm)</label>
+          <div class="grid2">
+            <input id="qr_x" type="number" step="0.1" class="inp" placeholder="X (cm)">
+            <input id="qr_y" type="number" step="0.1" class="inp" placeholder="Y (cm)">
+          </div>
+        </div>
+        <div>
+          <label class="lbl">Nota</label>
+          <p class="hint">Saiz QR diuruskan oleh renderer; koordinat adalah titik letak.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Penandatangan -->
+    <section class="section">
+      <h2 class="text-lg font-semibold flex items-center justify-between">
+        Penandatangan (0..N)
+        <button id="add_signatory" class="btn">Tambah Penandatangan</button>
+      </h2>
+      <div id="signatories_wrap" class="space-y-4"></div>
+    </section>
+
+    <!-- Hasil -->
+    <section class="section">
+      <div class="flex flex-wrap gap-3 items-center">
+        <button id="generate" class="btnp">Jana JSON</button>
+        <button id="download_meta" class="btn" disabled>Muat Turun <b>metadata.json</b></button>
+        <button id="download_payload" class="btn" disabled>Muat Turun <b>payload_penyimpanan.json</b></button>
+        <span id="status" class="text-sm text-gray-500"></span>
+      </div>
+      <details open class="mt-2">
+        <summary class="cursor-pointer font-medium">Pratonton <code>metadata</code></summary>
+        <textarea id="preview_meta" class="w-full h-72 border rounded-lg p-3 font-mono text-sm" readonly placeholder="JSON metadata akan dipaparkan di sini..."></textarea>
+      </details>
+      <details class="mt-2">
+        <summary class="cursor-pointer font-medium">Pratonton <code>payload_penyimpanan</code> (certificate_batch + metadata)</summary>
+        <textarea id="preview_payload" class="w-full h-72 border rounded-lg p-3 font-mono text-sm" readonly placeholder="JSON payload penyimpanan akan dipaparkan di sini..."></textarea>
+      </details>
+    </section>
+
+  </main>
+
+  <!-- Templates -->
+  <template id="logo_tpl">
+    <div class="border rounded-lg p-4">
+      <div class="flex items-center justify-between">
+        <h3 class="font-medium">Logo</h3>
+        <button class="remove_logo text-sm text-red-600 hover:underline">Buang</button>
+      </div>
+      <div class="grid3 mt-2">
+        <input placeholder="Logo URL *" class="l_url inp" />
+        <input placeholder="Alt" class="l_alt inp" />
+        <input placeholder="MIME (cth: image/png)" class="l_mime inp" />
+      </div>
+      <div class="grid3 mt-2">
+        <input placeholder="Width px" type="number" class="l_w inp" />
+        <input placeholder="Height px" type="number" class="l_h inp" />
+        <input placeholder="SHA256" class="l_sha inp" />
+      </div>
+      <div class="grid2 mt-2">
+        <input placeholder="X (cm)" type="number" step="0.1" class="l_x inp" />
+        <input placeholder="Y (cm)" type="number" step="0.1" class="l_y inp" />
+      </div>
+    </div>
+  </template>
+
+  <template id="signatory_tpl">
+    <div class="border rounded-lg p-4">
+      <div class="flex items-center justify-between">
+        <h3 class="font-medium">Penandatangan</h3>
+        <button class="remove_signatory text-sm text-red-600 hover:underline">Buang</button>
+      </div>
+
+      <div class="grid3 mt-2">
+        <input placeholder="Nama *" class="s_name inp" />
+        <input placeholder="Jawatan *" class="s_title inp" />
+        <input placeholder="Signed Date (YYYY-MM-DD)" class="s_signed_date inp" />
+      </div>
+
+      <div class="grid3 mt-2">
+        <div>
+          <input placeholder="Nama — X (cm)" type="number" step="0.1" class="s_name_x inp" />
+        </div>
+        <div>
+          <input placeholder="Nama — Y (cm)" type="number" step="0.1" class="s_name_y inp" />
+        </div>
+        <div>
+          <select class="s_name_font_style inp">
+            <option value="regular">regular</option>
+            <option value="bold" selected>bold</option>
+            <option value="italic">italic</option>
+            <option value="bold_italic">bold_italic</option>
+          </select>
+          <label class="hint">Nama — font_style</label>
+        </div>
+      </div>
+
+      <div class="grid3 mt-2">
+        <input placeholder="Nama — font_family" class="s_name_font inp" value="Inter" />
+        <input placeholder="Nama — font_size_pt" type="number" class="s_name_pt inp" value="14" />
+        <input placeholder="Nama — font_color" class="s_name_color inp" value="#000000" />
+      </div>
+
+      <div class="grid3 mt-2">
+        <div>
+          <input placeholder="Jawatan — X (cm)" type="number" step="0.1" class="s_role_x inp" />
+        </div>
+        <div>
+          <input placeholder="Jawatan — Y (cm)" type="number" step="0.1" class="s_role_y inp" />
+        </div>
+        <div>
+          <select class="s_role_font_style inp">
+            <option value="regular" selected>regular</option>
+            <option value="bold">bold</option>
+            <option value="italic">italic</option>
+            <option value="bold_italic">bold_italic</option>
+          </select>
+          <label class="hint">Jawatan — font_style</label>
+        </div>
+      </div>
+
+      <div class="grid3 mt-2">
+        <input placeholder="Jawatan — font_family" class="s_role_font inp" value="Inter" />
+        <input placeholder="Jawatan — font_size_pt" type="number" class="s_role_pt inp" value="12" />
+        <input placeholder="Jawatan — font_color" class="s_role_color inp" value="#000000" />
+      </div>
+
+      <div class="grid3 mt-2">
+        <input placeholder="Signature Image URL" class="s_sig_url inp" />
+        <input placeholder="Signature — X (cm)" type="number" step="0.1" class="s_sig_x inp" />
+        <input placeholder="Signature — Y (cm)" type="number" step="0.1" class="s_sig_y inp" />
+      </div>
+    </div>
+  </template>
+
+  <script>
+    // ===== Helpers =====
+    const $ = sel => document.querySelector(sel);
+    const $$ = sel => Array.from(document.querySelectorAll(sel));
+    const num = v => {
+      const n = Number(v);
+      return isNaN(n) ? undefined : n;
+    };
+    const val = v => (v===undefined || v===null || String(v).trim()==='') ? undefined : String(v).trim();
+    const nowISO = () => new Date().toISOString();
+
+    const cmCenterX = () => {
+      const ori = $('#orientasi').value;
+      const width = (ori === 'Landskap') ? 29.7 : 21.0;
+      return +(width / 2).toFixed(2);
+    };
+
+    const clean = (obj) => {
+      if (Array.isArray(obj)) return obj.map(clean).filter(v => v !== undefined);
+      if (obj && typeof obj === 'object') {
+        const out = {};
+        for (const [k,v] of Object.entries(obj)) {
+          const cv = clean(v);
+          const isEmptyObj = cv && typeof cv === 'object' && !Array.isArray(cv) && Object.keys(cv).length === 0;
+          if (cv !== undefined && !isEmptyObj) out[k] = cv;
+        }
+        return Object.keys(out).length ? out : undefined;
+      }
+      return (obj === undefined || obj === null || obj === '') ? undefined : obj;
+    };
+
+    // ===== Logos dynamic =====
+    const logosWrap = $('#logos_wrap');
+    const addLogoUI = (preset) => {
+      const tpl = document.getElementById('logo_tpl').content.cloneNode(true);
+      const box = tpl.children[0];
+      if (preset) {
+        box.querySelector('.l_url').value = preset.url || '';
+        box.querySelector('.l_alt').value = preset.alt || '';
+        box.querySelector('.l_mime').value = preset.mime || '';
+        box.querySelector('.l_w').value = preset.w || '';
+        box.querySelector('.l_h').value = preset.h || '';
+        box.querySelector('.l_sha').value = preset.sha || '';
+        box.querySelector('.l_x').value = preset.x ?? '';
+        box.querySelector('.l_y').value = preset.y ?? '';
+      }
+      box.querySelector('.remove_logo').addEventListener('click', (e) => e.target.closest('.border').remove());
+      logosWrap.appendChild(tpl);
+    };
+    document.getElementById('add_logo').addEventListener('click', () => addLogoUI());
+
+    // ===== Signatories dynamic =====
+    const signWrap = $('#signatories_wrap');
+    const addSignatoryUI = (preset) => {
+      const tpl = document.getElementById('signatory_tpl').content.cloneNode(true);
+      const box = tpl.children[0];
+      if (preset) {
+        box.querySelector('.s_name').value = preset.name || '';
+        box.querySelector('.s_title').value = preset.title || '';
+        box.querySelector('.s_signed_date').value = preset.signed_date || '';
+        box.querySelector('.s_name_x').value = preset.name_x ?? '';
+        box.querySelector('.s_name_y').value = preset.name_y ?? '';
+        box.querySelector('.s_name_font').value = preset.name_font || 'Inter';
+        box.querySelector('.s_name_pt').value = preset.name_pt ?? 14;
+        box.querySelector('.s_name_color').value = preset.name_color || '#000000';
+        box.querySelector('.s_name_font_style').value = preset.name_style || 'bold';
+
+        box.querySelector('.s_role_x').value = preset.role_x ?? '';
+        box.querySelector('.s_role_y').value = preset.role_y ?? '';
+        box.querySelector('.s_role_font').value = preset.role_font || 'Inter';
+        box.querySelector('.s_role_pt').value = preset.role_pt ?? 12;
+        box.querySelector('.s_role_color').value = preset.role_color || '#000000';
+        box.querySelector('.s_role_font_style').value = preset.role_style || 'regular';
+
+        box.querySelector('.s_sig_url').value = preset.sig_url || '';
+        box.querySelector('.s_sig_x').value = preset.sig_x ?? '';
+        box.querySelector('.s_sig_y').value = preset.sig_y ?? '';
+      }
+      box.querySelector('.remove_signatory').addEventListener('click', (e) => e.target.closest('.border').remove());
+      signWrap.appendChild(tpl);
+    };
+    document.getElementById('add_signatory').addEventListener('click', () => addSignatoryUI());
+
+    // ===== Auto-add defaults =====
+    document.getElementById('init_auto').addEventListener('click', () => {
+      const centerX = cmCenterX();
+
+      if (!$('#title_text').value && $('#nama_sijil').value)
+        $('#title_text').value = $('#nama_sijil').value;
+
+      if (!$('#title_x').value) $('#title_x').value = centerX;
+      if (!$('#title_y').value) $('#title_y').value = ($('#orientasi').value === 'Landskap') ? 6.0 : 7.5;
+
+      if (!$('#org_name').value) $('#org_name').value = 'Nama Organisasi';
+      if (!$('#org_x').value) $('#org_x').value = centerX;
+      if (!$('#org_y').value) $('#org_y').value = ($('#orientasi').value === 'Landskap') ? 2.8 : 3.0;
+
+      if (!$('#desc_x').value) $('#desc_x').value = centerX;
+      if (!$('#desc_y').value) $('#desc_y').value = ($('#orientasi').value === 'Landskap') ? 8.5 : 10.0;
+
+      if (!$('#recipient_x').value) $('#recipient_x').value = centerX;
+      if (!$('#recipient_y').value) $('#recipient_y').value = ($('#orientasi').value === 'Landskap') ? 10.5 : 12.0;
+
+      if (!$('#event_x').value) $('#event_x').value = centerX;
+      if (!$('#event_y').value) $('#event_y').value = ($('#orientasi').value === 'Landskap') ? 12.0 : 14.0;
+
+      if (!$('#issued_x').value) $('#issued_x').value = centerX;
+      if (!$('#issued_y').value) $('#issued_y').value = ($('#orientasi').value === 'Landskap') ? 17.5 : 25.0;
+      if (!$('#issued_text').value) $('#issued_text').value = new Date().toLocaleDateString('ms-MY', { day:'2-digit', month:'long', year:'numeric' });
+
+      if (!$('#qr_x').value) $('#qr_x').value = ($('#orientasi').value === 'Landskap') ? 27.0 : 18.0;
+      if (!$('#qr_y').value) $('#qr_y').value = ($('#orientasi').value === 'Landskap') ? 16.5 : 26.0;
+      if (!$('#qr_url').value && $('#verify_url').value) $('#qr_url').value = $('#verify_url').value;
+
+      // Auto-add satu logo kiri atas jika tiada
+      if (logosWrap.children.length === 0) {
+        addLogoUI({ url: 'https://cdn.example.com/logo.png', alt: 'Logo organisasi', x: 2.0, y: 2.0, mime: 'image/png', w: 512, h: 512 });
+      }
+
+      // Auto-add dua penandatangan kosong sebagai contoh
+      if (signWrap.children.length === 0) {
+        addSignatoryUI({
+          name: 'Nama Penandatangan 1', title: 'Jawatan', name_x: 7.5, name_y: 16.5,
+          role_x: 7.5, role_y: 17.2, sig_x: 7.5, sig_y: 14.0
+        });
+        addSignatoryUI({
+          name: 'Nama Penandatangan 2', title: 'Jawatan', name_x: 22.2, name_y: 16.5,
+          role_x: 22.2, role_y: 17.2, sig_x: 22.2, sig_y: 14.0
+        });
+      }
+    });
+
+    // ===== Build JSON =====
+    function buildMetadata() {
+      const meta = {
+        versi_skema: "1.0.1",
+        tetapan_paparan: {
+          saiz_sijil: "A4",
+          orientasi: $('#orientasi').value,
+          default_alignment: $('#alignment').value,
+          margin_cm: {
+            left: num($('#m_left').value),
+            right: num($('#m_right').value),
+            top: num($('#m_top').value),
+            bottom: num($('#m_bottom').value)
+          }
+        },
+        elemen: {
+          logo: $$('#logos_wrap .border').map(box => ({
+            url: val(box.querySelector('.l_url').value),
+            alt: val(box.querySelector('.l_alt').value),
+            mime_type: val(box.querySelector('.l_mime').value),
+            width_px: num(box.querySelector('.l_w').value),
+            height_px: num(box.querySelector('.l_h').value),
+            sha256: val(box.querySelector('.l_sha').value),
+            lokasi: { x: num(box.querySelector('.l_x').value), y: num(box.querySelector('.l_y').value), units: "cm" }
+          })).filter(x => x.url),
+          nama_organisasi: {
+            teks: val($('#org_name').value),
+            font_family: val($('#def_font').value) || "Inter",
+            font_size_pt: num($('#def_body_pt').value) || 12,
+            font_style: "bold",
+            font_color: val($('#def_text_color').value) || "#000000",
+            lokasi: { x: num($('#org_x').value), y: num($('#org_y').value), units: "cm" }
+          },
+          tajuk_sijil: {
+            teks: val($('#title_text').value) || val($('#nama_sijil').value),
+            font_family: "Merriweather",
+            font_size_pt: num($('#def_title_pt').value) || 26,
+            font_style: "bold",
+            font_color: val($('#def_title_color').value) || "#222222",
+            lokasi: { x: num($('#title_x').value) ?? cmCenterX(), y: num($('#title_y').value), units: "cm" }
+          },
+          nama_penerima: {
+            teks: val($('#recipient_name').value),
+            font_family: "Playfair Display",
+            font_size_pt: 20,
+            font_style: "bold",
+            font_color: "#000000",
+            lokasi: { x: num($('#recipient_x').value), y: num($('#recipient_y').value), units: "cm" }
+          },
+          description: {
+            teks: val($('#desc_text').value),
+            font_family: val($('#def_font').value) || "Inter",
+            font_size_pt: 13,
+            font_style: "regular",
+            font_color: val($('#def_text_color').value) || "#000000",
+            lokasi: { x: num($('#desc_x').value), y: num($('#desc_y').value), units: "cm" }
+          },
+          alamat_baris1: val($('#addr1').value) ? {
+            teks: val($('#addr1').value),
+            font_family: val($('#def_font').value) || "Inter",
+            font_size_pt: 12,
+            font_style: "regular",
+            font_color: "#000000",
+            lokasi: { x: num($('#addr1_x').value), y: num($('#addr1_y').value), units: "cm" }
+          } : undefined,
+          alamat_baris2: val($('#addr2').value) ? {
+            teks: val($('#addr2').value),
+            font_family: val($('#def_font').value) || "Inter",
+            font_size_pt: 12,
+            font_style: "regular",
+            font_color: "#000000",
+            lokasi: { x: num($('#addr2_x').value), y: num($('#addr2_y').value), units: "cm" }
+          } : undefined,
+          event: {
+            nama: val($('#event_name').value),
+            description: val($('#event_desc').value),
+            date_event: val($('#event_date').value),
+            result_event: val($('#event_result').value),
+            lokasi: { x: num($('#event_x').value), y: num($('#event_y').value), units: "cm" }
+          },
+          signatories: $$('#signatories_wrap .border').map(box => {
+            const name = val(box.querySelector('.s_name').value);
+            const title = val(box.querySelector('.s_title').value);
+            const signedDate = val(box.querySelector('.s_signed_date').value);
+            const name_x = num(box.querySelector('.s_name_x').value);
+            const name_y = num(box.querySelector('.s_name_y').value);
+            const role_x = num(box.querySelector('.s_role_x').value);
+            const role_y = num(box.querySelector('.s_role_y').value);
+            const sig_url = val(box.querySelector('.s_sig_url').value);
+            const sig_x = num(box.querySelector('.s_sig_x').value);
+            const sig_y = num(box.querySelector('.s_sig_y').value);
+
+            return {
+              nama_signatory: {
+                teks: name,
+                font_family: val(box.querySelector('.s_name_font').value) || "Inter",
+                font_size_pt: num(box.querySelector('.s_name_pt').value) || 14,
+                font_style: val(box.querySelector('.s_name_font_style').value) || "bold",
+                font_color: val(box.querySelector('.s_name_color').value) || "#000000",
+                lokasi: { x: name_x, y: name_y, units: "cm" }
+              },
+              jawatan_signatory: {
+                teks: title,
+                font_family: val(box.querySelector('.s_role_font').value) || "Inter",
+                font_size_pt: num(box.querySelector('.s_role_pt').value) || 12,
+                font_style: val(box.querySelector('.s_role_font_style').value) || "regular",
+                font_color: val(box.querySelector('.s_role_color').value) || "#000000",
+                lokasi: { x: role_x, y: role_y, units: "cm" }
+              },
+              signature_url: sig_url ? {
+                url: sig_url,
+                lokasi: { x: sig_x, y: sig_y, units: "cm" }
+              } : undefined,
+              signed_date: signedDate
+            };
+          }).filter(s => s.nama_signatory?.teks || s.jawatan_signatory?.teks || s.signature_url),
+          tarikh_issued: {
+            teks: val($('#issued_text').value),
+            font_family: val($('#def_font').value) || "Inter",
+            font_size_pt: num($('#def_body_pt').value) || 12,
+            font_style: "regular",
+            font_color: val($('#def_text_color').value) || "#000000",
+            lokasi: { x: num($('#issued_x').value), y: num($('#issued_y').value), units: "cm" }
+          },
+          qrcode_url: {
+            url: val($('#qr_url').value) || val($('#verify_url').value),
+            lokasi: { x: num($('#qr_x').value), y: num($('#qr_y').value), units: "cm" }
+          }
+        },
+        aksesibiliti: {
+          alt_texts: { logo: "Lambang rasmi organisasi" },
+          high_contrast_mode: false
+        },
+        audit: {
+          updated_at: nowISO(),
+          updated_by: val($('#created_by').value)
+        }
+      };
+      return clean(meta);
+    }
+
+    function buildStoragePayload(meta) {
+      const payload = {
+        certificate_batch: {
+          cert_batch_id: val($('#cert_batch_id').value),
+          nama_sijil: val($('#nama_sijil').value),
+          created_at: nowISO(),
+          created_by: val($('#created_by').value)
+        },
+        metadata: meta
+      };
+      return clean(payload);
+    }
+
+    // ===== Generate & Download =====
+    const status = $('#status');
+    $('#generate').addEventListener('click', () => {
+      status.textContent = '';
+      const required = [];
+      if (!val($('#nama_sijil').value)) required.push('Nama Sijil');
+      if (!val($('#cert_batch_id').value)) required.push('cert_batch_id');
+      if (!val($('#created_by').value)) required.push('created_by');
+      if (required.length) {
+        status.textContent = 'Sila lengkapkan: ' + required.join(', ');
+        return;
+      }
+
+      const meta = buildMetadata();
+      $('#preview_meta').value = JSON.stringify(meta, null, 2);
+
+      const payload = buildStoragePayload(meta);
+      $('#preview_payload').value = JSON.stringify(payload, null, 2);
+
+      $('#download_meta').disabled = false;
+      $('#download_payload').disabled = false;
+      status.textContent = 'JSON dijana.';
+    });
+
+    function download(filename, text) {
+      const blob = new Blob([text], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    $('#download_meta').addEventListener('click', () => {
+      const txt = $('#preview_meta').value || JSON.stringify(buildMetadata(), null, 2);
+      download('metadata.json', txt);
+    });
+
+    $('#download_payload').addEventListener('click', () => {
+      const meta = $('#preview_meta').value ? JSON.parse($('#preview_meta').value) : buildMetadata();
+      const payload = buildStoragePayload(meta);
+      download('payload_penyimpanan.json', JSON.stringify(payload, null, 2));
+    });
+
+    // ===== Kualiti hidup: isi tarikh terbit jika kosong bila nama diisi =====
+    $('#nama_sijil').addEventListener('blur', () => {
+      if (!$('#title_text').value) $('#title_text').value = $('#nama_sijil').value;
+    });
+  </script>
+</body>
+</html>

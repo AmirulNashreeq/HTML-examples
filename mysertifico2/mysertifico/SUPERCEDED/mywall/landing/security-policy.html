@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Policy - MyWall</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/images/logos/favicon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Poppins:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        // Palet Aqua Lautan & Oren Senja
+                        'primary': {
+                            'DEFAULT': '#14B8A6',       // Aqua Lautan (Teal-500)
+                            '50': '#f0fdfa',
+                            '100': '#ccfbf1',
+                            '200': '#99f6e4',
+                            '300': '#5eead4',
+                            '400': '#2dd4bf',
+                            '500': '#14b8a6',
+                            '600': '#0d9488',
+                            '700': '#0f766e',
+                            '800': '#115e59',
+                            '900': '#134E4A',    // Aqua Gelap (Teal-900)
+                        },
+                        'accent': {
+                            'DEFAULT': '#F97316',        // Oren Senja (Orange-500)
+                            'hover': '#EA580C',  // Oren Hangat untuk hover (Orange-600)
+                        },
+                        'dark-bg': '#134E4A',       // Aqua Sangat Gelap untuk footer (Teal-900)
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .prose h2 {
+            font-size: 1.5rem; /* 24px */
+            font-weight: 700;
+            color: #ffffff;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .prose h3 {
+            font-size: 1.25rem; /* 20px */
+            font-weight: 600;
+            color: #ffffff;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+        .prose p, .prose ul, .prose li {
+            color: #ccfbf1; /* primary-100 */
+        }
+        .prose a {
+            color: #F97316; /* accent */
+            text-decoration: underline;
+        }
+        .prose a:hover {
+            color: #EA580C; /* accent-hover */
+        }
+        .prose ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-primary-900 to-primary text-white overflow-x-hidden">
+
+    <!-- Header & Navbar -->
+    <header class="bg-white shadow-md text-gray-800 fixed w-full top-0 z-50">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <a href="home.html" class="flex items-center gap-2">
+                    <img src="../assets/images/logos/logo.png" alt="MyWall Logo" class="h-10 w-10">
+                    <span class="font-poppins font-bold text-2xl text-primary">MyWall</span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="home.html" class="hover:text-primary font-medium">Home</a>
+                    <a href="about.html" class="hover:text-primary font-medium">About</a>
+                    <a href="price.html" class="hover:text-primary font-medium">Pricing</a>
+                    <a href="contact-us.html" class="hover:text-primary font-medium">Contact Us</a>
+                </div>
+                
+                <!-- Login Buttons for Desktop -->
+                 <div class="hidden md:flex items-center space-x-2">
+                    <a href="sign-in.html" class="px-4 py-2 text-sm bg-primary text-white font-semibold rounded-lg hover:bg-primary-600">Sign In</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden">
+                    <button id="menu-toggle" class="text-gray-800 focus:outline-none">
+                        <i id="icon-open" class="ri-menu-line text-2xl"></i>
+                        <i id="icon-close" class="ri-close-line text-2xl hidden"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden md:hidden mt-4 bg-white rounded-lg p-4">
+                <a href="home.html" class="block py-2 text-sm text-gray-800 hover:text-primary">Home</a>
+                <a href="about.html" class="block py-2 text-sm text-gray-800 hover:text-primary">About</a>
+                <a href="price.html" class="block py-2 text-sm text-gray-800 hover:text-primary">Pricing</a>
+                <a href="contact-us.html" class="block py-2 text-sm text-gray-800 hover:text-primary">Contact Us</a>
+                 <div class="border-t my-4"></div>
+                 <a href="sign-in.html" class="block w-full text-center py-2 text-sm bg-primary text-white font-semibold rounded-lg hover:bg-primary-600">Sign In</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="pt-24 pb-12">
+        <!-- Page Header Section -->
+        <section class="py-16 text-center">
+            <div class="container mx-auto px-6">
+                <h1 class="text-4xl md:text-5xl font-extrabold text-white font-poppins">Security Policy</h1>
+                <p class="text-lg text-primary-200 mt-4">Last Updated: July 2, 2025</p>
+            </div>
+        </section>
+
+        <!-- Security Policy Content -->
+        <section class="py-16">
+            <div class="container mx-auto px-6">
+                <div class="bg-white/10 backdrop-blur-sm rounded-2xl shadow-2xl p-8 md:p-12 prose max-w-4xl mx-auto">
+                    
+                    <h2>1. Our Commitment to Security</h2>
+                    <p>At MyWall, the security of your data is our highest priority. We are committed to protecting your personal information and your digital certificates from unauthorized access, use, or disclosure. This Security Policy outlines the measures we take to secure our platform and your data.</p>
+
+                    <h2>2. Data Protection Measures</h2>
+                    <h3>Encryption</h3>
+                    <ul>
+                        <li><strong>Encryption in Transit:</strong> All data transmitted between your device and our servers is encrypted using industry-standard Transport Layer Security (TLS 1.2 or higher). This ensures that your data is protected from eavesdropping.</li>
+                        <li><strong>Encryption at Rest:</strong> Your personal information and uploaded certificate files are encrypted at rest on our servers using advanced encryption standards (AES-256).</li>
+                    </ul>
+                    <h3>Data Storage</h3>
+                    <p>We partner with leading cloud infrastructure providers that maintain state-of-the-art physical and network security to protect our servers. Access to this data is strictly limited to authorized personnel.</p>
+
+                    <h2>3. Account Security</h2>
+                    <p>You play a crucial role in protecting your account. We encourage you to:</p>
+                    <ul>
+                        <li>Use a strong, unique password for your MyWall account. A strong password includes a mix of letters, numbers, and symbols.</li>
+                        <li>Do not share your password with anyone. MyWall staff will never ask you for your password.</li>
+                        <li>Be cautious of phishing attempts. Always ensure you are on the official MyWall website before entering your login credentials.</li>
+                        <li>Sign out of your account when using a shared or public computer.</li>
+                    </ul>
+
+                    <h2>4. Secure Sharing</h2>
+                    <p>MyWall's sharing feature is designed with security in mind. When you share a certificate, we generate a unique, secure link that you can share with trusted recipients. You maintain control over your shared content and can manage access as needed.</p>
+
+                    <h2>5. Vulnerability Reporting</h2>
+                    <p>We are committed to working with security researchers to identify and resolve potential vulnerabilities in our service. If you believe you have found a security vulnerability in MyWall, please report it to us responsibly. We ask that you do not publicly disclose the issue until we have had a chance to address it.</p>
+                    <p>Please send your findings to <a href="mailto:security@mywall.app">security@mywall.app</a>. We appreciate your efforts to help us keep our platform secure.</p>
+                    
+                    <h2>6. Policy Updates</h2>
+                    <p>We may update this Security Policy from time to time to reflect changes in our practices or for other operational, legal, or regulatory reasons. We will notify you of any material changes by posting the new policy on this page and updating the "Last Updated" date.</p>
+
+                    <h2>7. Contact Us</h2>
+                    <p>If you have any questions about our security practices, please contact us at:</p>
+                    <p>
+                        Webapp Studio Sdn. Bhd.<br>
+                        Kuala Lumpur, Malaysia<br>
+                        <a href="mailto:hello@mywall.app">hello@mywall.app</a>
+                    </p>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark-bg/50 text-white">
+        <div class="container mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+            <!-- Info -->
+            <div>
+                <h3 class="text-xl font-bold font-poppins mb-4 text-primary-300">MyWall</h3>
+                <p class="text-sm text-primary-200">MyWall is your personal digital wall for all your certificates and qualifications. Collect, manage, showcase, and share your achievements securely.</p>
+            </div>
+            <!-- Links -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4 text-primary-300">Links</h4>
+                <ul class="space-y-2 text-sm text-primary-200">
+                    <li><a href="home.html" class="hover:text-white">Home</a></li>
+                    <li><a href="about.html" class="hover:text-white">About</a></li>
+                    <li><a href="price.html" class="hover:text-white">Pricing</a></li>
+                    <li><a href="contact-us.html" class="hover:text-white">Contact Us</a></li>
+                </ul>
+            </div>
+            <!-- Policies -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4 text-primary-300">Terms & Policies</h4>
+                <ul class="space-y-2 text-sm text-primary-200">
+                    <li><a href="privacy-policy.html" class="hover:text-white">Privacy Policy</a></li>
+                    <li><a href="terms-of-service.html" class="hover:text-white">Terms of Service</a></li>
+                    <li><a href="security-policy.html" class="hover:text-white">Security Policy</a></li>
+                </ul>
+            </div>
+            <!-- Social -->
+            <div>
+                <h4 class="text-lg font-semibold mb-4 text-primary-300">Follow Us</h4>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-primary-200 hover:text-white text-xl" title="Facebook"><i class="ri-facebook-fill"></i></a>
+                    <a href="#" class="text-primary-200 hover:text-white text-xl" title="Instagram"><i class="ri-instagram-fill"></i></a>
+                    <a href="#" class="text-primary-200 hover:text-white text-xl" title="TikTok"><i class="ri-tiktok-fill"></i></a>
+                    <a href="#" class="text-primary-200 hover:text-white text-xl" title="YouTube"><i class="ri-youtube-fill"></i></a>
+                </div>
+            </div>
+        </div>
+        <!-- Divider + Copyright -->
+        <div class="border-t border-primary-800/50">
+            <div class="container mx-auto px-6 py-4 text-center text-sm text-primary-300">&copy; 2025 MyWall. All rights reserved by Webapp Studio Sdn. Bhd.</div>
+        </div>
+    </footer>
+
+    <!-- Main Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- Navbar Toggle for Mobile ---
+            const menuToggle = document.getElementById('menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const iconOpen = document.getElementById('icon-open');
+            const iconClose = document.getElementById('icon-close');
+
+            if(menuToggle) {
+                menuToggle.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                    iconOpen.classList.toggle('hidden');
+                    iconClose.classList.toggle('hidden');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyWall - Create Your Account</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../src/images/logos/favicon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Custom Tailwind Config with MyWall Theme -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        // Palet Aqua Lautan & Oren Senja
+                        'primary': {
+                            'DEFAULT': '#14B8A6',       // Aqua Lautan (Teal-500)
+                            '50': '#f0fdfa',
+                            '100': '#ccfbf1',
+                            '200': '#99f6e4',
+                            '300': '#5eead4',
+                            '400': '#2dd4bf',
+                            '500': '#14b8a6',
+                            '600': '#0d9488',
+                            '700': '#0f766e',
+                            '800': '#115e59',
+                            '900': '#134E4A',    // Aqua Gelap (Teal-900)
+                        },
+                        'accent': {
+                            'DEFAULT': '#F97316',        // Oren Senja (Orange-500)
+                            'hover': '#EA580C',  // Oren Hangat untuk hover (Orange-600)
+                        },
+                        'dark-bg': '#134E4A',       // Aqua Sangat Gelap untuk footer (Teal-900)
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="relative flex flex-col m-6 space-y-8 bg-white dark:bg-gray-800 shadow-2xl rounded-2xl md:flex-row md:space-y-0">
+            <!-- Left Side -->
+            <div class="relative w-full md:w-1/2">
+                <img src="../../src/images/heroes/welcome4.png"
+                     alt="A student smiling and holding books"
+                     onerror="this.onerror=null; this.src='https://placehold.co/800x1200/134E4A/ffffff?text=MyWall';"
+                     class="w-full h-full hidden md:block rounded-l-2xl object-cover">
+                 <!-- Gradient overlay updated to the new theme -->
+                 <div class="absolute inset-0 bg-gradient-to-t from-primary-900 to-transparent opacity-90 md:rounded-l-2xl"></div>
+                 <div class="absolute bottom-10 left-10 text-white">
+                     <h2 class="text-4xl font-bold font-poppins">MyWall</h2>
+                     <p class="text-lg text-primary-200">Your Personal Wall of Achievements</p>
+                 </div>
+            </div>
+
+            <!-- Right Side -->
+            <div class="w-full md:w-1/2 p-8 md:p-12">
+                <!-- Theme Toggle -->
+                <div class="absolute top-6 right-6">
+                    <button id="theme-toggle" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg p-2 text-xl">
+                        <i class="ri-moon-line block dark:hidden"></i>
+                        <i class="ri-sun-line hidden dark:block"></i>
+                    </button>
+                </div>
+
+                <h2 class="font-bold text-3xl text-gray-800 dark:text-white">Create Your MyWall</h2>
+                <p class="text-sm font-normal text-gray-600 dark:text-gray-400 mb-4">Your lifelong digital wall for all your certificates.</p>
+
+                <!-- Success Message -->
+                <div id="success-message" class="hidden flex items-center p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-700 dark:text-green-400" role="alert">
+                    <i class="ri-checkbox-circle-line mr-3"></i>
+                    <div>
+                        <span class="font-medium">Account created successfully!</span> Please check your email to verify your account.
+                    </div>
+                </div>
+
+                <form id="signupForm" class="space-y-5">
+                     <div>
+                        <label for="full_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Full Name</label>
+                        <input type="text" id="full_name" name="full_name" required class="mt-1 w-full p-3 border rounded-lg focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    </div>
+                     <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+                        <input type="email" id="email" name="email" required class="mt-1 w-full p-3 border rounded-lg focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
+                        <div class="relative">
+                            <input type="password" id="password" name="password" required class="mt-1 w-full p-3 border rounded-lg pr-10 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <button type="button" class="password-toggle absolute inset-y-0 right-0 px-3 text-gray-500 dark:text-gray-400">
+                                <i class="ri-eye-off-line"></i>
+                            </button>
+                        </div>
+                    </div>
+                     <div>
+                        <label for="country" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Country</label>
+                         <select id="country" name="country" required class="mt-1 w-full p-3 border rounded-lg focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <!-- Country list will be populated by JS -->
+                        </select>
+                    </div>
+                    <div>
+                        <label for="user_type" class="block text-sm font-medium text-gray-700 dark:text-gray-300">I am a</label>
+                        <select id="user_type" name="user_type" required class="mt-1 w-full p-3 border rounded-lg focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <option value="student">Student</option>
+                            <option value="parent">Parent / Guardian</option>
+                        </select>
+                    </div>
+
+                    <div class="text-xs text-gray-500 dark:text-gray-400">
+                        <!-- Link colors updated -->
+                        By clicking "Create Account", you agree to our <a href="#" class="text-primary hover:underline">Terms of Service</a> and <a href="#" class="text-primary hover:underline">Privacy Policy</a>.
+                    </div>
+                    
+                    <!-- Button color updated -->
+                    <button type="submit" class="w-full bg-accent text-white py-3 rounded-lg font-semibold hover:bg-accent-hover transition-colors">Create MyWall Account</button>
+                </form>
+
+                <div class="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
+                    <!-- Link color updated -->
+                    Already have a MyWall account? <a href="sign-in.html" class="font-semibold text-primary hover:underline">Sign In here</a>.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script for password toggle and form submission -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Theme Toggle ---
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const applyTheme = () => {
+                if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            };
+            applyTheme();
+            themeToggleBtn.addEventListener('click', () => {
+                const isDark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('color-theme', isDark ? 'dark' : 'light');
+            });
+
+            // --- Password Toggle ---
+            document.querySelectorAll('.password-toggle').forEach(button => {
+                button.addEventListener('click', function () {
+                    const input = this.closest('.relative').querySelector('input');
+                    const icon = this.querySelector('i');
+                    const isPassword = input.getAttribute('type') === 'password';
+                    input.setAttribute('type', isPassword ? 'text' : 'password');
+                    icon.classList.toggle('ri-eye-line', isPassword);
+                    icon.classList.toggle('ri-eye-off-line', !isPassword);
+                });
+            });
+
+            // --- Populate Country List ---
+            const countrySelect = document.getElementById('country');
+            const countries = ["Malaysia", "Singapore", "Indonesia", "Brunei Darussalam", "Thailand", "Philippines", "Vietnam", "Myanmar", "Cambodia", "Laos", "Timor-Leste", "---", "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo, Democratic Republic of the", "Congo, Republic of the", "Costa Rica", "Cote d'Ivoire", "Croatia", "Cuba", "Cyprus", "Czechia", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kosovo", "Kuwait", "Kyrgyzstan", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Palestine State", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States of America", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Yemen", "Zambia", "Zimbabwe"];
+            
+            let countryHtml = '<option value="">-- Select your country --</option>';
+            countries.forEach(country => {
+                if (country === "---") {
+                    countryHtml += `<option disabled>──────────</option>`;
+                } else {
+                    countryHtml += `<option value="${country}">${country}</option>`;
+                }
+            });
+            countrySelect.innerHTML = countryHtml;
+            // Set default to Malaysia
+            countrySelect.value = "Malaysia";
+            
+            // --- Form Submission Simulation ---
+            const signupForm = document.getElementById('signupForm');
+            const successMessage = document.getElementById('success-message');
+
+            signupForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                // Add validation if needed
+                console.log('MyWall registration submitted.');
+
+                // Hide form and show success message
+                signupForm.classList.add('hidden');
+                successMessage.classList.remove('hidden');
+            });
+        });
+    </script>
+</body>
+</html>

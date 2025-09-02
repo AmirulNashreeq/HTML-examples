@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>View Recipient - MySertifico</title>
+  <link rel="icon" type="image/png" href="../../src/images/logos/favicon.png" onerror="this.onerror=null;this.src='https://placehold.co/32x32/0d9488/ffffff?text=M';">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Remix Icon CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+  <!-- Google Fonts: Inter, Poppins, Montserrat, EB Garamond -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&family=Montserrat:wght@400;500;600;700&family=EB+Garamond:wght@400;700&display=swap" rel="stylesheet">
+  
+  <!-- PDF Generation Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- Custom Tailwind Configuration -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            poppins: ['Poppins', 'sans-serif'],
+            montserrat: ['Montserrat', 'sans-serif'],
+            garamond: ['EB Garamond', 'serif'],
+          },
+          colors: {
+            primary: {
+              DEFAULT: '#0d9488',   /* Teal-600 */
+              dark: '#0f766e',      /* Teal-700 */
+              light: '#ccfbf1',     /* Teal-100 */
+            },
+            accent: {
+              DEFAULT: '#f59e0b',   /* Amber-500 */
+              hover: '#d97706',     /* Amber-600 */
+            },
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .sidebar { scrollbar-width: none; }
+    .sidebar::-webkit-scrollbar { display: none; }
+    .pagination-btn[disabled] { cursor: not-allowed; opacity: 0.5; }
+    .modal-enter { animation: fadeIn 0.3s ease-out; }
+    .modal-leave { animation: fadeOut 0.3s ease-in; }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    @keyframes fadeOut { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(0.95); } }
+
+    /* (BM) Pastikan font digunakan dalam SVG juga */
+    #certificate-render-area text {
+      font-family: var(--font-family, 'Montserrat', sans-serif);
+    }
+    /* (BM) Kawasan preview: kekalkan nisbah, skala responsif tanpa ubah reka bentuk luar */
+    #certificate-render-area svg {
+      display: block;
+      width: 100%;   /* skala responsif */
+      height: auto;  /* kekalkan nisbah melalui viewBox */
+    }
+    /* (BM) Latar untuk bantu visual */
+    #certificate-render-area {
+      background: #fff;
+      border-radius: .5rem;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+
+  <!-- ===== Sidebar Start ===== -->
+  <aside id="sidebar" class="sidebar fixed top-0 left-0 z-50 h-full w-64 bg-gray-800 dark:bg-gray-950 text-white transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto">
+    <div class="flex items-center justify-between p-6">
+      <h2 class="font-poppins text-2xl font-bold text-white">Menu</h2>
+      <button id="close-sidebar" class="text-gray-400 hover:text-white">
+        <i class="ri-close-line text-2xl"></i>
+      </button>
+    </div>
+    <nav class="p-4">
+      <ul class="space-y-2">
+        <li><a href="dashboard.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white transition-colors"><i class="ri-dashboard-3-line mr-3 text-lg"></i><span>Dashboard</span></a></li>
+        <li>
+          <button data-collapse-toggle="submenu-gallery" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white transition-colors">
+            <span class="flex items-center"><i class="ri-gallery-line mr-3 text-lg"></i><span>Gallery</span></span><i class="ri-arrow-down-s-line transition-transform duration-200"></i>
+          </button>
+          <ul id="submenu-gallery" class="hidden py-2 space-y-1 pl-8">
+            <li><a href="templates-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Templates</a></li>
+            <li><a href="logos-badges.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Logos & Badges</a></li>
+          </ul>
+        </li>
+        <li><a href="certificate-list.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white transition-colors"><i class="ri-award-line mr-3 text-lg"></i><span>Certificates</span></a></li>
+        <li>
+          <button data-collapse-toggle="submenu-settings" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white transition-colors">
+            <span class="flex items-center"><i class="ri-settings-3-line mr-3 text-lg"></i><span>Settings</span></span><i class="ri-arrow-down-s-line transition-transform duration-200"></i>
+          </button>
+          <ul id="submenu-settings" class="hidden py-2 space-y-1 pl-8">
+            <li><a href="organisation.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Organisation</a></li>
+            <li><a href="logo-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Logos</a></li>
+            <li><a href="selected-template-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Selected Templates</a></li>
+            <li><a href="user-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Users</a></li>
+            <li class="px-4"><hr class="border-gray-700 my-1"></li>
+            <li><a href="account.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Account</a></li>
+          </ul>
+        </li>
+        <li class="pt-4 mt-4 border-t border-gray-700"><a href="#" id="logout-sidebar" class="flex items-center py-2.5 px-4 rounded-lg text-red-400 hover:bg-red-500 hover:text-white transition-colors"><i class="ri-logout-box-r-line mr-3 text-lg"></i><span>Log Out</span></a></li>
+      </ul>
+    </nav>
+  </aside>
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+  <!-- ===== Sidebar End ===== -->
+
+  <!-- ===== Main Content Start ===== -->
+  <div id="main-content" class="relative min-h-screen transition-all duration-300 ease-in-out">
+    <!-- ===== Navbar Start ===== -->
+    <header class="sticky top-0 z-30 bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+      <div class="flex items-center justify-between p-4">
+        <div class="flex items-center space-x-4">
+          <button id="sidebar-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"><i class="ri-menu-line text-2xl"></i></button>
+          <a href="dashboard.html" class="flex items-center gap-x-2">
+            <img src="../../src/images/logos/logo.png" alt="MySertifico Logo" class="h-8 w-8 rounded-lg" onerror="this.onerror=null;this.src='https://placehold.co/32x32/0d9488/ffffff?text=M';">
+            <span class="font-poppins text-2xl font-bold text-primary hidden sm:block">MySertifico</span>
+          </a>
+        </div>
+        <div class="flex items-center space-x-4">
+          <button id="theme-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-moon-line block dark:hidden"></i><i class="ri-sun-line hidden dark:block"></i></button>
+          <div class="relative">
+            <button id="profile-menu-button" class="flex items-center space-x-2">
+              <img class="h-9 w-9 rounded-full object-cover" src="https://i.pravatar.cc/150?u=admin" alt="Admin" onerror="this.onerror=null;this.src='https://placehold.co/40x40/0d9488/ffffff?text=A';">
+              <div class="hidden md:block text-left">
+                <div class="text-sm font-semibold text-gray-800 dark:text-white">Fikri Nabil</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">Super Admin</div>
+              </div>
+            </button>
+            <div id="profile-menu" class="hidden absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <div class="py-1">
+                <a href="my-profile.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-user-line mr-3"></i>My Profile</a>
+                <a href="change-password.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-lock-password-line mr-3"></i>Change Password</a>
+                <hr class="border-gray-200 dark:border-gray-700 my-1">
+                <a href="#" id="logout-navbar" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-logout-box-r-line mr-3"></i>Logout</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- ===== Navbar End ===== -->
+
+    <!-- ===== Page Content Start ===== -->
+    <main class="p-6 sm:p-8">
+      <div class="max-w-7xl mx-auto">
+        <!-- Header -->
+        <div class="mb-6">
+          <a href="dashboard.html" class="inline-flex items-center gap-2 text-primary hover:underline mb-2"><i class="ri-arrow-left-line"></i> Back to Dashboard</a>
+          <h1 id="recipient-name" class="text-3xl font-bold text-gray-800 dark:text-white">Loading recipient...</h1>
+          <p id="recipient-id" class="text-gray-500 dark:text-gray-400 mt-1">National ID: ...</p>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md mb-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+            <div class="lg:col-span-2">
+              <label for="search-cert" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Search Certificate</label>
+              <div class="relative"><div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><i class="ri-search-line text-gray-400"></i></div><input type="text" id="search-cert" placeholder="Search by batch name, category..." class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-primary focus:border-primary"></div>
+            </div>
+            <div>
+              <label for="filter-category" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
+              <select id="filter-category" class="w-full py-2 px-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-primary focus:border-primary"><option value="all">All Categories</option></select>
+            </div>
+            <div>
+              <label for="filter-status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Status</label>
+              <select id="filter-status" class="w-full py-2 px-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-primary focus:border-primary"><option value="all">All Statuses</option><option value="Published">Published</option><option value="Draft">Draft</option></select>
+            </div>
+          </div>
+          <div id="bulk-actions-toolbar" class="hidden mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between">
+              <p class="text-sm text-gray-600 dark:text-gray-300"><span id="selected-count">0</span> certificate(s) selected.</p>
+              <button id="download-selected-btn" class="px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-dark transition-colors flex items-center gap-2"><i class="ri-download-2-line"></i><span>Download Selected</span></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Certificate List Table -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-x-auto">
+          <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
+              <tr>
+                <th scope="col" class="p-4"><input type="checkbox" id="select-all-certs" class="w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary dark:focus:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"></th>
+                <th scope="col" class="px-6 py-3">#</th>
+                <th scope="col" class="px-6 py-3">Certificate Batch</th>
+                <th scope="col" class="px-6 py-3">Creator</th>
+                <th scope="col" class="px-6 py-3">Date Issued</th>
+                <th scope="col" class="px-6 py-3">Status</th>
+                <th scope="col" class="px-6 py-3 text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody id="cert-table-body">
+              <tr><td colspan="7" class="text-center py-10"><div class="text-gray-500 dark:text-gray-400"><i class="ri-loader-4-line animate-spin text-4xl"></i><p class="mt-2">Loading certificates...</p></div></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div id="pagination-container" class="flex items-center justify-between mt-6"></div>
+      </div>
+    </main>
+    <!-- ===== Page Content End ===== -->
+  </div>
+  <!-- ===== Main Content End ===== -->
+
+  <!-- ===== Certificate Preview Modal ===== -->
+  <div id="previewModal" class="hidden fixed inset-0 z-[60] flex items-center justify-center bg-black bg-opacity-60 p-4">
+    <div id="modalContent" class="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-5xl max-h-[95vh] flex flex-col modal-enter">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between p-4 border-b dark:border-gray-700">
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Certificate Preview</h3>
+        <button id="closeModalBtn" class="text-gray-400 hover:text-gray-600 dark:hover:text-white"><i class="ri-close-line text-2xl"></i></button>
+      </div>
+      <!-- Modal Body -->
+      <div class="p-6 overflow-y-auto flex-grow bg-gray-100 dark:bg-gray-900">
+        <div id="certificate-render-area" class="w-full mx-auto shadow-lg">
+          <!-- SVG will be rendered here -->
+        </div>
+      </div>
+      <!-- Modal Footer -->
+      <div class="flex items-center justify-end p-4 border-t dark:border-gray-700 gap-3">
+        <button id="downloadCertBtn" class="px-5 py-2 rounded-lg bg-primary text-white hover:bg-primary-dark transition-colors flex items-center gap-2">
+          <i class="ri-download-2-line"></i><span>Download as PDF</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      /* ============================================================
+         (BM) Setup asas (sidebar/tema/menu) – TIDAK ubah reka bentuk
+         ============================================================ */
+      const sidebar = document.getElementById('sidebar');
+      const sidebarToggleBtn = document.getElementById('sidebar-toggle');
+      const closeSidebarBtn = document.getElementById('close-sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      function openSidebar(){ sidebar.classList.remove('-translate-x-full'); overlay.classList.remove('hidden'); }
+      function closeSidebar(){ sidebar.classList.add('-translate-x-full'); overlay.classList.add('hidden'); }
+      sidebarToggleBtn.addEventListener('click', (e)=>{ e.stopPropagation(); openSidebar(); });
+      closeSidebarBtn.addEventListener('click', closeSidebar);
+      overlay.addEventListener('click', closeSidebar);
+      document.querySelectorAll('[data-collapse-toggle]').forEach(button => {
+        button.addEventListener('click', () => {
+          const target = document.getElementById(button.getAttribute('data-collapse-toggle'));
+          if(target) target.classList.toggle('hidden');
+          button.querySelector('.ri-arrow-down-s-line')?.classList.toggle('rotate-180');
+        });
+      });
+      const themeToggleBtn = document.getElementById('theme-toggle');
+      const applyTheme = () => {
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      };
+      applyTheme();
+      themeToggleBtn.addEventListener('click', () => {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('color-theme', isDark ? 'dark' : 'light');
+      });
+      const profileMenuButton = document.getElementById('profile-menu-button');
+      const profileMenu = document.getElementById('profile-menu');
+      profileMenuButton?.addEventListener('click', (e) => { e.stopPropagation(); profileMenu.classList.toggle('hidden'); });
+      window.addEventListener('click', (e) => {
+        if (profileMenu && !profileMenu.classList.contains('hidden') && !profileMenuButton.contains(e.target) && !profileMenu.contains(e.target)) {
+          profileMenu.classList.add('hidden');
+        }
+      });
+      document.getElementById('logout-sidebar').addEventListener('click', (e) => { e.preventDefault(); window.location.href = "../landing/home.html"; });
+      document.getElementById('logout-navbar').addEventListener('click', (e) => { e.preventDefault(); window.location.href = "../landing/home.html"; });
+
+      /* ============================================================
+         (BM) DUMMY DATA + Dimensi A4 @ 96 DPI
+         - Saiz px diset tepat (A4 L: 1122x794, P: 794x1122) supaya
+           koordinat elemen tepat & konsisten bila diskalakan.
+         ============================================================ */
+      const A4_LANDSCAPE = { width: 1122, height: 794 };
+      const A4_PORTRAIT  = { width: 794,  height: 1122 };
+      const MARGIN = 76;
+
+      const certificateDatabase = {
+        'CLLC-PURPLE-005': { 
+          name: 'Contoh Sijil Graduasi (Landscape)', 
+          orientation: 'landscape',
+          ...A4_LANDSCAPE,
+          templateUrl: '../../src/images/templates/cllc-purple-005.svg', 
+          elements: [
+            { type:'image', content:'../../src/images/logos-badges/sample-logo.svg', position_x:A4_LANDSCAPE.width/2, position_y:110, width:80, height:80, align:'center' },
+            { type:'text',  content:'Nama Organisasi Anda', position_x:A4_LANDSCAPE.width/2, position_y:190, font_family:'Montserrat', font_size:18, font_weight:'500', color:'#111827', align:'center' },
+            { type:'text',  content:'TAJUK SIJIL', position_x:A4_LANDSCAPE.width/2, position_y:250, font_family:'EB Garamond', font_size:46, font_weight:'bold', color:'#AA8F29', align:'center' },
+            { type:'text',  content:'Teks badan sijil di sini', position_x:A4_LANDSCAPE.width/2, position_y:320, font_family:'Montserrat', font_size:16, color:'#374151', align:'center' },
+            { type:'text',  content:'[RECIPIENT_NAME]', position_x:A4_LANDSCAPE.width/2, position_y:360, font_family:'Montserrat', font_size:20, font_weight:'bold', color:'#000000', align:'center' },
+            { type:'text',  content:'Penerangan acara sijil di sini', position_x:A4_LANDSCAPE.width/2, position_y:400, font_family:'Montserrat', font_size:16, color:'#374151', align:'center' },
+            { type:'text',  content:'pada [Tarikh Acara]', position_x:A4_LANDSCAPE.width/2, position_y:425, font_family:'Montserrat', font_size:16, font_weight:'500', color:'#111827', align:'center' },
+            { type:'image', content:'../../src/images/signatures/sample-signature.svg', position_x:280, position_y:550, width:150, height:67, align:'center' },
+            { type:'text',  content:'Nama Penandatangan', position_x:280, position_y:630, font_family:'Montserrat', font_size:14, font_weight:'500', color:'#000000', align:'center' },
+            { type:'text',  content:'Jawatan Penandatangan', position_x:280, position_y:650, font_family:'Montserrat', font_size:14, color:'#374151', align:'center' },
+            { type:'image', content:'../../src/images/qrcodes/sample-qrcode.svg', position_x:A4_LANDSCAPE.width - MARGIN, position_y:A4_LANDSCAPE.height - MARGIN, width:100, height:100, align:'right' },
+            { type:'text',  content:'Tarikh Dikeluarkan: [Tarikh Dikeluarkan]', position_x:A4_LANDSCAPE.width/2, position_y:700, font_family:'Montserrat', font_size:14, color:'#374151', align:'center' },
+          ]
+        },
+        'MDPC-GOLD-002': { 
+          name: 'Contoh Sijil Anugerah (Portrait)',
+          orientation: 'portrait',
+          ...A4_PORTRAIT,
+          templateUrl: '../../src/images/templates/mdpc-gold-002.svg',
+          elements: [
+            { type:'image', content:'../../src/images/logos-badges/sample-logo.svg', position_x:A4_PORTRAIT.width/2, position_y:120, width:70, height:70, align:'center'},
+            { type:'text',  content:'Nama Organisasi Anda', position_x:A4_PORTRAIT.width/2, position_y:220, font_family:'Montserrat', font_size:18, font_weight:'500', color:'#111827', align:'center'},
+            { type:'text',  content:'Alamat Baris 1', position_x:A4_PORTRAIT.width/2, position_y:255, font_family:'Montserrat', font_size:14, color:'#374151', align:'center'},
+            { type:'text',  content:'Alamat Baris 2', position_x:A4_PORTRAIT.width/2, position_y:280, font_family:'Montserrat', font_size:14, color:'#374151', align:'center'},
+            { type:'text',  content:'TAJUK SIJIL', position_x:A4_PORTRAIT.width/2, position_y:350, font_family:'EB Garamond', font_size:34, font_weight:'bold', color:'#111827', align:'center'},
+            { type:'text',  content:'Teks badan sijil di sini', position_x:A4_PORTRAIT.width/2, position_y:450, font_family:'Montserrat', font_size:16, color:'#374151', align:'center'},
+            { type:'text',  content:'[RECIPIENT_NAME]', position_x:A4_PORTRAIT.width/2, position_y:500, font_family:'Montserrat', font_size:18, font_weight:'bold', color:'#000000', align:'center'},
+            { type:'text',  content:'Penerangan acara sijil di sini', position_x:A4_PORTRAIT.width/2, position_y:560, font_family:'Montserrat', font_size:18, color:'#374151', align:'center'},
+            { type:'text',  content:'[Nama Acara] pada [Tarikh Acara]', position_x:A4_PORTRAIT.width/2, position_y:595, font_family:'Montserrat', font_size:18, font_weight:'500', color:'#111827', align:'center'},
+            { type:'image', content:'../../src/images/signatures/sample-signature.svg', position_x:A4_PORTRAIT.width/2, position_y:800, width:200, height:50, align:'center'},
+            { type:'text',  content:'Nama Penandatangan', position_x:A4_PORTRAIT.width/2, position_y:870, font_family:'Montserrat', font_size:14, font_weight:'500', color:'#000000', align:'center'},
+            { type:'text',  content:'Jawatan Penandatangan', position_x:A4_PORTRAIT.width/2, position_y:890, font_family:'Montserrat', font_size:14, color:'#374151', align:'center'},
+            { type:'text',  content:'Tarikh Dikeluarkan: [Tarikh Dikeluarkan]', position_x:A4_PORTRAIT.width/2, position_y:980, font_family:'Montserrat', font_size:12, color:'#374151', align:'center'},
+            { type:'image', content:'../../src/images/qrcodes/sample-qrcode.svg', position_x:A4_PORTRAIT.width - MARGIN, position_y:A4_PORTRAIT.height - MARGIN, width:80, height:80, align:'right'}
+          ]
+        }
+      };
+      
+      const RECIPIENTS_DB = {
+        "900101-14-5678": {
+          recipient_id: "RCP-0001",
+          name: "Ali bin Ahmad",
+          national_id: "900101-14-5678",
+          certificates: [
+            { id: "cert001", template_id: "CLLC-PURPLE-005", batch_name: "Sijil Graduasi 2025 (Landscape)", creator: "Fikri Nabil", issue_date: "2025-12-31", status: "Draft",     category: "Academic" },
+            { id: "cert002", template_id: "MDPC-GOLD-002",   batch_name: "Anugerah Kecemerlangan (Portrait)", creator: "Mirza Amirul Rashid", issue_date: "2025-03-15", status: "Published", category: "Award" },
+          ]
+        },
+      };
+
+      /* ============================================================
+         (BM) STATE + ELEM DOM
+         ============================================================ */
+      let allCertificates = [];
+      let filteredCertificates = [];
+      let currentPage = 1;
+      const itemsPerPage = 5;
+      let selectedCertIds = new Set();
+      let currentRecipient = null;
+
+      // Untuk eksport tepat: simpan rujukan SVG & metadata semasa
+      let currentPreview = {
+        svgNode: null,
+        width: 0,
+        height: 0,
+        orientation: 'landscape',
+        fileName: 'certificate.pdf',
+        certId: null
+      };
+
+      const recipientNameEl = document.getElementById('recipient-name');
+      const recipientIdEl   = document.getElementById('recipient-id');
+      const tableBody       = document.getElementById('cert-table-body');
+      const searchInput     = document.getElementById('search-cert');
+      const categoryFilter  = document.getElementById('filter-category');
+      const statusFilter    = document.getElementById('filter-status');
+      const paginationContainer = document.getElementById('pagination-container');
+      const selectAllCheckbox   = document.getElementById('select-all-certs');
+      const bulkActionsToolbar  = document.getElementById('bulk-actions-toolbar');
+      const selectedCountEl     = document.getElementById('selected-count');
+      const downloadSelectedBtn = document.getElementById('download-selected-btn');
+
+      const previewModal  = document.getElementById('previewModal');
+      const modalContent  = document.getElementById('modalContent');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      const downloadCertBtn = document.getElementById('downloadCertBtn');
+      const renderArea    = document.getElementById('certificate-render-area');
+
+      /* ============================================================
+         (BM) INIT
+         ============================================================ */
+      function init() {
+        const params = new URLSearchParams(window.location.search);
+        const nationalId = params.get('national_id');
+        currentRecipient = RECIPIENTS_DB[nationalId];
+
+        if (currentRecipient) {
+          recipientNameEl.textContent = `Certificates for: ${currentRecipient.name}`;
+          recipientIdEl.textContent   = `National ID: ${currentRecipient.national_id}`;
+          allCertificates = currentRecipient.certificates;
+          populateCategoryFilter();
+          applyFilters();
+        } else {
+          recipientNameEl.textContent = 'Recipient Not Found';
+          recipientIdEl.textContent   = 'Please check the National ID and try again.';
+          tableBody.innerHTML = `<tr><td colspan="7" class="text-center py-10 text-red-500">Could not find recipient data.</td></tr>`;
+        }
+      }
+
+      function populateCategoryFilter() {
+        const categories = [...new Set(allCertificates.map(cert => cert.category))];
+        categories.sort().forEach(category => {
+          const option = document.createElement('option');
+          option.value = category;
+          option.textContent = category;
+          categoryFilter.appendChild(option);
+        });
+      }
+
+      /* ============================================================
+         (BM) RENDER TABLE & PAGINASI
+         ============================================================ */
+      function renderTable() {
+        tableBody.innerHTML = '';
+        if (filteredCertificates.length === 0) {
+          tableBody.innerHTML = `<tr><td colspan="7" class="text-center py-10">No certificates found matching your criteria.</td></tr>`;
+          renderPagination();
+          return;
+        }
+
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const pageItems = filteredCertificates.slice(startIndex, startIndex + itemsPerPage);
+
+        pageItems.forEach((cert, index) => {
+          const row = document.createElement('tr');
+          row.className = 'bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600';
+          row.innerHTML = `
+            <td class="w-4 p-4"><input type="checkbox" data-id="${cert.id}" class="row-checkbox w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary"></td>
+            <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">${startIndex + index + 1}</td>
+            <td class="px-6 py-4">${cert.batch_name}</td>
+            <td class="px-6 py-4">${cert.creator}</td>
+            <td class="px-6 py-4">${new Date(cert.issue_date).toLocaleDateString('en-GB')}</td>
+            <td class="px-6 py-4"><span class="px-2 py-1 text-xs font-medium rounded-full ${cert.status === 'Published' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300'}">${cert.status}</span></td>
+            <td class="px-6 py-4 text-center"><button data-id="${cert.id}" title="Preview/Download" class="view-btn text-primary hover:text-primary-dark text-xl"><i class="ri-eye-line"></i></button></td>
+          `;
+          tableBody.appendChild(row);
+        });
+        
+        updateCheckboxes();
+        renderPagination();
+      }
+      
+      function renderPagination() {
+        paginationContainer.innerHTML = '';
+        const totalPages = Math.ceil(filteredCertificates.length / itemsPerPage);
+        if (totalPages <= 1) return;
+        
+        const paginationHTML = `
+          <span class="text-sm text-gray-700 dark:text-gray-400">Showing <span class="font-semibold text-gray-900 dark:text-white">${(currentPage - 1) * itemsPerPage + 1}</span> to <span class="font-semibold text-gray-900 dark:text-white">${Math.min(currentPage * itemsPerPage, filteredCertificates.length)}</span> of <span class="font-semibold text-gray-900 dark:text-white">${filteredCertificates.length}</span> Results</span>
+          <div class="inline-flex -space-x-px text-sm h-8">
+            <button id="prev-page" class="pagination-btn flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">&lt;</button>
+            ${Array.from({length: totalPages}, (_, i) => `<button data-page="${i + 1}" class="page-number-btn flex items-center justify-center px-3 h-8 leading-tight ${i + 1 === currentPage ? 'text-primary-dark border border-primary bg-primary-light dark:bg-gray-700 dark:border-primary' : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700'}">${i + 1}</button>`).join('')}
+            <button id="next-page" class="pagination-btn flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">&gt;</button>
+          </div>`;
+        
+        paginationContainer.innerHTML = paginationHTML;
+        document.getElementById('prev-page').addEventListener('click', () => { if (currentPage > 1) { currentPage--; renderTable(); } });
+        document.getElementById('next-page').addEventListener('click', () => { if (currentPage < totalPages) { currentPage++; renderTable(); } });
+        document.querySelectorAll('.page-number-btn').forEach(btn => btn.addEventListener('click', (e) => { currentPage = parseInt(e.target.dataset.page); renderTable(); }));
+        document.getElementById('prev-page').disabled = currentPage === 1;
+        document.getElementById('next-page').disabled = currentPage === totalPages;
+      }
+
+      /* ============================================================
+         (BM) FILTER & SEARCH
+         ============================================================ */
+      function applyFilters() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const selectedCategory = categoryFilter.value;
+        const selectedStatus = statusFilter.value;
+        filteredCertificates = allCertificates.filter(cert => 
+          (searchTerm === '' || cert.batch_name.toLowerCase().includes(searchTerm) || cert.category.toLowerCase().includes(searchTerm)) &&
+          (selectedCategory === 'all' || cert.category === selectedCategory) &&
+          (selectedStatus === 'all' || cert.status === selectedStatus)
+        );
+        currentPage = 1;
+        renderTable();
+      }
+
+      /* ============================================================
+         (BM) UTIL: Cipta elemen teks/imej SVG dengan penjajaran tepat
+         - Guna text-anchor & dominant-baseline supaya titik (x,y)
+           mewakili pusat/kanan/kiri mengikut 'align'
+         ============================================================ */
+      function addText(svg, el, textContent){
+        const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        t.setAttribute('x', el.position_x);
+        t.setAttribute('y', el.position_y);
+        t.setAttribute('font-size', el.font_size);
+        if (el.font_weight) t.setAttribute('font-weight', el.font_weight);
+        t.setAttribute('fill', el.color || '#111827');
+        t.setAttribute('text-anchor', el.align === 'center' ? 'middle' : (el.align === 'right' ? 'end' : 'start'));
+        t.setAttribute('dominant-baseline', 'middle'); // (BM) pastikan jajaran menegak tepat di tengah
+        t.style.fontFamily = el.font_family || 'Montserrat';
+        t.textContent = textContent;
+        svg.appendChild(t);
+      }
+      function addImage(svg, el){
+        const img = document.createElementNS('http://www.w3.org/2000/svg', 'image');
+        img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', el.content);
+        let xPos;
+        if (el.align === 'center') xPos = el.position_x - el.width/2;
+        else if (el.align === 'right') xPos = el.position_x - el.width;
+        else xPos = el.position_x;
+        img.setAttribute('x', xPos);
+        img.setAttribute('y', el.position_y - el.height/2);
+        img.setAttribute('width', el.width);
+        img.setAttribute('height', el.height);
+        svg.appendChild(img);
+      }
+
+      /* ============================================================
+         (BM) PREVIEW MODAL: bina SVG + viewBox untuk skala responsif
+         ============================================================ */
+      async function showPreviewModal(certId) {
+        const certInfo = allCertificates.find(c => c.id === certId);
+        const templateData = certificateDatabase[certInfo.template_id];
+        if (!certInfo || !templateData || !currentRecipient) return;
+
+        // (BM) Letak pemegang sementara
+        renderArea.innerHTML = '<div class="flex items-center justify-center h-[50vh]"><i class="ri-loader-4-line animate-spin text-4xl text-gray-500"></i></div>';
+        previewModal.classList.remove('hidden');
+        modalContent.classList.remove('modal-leave');
+        modalContent.classList.add('modal-enter');
+
+        try {
+          // (BM) Muat turun SVG template
+          const resp = await fetch(templateData.templateUrl);
+          if (!resp.ok) throw new Error(`Template not found at ${templateData.templateUrl}`);
+          const svgText = await resp.text();
+
+          const parser = new DOMParser();
+          const svgDoc = parser.parseFromString(svgText, 'image/svg+xml');
+          const svgEl  = svgDoc.documentElement;
+
+          // (BM) Pastikan SVG guna viewBox & scaling responsif yang tepat
+          svgEl.removeAttribute('width');
+          svgEl.removeAttribute('height');
+          svgEl.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+          svgEl.setAttribute('viewBox', `0 0 ${templateData.width} ${templateData.height}`);
+
+          // (BM) Suntik elemen teks/imej mengikut koordinat asal (px)
+          templateData.elements.forEach(el => {
+            // Gantian token dinamik
+            let text = (el.content || '')
+              .replace('[RECIPIENT_NAME]', currentRecipient.name.toUpperCase())
+              .replace('[Tarikh Acara]', new Date(certInfo.issue_date).toLocaleDateString('ms-MY', { day: 'numeric', month: 'long', year: 'numeric' }))
+              .replace('[Tarikh Dikeluarkan]', new Date(certInfo.issue_date).toLocaleDateString('ms-MY'));
+            if (el.type === 'text') addText(svgEl, el, text);
+            if (el.type === 'image') addImage(svgEl, el);
+          });
+
+          // (BM) Render dalam UI – skala automatik, nisbah kekal tepat
+          renderArea.innerHTML = '';
+          renderArea.appendChild(svgEl);
+
+          // (BM) Simpan state untuk eksport PDF dengan saiz tepat
+          currentPreview = {
+            svgNode: svgEl.cloneNode(true),          // clone supaya eksport tak ganggu preview
+            width: templateData.width,
+            height: templateData.height,
+            orientation: templateData.orientation,
+            fileName: `${certInfo.batch_name} - ${currentRecipient.name}.pdf`.replace(/[\\/:*?"<>|]+/g,'_'),
+            certId: certInfo.id
+          };
+        } catch (err) {
+          console.error('Preview error:', err);
+          renderArea.innerHTML = `<div class="p-4 text-red-500 text-center bg-red-100 dark:bg-red-900/50 rounded-lg">Failed to load certificate template.<br><small>${err.message}</small></div>`;
+        }
+      }
+      function hidePreviewModal() {
+        modalContent.classList.remove('modal-enter');
+        modalContent.classList.add('modal-leave');
+        setTimeout(() => {
+          previewModal.classList.add('hidden');
+          renderArea.innerHTML = '';
+        }, 300);
+      }
+
+      /* ============================================================
+         (BM) EKSPORT PDF TEPAT:
+         - Kaedah utama: Render SVG (saiz asal px) → Canvas → jsPDF
+         - Saiz dimasukkan ke PDF dalam unit mm (A4).
+         - Fallback: html2canvas jika berlaku CORS/taint.
+         ============================================================ */
+      async function svgToPngDataUrl(svgNode, width, height) {
+        // (BM) Tukar SVGNode -> string + tambah style font agar konsisten
+        const serializer = new XMLSerializer();
+        let svgString = serializer.serializeToString(svgNode);
+
+        // (BM) Pastikan namespace xlink wujud (untuk <image href>)
+        if (!svgString.includes('xmlns:xlink')) {
+          svgString = svgString.replace('<svg', '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+        }
+
+        // (BM) Tambah style untuk font family default jika perlu
+        const styleTag = `<style>@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=EB+Garamond:wght@400;700&display=swap'); text{font-family:Montserrat, sans-serif;}</style>`;
+        svgString = svgString.replace('<svg', `<svg>`).replace('>', `>${styleTag}`);
+
+        const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(svgBlob);
+
+        // (BM) Lukis pada kanvas saiz tepat (px)
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        const dataUrl = await new Promise((resolve, reject) => {
+          img.onload = () => {
+            try {
+              const canvas = document.createElement('canvas');
+              canvas.width  = Math.round(width);
+              canvas.height = Math.round(height);
+              const ctx = canvas.getContext('2d', { alpha: true });
+              ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+              const png = canvas.toDataURL('image/png'); // (BM) kekal tajam & saiz tepat
+              resolve(png);
+            } catch (e) { reject(e); }
+          };
+          img.onerror = (e) => reject(new Error('Failed to render SVG to image (possible CORS).'));
+          img.src = url;
+        });
+
+        URL.revokeObjectURL(url);
+        return dataUrl;
+      }
+
+      async function exportCurrentPreviewToPdf() {
+        const { jsPDF } = window.jspdf;
+        if (!currentPreview.svgNode) throw new Error('Nothing to export.');
+
+        const isLandscape = currentPreview.orientation === 'landscape';
+        const pdf = new jsPDF({ orientation: isLandscape ? 'landscape' : 'portrait', unit: 'mm', format: 'a4' });
+
+        // (BM) Cuba kaedah utama (SVG→PNG tepat). Jika gagal, fallback html2canvas.
+        try {
+          const pngDataUrl = await svgToPngDataUrl(currentPreview.svgNode, currentPreview.width, currentPreview.height);
+          const pdfWidth  = isLandscape ? 297 : 210; // A4 mm
+          const pdfHeight = isLandscape ? 210 : 297;
+
+          // (BM) Letak imej penuh halaman A4
+          pdf.addImage(pngDataUrl, 'PNG', 0, 0, pdfWidth, pdfHeight);
+          pdf.save(currentPreview.fileName);
+        } catch (err) {
+          console.warn('SVG->Canvas export failed, falling back to html2canvas:', err);
+          // (BM) Fallback: tangkap kawasan render DOM
+          const canvas = await html2canvas(renderArea, { scale: 3, useCORS: true, allowTaint: true, backgroundColor: '#ffffff' });
+          const imgData = canvas.toDataURL('image/png');
+          const pdfWidth  = isLandscape ? 297 : 210;
+          const pdfHeight = isLandscape ? 210 : 297;
+          pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+          pdf.save(currentPreview.fileName);
+        }
+      }
+
+      /* ============================================================
+         (BM) EVENTS
+         ============================================================ */
+      searchInput.addEventListener('input', applyFilters);
+      categoryFilter.addEventListener('change', applyFilters);
+      statusFilter.addEventListener('change', applyFilters);
+
+      document.getElementById('closeModalBtn').addEventListener('click', hidePreviewModal);
+      previewModal.addEventListener('click', (e) => { if (e.target === previewModal) hidePreviewModal(); });
+
+      downloadCertBtn.addEventListener('click', async (e) => {
+        const btn = e.currentTarget;
+        const prev = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = `<i class="ri-loader-4-line animate-spin"></i><span> Generating...</span>`;
+        try {
+          await exportCurrentPreviewToPdf();
+        } catch (err) {
+          console.error('PDF Generation failed:', err);
+          alert('Sorry, there was an error generating the PDF.');
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = prev;
+        }
+      });
+
+      // Checkbox & bulk selection
+      function updateBulkActionsToolbar() {
+        const count = selectedCertIds.size;
+        bulkActionsToolbar.classList.toggle('hidden', count === 0);
+        selectedCountEl.textContent = count;
+      }
+      function updateCheckboxes() {
+        const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+        rowCheckboxes.forEach(cb => { cb.checked = selectedCertIds.has(cb.dataset.id); });
+        const allVisibleIds = Array.from(rowCheckboxes).map(cb => cb.dataset.id);
+        document.getElementById('select-all-certs').checked = allVisibleIds.length > 0 && allVisibleIds.every(id => selectedCertIds.has(id));
+      }
+      document.getElementById('select-all-certs').addEventListener('change', (e) => {
+        document.querySelectorAll('.row-checkbox').forEach(cb => {
+          cb.checked = e.target.checked;
+          if (e.target.checked) selectedCertIds.add(cb.dataset.id);
+          else selectedCertIds.delete(cb.dataset.id);
+        });
+        updateBulkActionsToolbar();
+      });
+      tableBody.addEventListener('change', (e) => {
+        if (e.target.classList.contains('row-checkbox')) {
+          const certId = e.target.dataset.id;
+          if (e.target.checked) selectedCertIds.add(certId);
+          else selectedCertIds.delete(certId);
+          updateBulkActionsToolbar();
+          updateCheckboxes();
+        }
+      });
+      tableBody.addEventListener('click', (e) => {
+        const viewButton = e.target.closest('.view-btn');
+        if (viewButton) showPreviewModal(viewButton.dataset.id);
+      });
+      downloadSelectedBtn.addEventListener('click', () => {
+        if (selectedCertIds.size > 0) alert(`Simulating bulk download for ${selectedCertIds.size} certificates:\n${[...selectedCertIds].join(', ')}`);
+      });
+
+      // Kick off
+      init();
+    });
+  </script>
+</body>
+</html>

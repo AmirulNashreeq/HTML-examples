@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySertifico Back Office - Create Template</title>
+    <link rel="icon" type="image/png" href="../src/images/logos/favicon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- Konfigurasi Tambahan untuk Tailwind -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#0d9488', // Teal-600
+                        'primary-dark': '#0f766e', // Teal-700
+                        'accent': '#f59e0b', // Amber-500
+                        'accent-dark': '#d97706', // Amber-600
+                        'bo-bg-light': '#f8fafc', // Slate-50
+                        'bo-bg-dark': '#020617', // Slate-950
+                        'bo-surface-light': '#ffffff',
+                        'bo-surface-dark': '#1e293b', // Slate-800
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .sidebar { scrollbar-width: none; }
+        .sidebar::-webkit-scrollbar { display: none; }
+        select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        .dark select {
+             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23d1d5db' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        }
+        #preview-area {
+            aspect-ratio: 8.5 / 11; /* Portrait A4 ratio */
+            transition: all 0.3s ease-in-out;
+        }
+        .draggable {
+            cursor: move;
+            position: absolute;
+            border: 1px dashed rgba(0,0,0,0.3);
+        }
+        .draggable.selected {
+            border-color: #0d9488;
+            outline: 2px solid #0d9488;
+        }
+    </style>
+</head>
+<body class="bg-bo-bg-light dark:bg-bo-bg-dark text-gray-800 dark:text-gray-200 transition-colors duration-300">
+
+    <!-- ===== Sidebar (Sama seperti halaman lain) ===== -->
+    <aside id="sidebar" class="sidebar fixed top-0 left-0 z-50 h-full w-64 bg-gray-900 text-white transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto">
+        <!-- ... (kandungan sidebar di sini) ... -->
+    </aside>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+    
+    <!-- ===== Main Content Start ===== -->
+    <div id="main-content" class="relative min-h-screen transition-all duration-300 ease-in-out">
+        <!-- ===== Navbar (Sama seperti halaman lain) ===== -->
+        <header class="sticky top-0 z-30 bg-bo-surface-light/80 dark:bg-bo-surface-dark/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
+             <!-- ... (kandungan navbar di sini) ... -->
+        </header>
+        
+        <!-- ===== Page Content Start ===== -->
+        <main class="p-6 sm:p-8">
+            <div class="max-w-full mx-auto">
+                <!-- Header -->
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200">Create New Template</h2>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Design and configure a new certificate template.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Left Column: Settings Panel -->
+                    <div class="lg:col-span-1 space-y-6">
+                        <div class="bg-bo-surface-light dark:bg-bo-surface-dark rounded-xl shadow-md p-6">
+                            <h3 class="font-semibold text-lg mb-4 border-b pb-3 dark:border-gray-700">Template Properties</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="style" class="block text-sm font-medium mb-1">Style</label>
+                                    <select id="style" class="w-full py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-bo-bg-light dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary">
+                                        <option value="Modern">Modern</option>
+                                        <option value="Classic">Classic</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="orientation" class="block text-sm font-medium mb-1">Orientation</label>
+                                    <select id="orientation" class="w-full py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-bo-bg-light dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary">
+                                        <option value="Portrait">Portrait</option>
+                                        <option value="Landscape">Landscape</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="default_alignment" class="block text-sm font-medium mb-1">Default Alignment</label>
+                                    <select id="default_alignment" class="w-full py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-bo-bg-light dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary">
+                                        <option value="Center">Center</option>
+                                        <option value="Left">Left</option>
+                                        <option value="Right">Right</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="theme_color" class="block text-sm font-medium mb-1">Theme Color</label>
+                                    <input type="text" id="theme_color" placeholder="e.g., gold, blue" class="w-full py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-bo-bg-light dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary">
+                                </div>
+                                <div>
+                                    <label for="template_code" class="block text-sm font-medium mb-1">Template Code (Auto-generated)</label>
+                                    <input type="text" id="template_code" readonly class="w-full py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-800/50 cursor-not-allowed">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-bo-surface-light dark:bg-bo-surface-dark rounded-xl shadow-md p-6">
+                            <h3 class="font-semibold text-lg mb-4 border-b pb-3 dark:border-gray-700">Assets</h3>
+                             <div class="space-y-4">
+                                <div>
+                                    <label for="blanko_url" class="block text-sm font-medium mb-1">Blanko Image</label>
+                                    <input type="file" id="blanko_url" accept="image/*" class="text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20">
+                                </div>
+                                 <div>
+                                    <label for="logo_url" class="block text-sm font-medium mb-1">Default Logo</label>
+                                    <input type="file" id="logo_url" accept="image/*" class="text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20">
+                                </div>
+                                 <div>
+                                    <label for="signature_url" class="block text-sm font-medium mb-1">Default Signature</label>
+                                    <input type="file" id="signature_url" accept="image/*" class="text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-bo-surface-light dark:bg-bo-surface-dark rounded-xl shadow-md p-6">
+                            <h3 class="font-semibold text-lg mb-4 border-b pb-3 dark:border-gray-700">Content Fields</h3>
+                            <div id="content-fields-container" class="space-y-3">
+                                <!-- Dynamic fields will be added here -->
+                            </div>
+                            <div class="flex gap-2 mt-4">
+                                <button type="button" id="add-text-field-btn" class="w-full text-sm bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 font-semibold py-2 px-4 rounded-lg transition-colors">
+                                    Add Text
+                                </button>
+                                <button type="button" id="add-image-field-btn" class="w-full text-sm bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 font-semibold py-2 px-4 rounded-lg transition-colors">
+                                    Add Image
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Live Preview -->
+                    <div class="lg:col-span-2">
+                        <div class="sticky top-24">
+                            <div id="preview-area" class="w-full bg-white shadow-lg relative overflow-hidden border dark:border-gray-700">
+                                <img id="blanko-preview" src="" class="absolute top-0 left-0 w-full h-full object-cover z-0" alt="">
+                                <!-- Draggable elements will be added here -->
+                            </div>
+                            <div class="mt-6 flex justify-end gap-4">
+                                <label for="is_active" class="flex items-center cursor-pointer">
+                                    <span class="mr-3 text-sm font-medium">Is Active</span>
+                                    <div class="relative">
+                                        <input type="checkbox" id="is_active" class="sr-only peer" checked>
+                                        <div class="block bg-gray-200 peer-checked:bg-primary w-14 h-8 rounded-full dark:bg-gray-700"></div>
+                                        <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-transform peer-checked:translate-x-full"></div>
+                                    </div>
+                                </label>
+                                <button id="save-template-btn" class="bg-primary text-white font-semibold py-2.5 px-8 rounded-lg hover:bg-primary-dark transition-colors">
+                                    Save Template
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- ===== Page Content End ===== -->
+    </div>
+    <!-- ===== Main Content End ===== -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Sidebar & Navbar Logic (disederhanakan untuk contoh) ---
+            // ... (logik sidebar & navbar anda di sini) ...
+
+            // --- Template Creator Logic ---
+            const formInputs = {
+                style: document.getElementById('style'),
+                orientation: document.getElementById('orientation'),
+                default_alignment: document.getElementById('default_alignment'),
+                theme_color: document.getElementById('theme_color'),
+                template_code: document.getElementById('template_code'),
+                blanko_url: document.getElementById('blanko_url'),
+                logo_url: document.getElementById('logo_url'),
+                signature_url: document.getElementById('signature_url'),
+                is_active: document.getElementById('is_active'),
+            };
+
+            const previewArea = document.getElementById('preview-area');
+            const blankoPreview = document.getElementById('blanko-preview');
+            const addTextFieldBtn = document.getElementById('add-text-field-btn');
+            const addImageFieldBtn = document.getElementById('add-image-field-btn');
+            const contentFieldsContainer = document.getElementById('content-fields-container');
+            const saveTemplateBtn = document.getElementById('save-template-btn');
+            
+            let contentFields = [];
+            let fieldCounter = 0;
+
+            // --- Function to generate template code ---
+            function generateTemplateCode() {
+                const style = formInputs.style.value.substring(0, 2).toLowerCase(); // mo / cl
+                const orient = formInputs.orientation.value.substring(0, 1).toLowerCase(); // p / l
+                const align = formInputs.default_alignment.value.substring(0, 1).toLowerCase(); // c / l / r
+                const color = formInputs.theme_color.value.trim().toLowerCase() || 'def';
+                const serial = String(Math.floor(Math.random() * 900) + 100); // 100-999
+                formInputs.template_code.value = `${style}${orient}${align}-${color}-${serial}`;
+            }
+
+            // --- Event Listeners for Properties ---
+            Object.values(formInputs).forEach(input => {
+                if(input.type === 'select-one' || input.type === 'text') {
+                    input.addEventListener('input', generateTemplateCode);
+                }
+            });
+
+            formInputs.orientation.addEventListener('change', (e) => {
+                if (e.target.value === 'Landscape') {
+                    previewArea.style.aspectRatio = '11 / 8.5';
+                } else {
+                    previewArea.style.aspectRatio = '8.5 / 11';
+                }
+            });
+
+            function handleFileInput(inputElement, callback) {
+                 inputElement.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (event) => callback(event.target.result, file.name);
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+            handleFileInput(formInputs.blanko_url, (result) => {
+                blankoPreview.src = result;
+            });
+
+            // --- Logic for Content Fields ---
+            function addField(type) {
+                fieldCounter++;
+                const fieldId = `field-${fieldCounter}`;
+                
+                const fieldHTML = `
+                    <div id="${fieldId}-config" class="p-3 border dark:border-gray-700 rounded-lg space-y-2">
+                        <div class="flex justify-between items-center">
+                            <input type="text" placeholder="Field Name (e.g., recipient_name)" class="field-name-input text-sm w-full bg-transparent focus:outline-none font-semibold" data-target="${fieldId}">
+                            <button type="button" class="remove-field-btn text-red-500 hover:text-red-700" data-target="${fieldId}"><i class="ri-delete-bin-line"></i></button>
+                        </div>
+                        <input type="text" placeholder="Label (e.g., Recipient Name)" class="field-label-input text-xs w-full bg-transparent focus:outline-none" data-target="${fieldId}">
+                    </div>
+                `;
+                contentFieldsContainer.insertAdjacentHTML('beforeend', fieldHTML);
+
+                const previewElement = document.createElement('div');
+                previewElement.id = fieldId;
+                previewElement.className = 'draggable p-2';
+                previewElement.style.left = '30%';
+                
+                let fieldData;
+
+                if (type === 'text') {
+                    previewElement.textContent = `Placeholder Text ${fieldCounter}`;
+                    previewElement.style.top = `${20 + (fieldCounter * 10)}%`;
+                    previewElement.style.textAlign = formInputs.default_alignment.value;
+                    fieldData = { type: 'text', id: fieldId, name: `text_field_${fieldCounter}`, label: `Placeholder Text ${fieldCounter}`, x: 30, y: 20 + (fieldCounter * 10), fontSize: 16, fontWeight: 'normal' };
+                } else { // image
+                    previewElement.style.width = '150px';
+                    previewElement.style.height = '50px';
+                    previewElement.style.top = `${50 + (fieldCounter * 5)}%`;
+                    previewElement.innerHTML = `<img src="https://placehold.co/150x50/f8fafc/cbd5e1?text=Image" class="w-full h-full object-contain">`;
+                    fieldData = { type: 'image', id: fieldId, name: `image_field_${fieldCounter}`, label: `Placeholder Image ${fieldCounter}`, x: 30, y: 50 + (fieldCounter * 5), width: 150, height: 50 };
+                }
+
+                previewArea.appendChild(previewElement);
+                contentFields.push(fieldData);
+                makeDraggable(previewElement);
+            }
+
+            contentFieldsContainer.addEventListener('input', (e) => {
+                if (e.target.classList.contains('field-name-input') || e.target.classList.contains('field-label-input')) {
+                    const targetId = e.target.dataset.target;
+                    const field = contentFields.find(f => f.id === targetId);
+                    const previewEl = document.getElementById(targetId);
+                    if (field) {
+                        if (e.target.classList.contains('field-name-input')) {
+                            field.name = e.target.value;
+                        } else {
+                            field.label = e.target.value;
+                            if (field.type === 'text') {
+                                previewEl.textContent = e.target.value || `Placeholder ${targetId.split('-')[1]}`;
+                            }
+                        }
+                    }
+                }
+            });
+
+            contentFieldsContainer.addEventListener('click', (e) => {
+                 if (e.target.closest('.remove-field-btn')) {
+                    const btn = e.target.closest('.remove-field-btn');
+                    const targetId = btn.dataset.target;
+                    document.getElementById(`${targetId}-config`).remove();
+                    document.getElementById(targetId).remove();
+                    contentFields = contentFields.filter(f => f.id !== targetId);
+                }
+            });
+
+            addTextFieldBtn.addEventListener('click', () => addField('text'));
+            addImageFieldBtn.addEventListener('click', () => addField('image'));
+
+            // --- Draggable Logic ---
+            function makeDraggable(element) {
+                let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+                element.onmousedown = dragMouseDown;
+
+                function dragMouseDown(e) {
+                    e.preventDefault();
+                    document.querySelectorAll('.draggable').forEach(el => el.classList.remove('selected'));
+                    element.classList.add('selected');
+
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    document.onmouseup = closeDragElement;
+                    document.onmousemove = elementDrag;
+                }
+
+                function elementDrag(e) {
+                    e.preventDefault();
+                    pos1 = pos3 - e.clientX;
+                    pos2 = pos4 - e.clientY;
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                    
+                    const newTop = element.offsetTop - pos2;
+                    const newLeft = element.offsetLeft - pos1;
+
+                    element.style.top = `${newTop}px`;
+                    element.style.left = `${newLeft}px`;
+
+                    // Update data
+                    const field = contentFields.find(f => f.id === element.id);
+                    if(field) {
+                        field.y = (newTop / previewArea.clientHeight) * 100;
+                        field.x = (newLeft / previewArea.clientWidth) * 100;
+                    }
+                }
+
+                function closeDragElement() {
+                    document.onmouseup = null;
+                    document.onmousemove = null;
+                }
+            }
+            
+            // --- Save Logic ---
+            saveTemplateBtn.addEventListener('click', () => {
+                const templateData = {
+                    style: formInputs.style.value,
+                    orientation: formInputs.orientation.value,
+                    default_alignment: formInputs.default_alignment.value,
+                    theme_color: formInputs.theme_color.value,
+                    template_code: formInputs.template_code.value,
+                    blanko_url: formInputs.blanko_url.files[0] ? formInputs.blanko_url.files[0].name : null,
+                    logo_url: formInputs.logo_url.files[0] ? formInputs.logo_url.files[0].name : null,
+                    signature_url: formInputs.signature_url.files[0] ? formInputs.signature_url.files[0].name : null,
+                    content: JSON.stringify(contentFields.map(({id, ...rest}) => rest)), // Remove temporary 'id'
+                    is_active: formInputs.is_active.checked,
+                    created_by: 101, // Example user ID
+                };
+
+                if (!templateData.template_code || !templateData.theme_color || !templateData.blanko_url) {
+                    alert('Please fill in all template properties and upload a blanko image.');
+                    return;
+                }
+
+                console.log("Data to be saved:", templateData);
+                alert("Template data logged to console. Check the developer tools.");
+            });
+
+            // Initial setup
+            generateTemplateCode();
+        });
+    </script>
+
+</body>
+</html>

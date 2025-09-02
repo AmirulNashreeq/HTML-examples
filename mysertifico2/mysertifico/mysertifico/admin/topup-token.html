@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top-up Token - MySertifico</title>
+    <link rel="icon" type="image/png" href="../assets/images/logos/favicon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': {
+                            'DEFAULT': '#0d9488', // Teal-600
+                            'dark': '#0f766e', // Teal-700
+                        },
+                        'accent': {
+                            'DEFAULT': '#f59e0b', // Amber-500
+                            'hover': '#d97706', // Amber-600
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .sidebar { scrollbar-width: none; }
+        .sidebar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+
+    <!-- ===== Sidebar Start ===== -->
+    <aside id="sidebar" class="sidebar fixed top-0 left-0 z-50 h-full w-64 bg-gray-800 dark:bg-gray-950 text-white transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto">
+        <div class="flex items-center justify-between p-6">
+             <h2 class="font-poppins text-2xl font-bold text-white">Menu</h2>
+             <button id="close-sidebar" class="text-gray-400 hover:text-white lg:hidden">
+                 <i class="ri-close-line text-2xl"></i>
+             </button>
+        </div>
+        <nav class="p-4">
+            <ul class="space-y-2">
+                <li>
+                    <a href="dashboard.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white">
+                        <i class="ri-dashboard-3-line mr-3 text-lg"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <button data-collapse-toggle="submenu-gallery" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white">
+                        <span class="flex items-center"><i class="ri-gallery-line mr-3 text-lg"></i><span>Gallery</span></span>
+                        <i class="ri-arrow-down-s-line transition-transform duration-200"></i>
+                    </button>
+                    <ul id="submenu-gallery" class="hidden py-2 space-y-1 pl-8">
+                        <li><a href="templates-list.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Templates</a></li>
+                        <li><a href="logos-badges.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Logos & Badges</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="certificate-list.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white">
+                        <i class="ri-award-line mr-3 text-lg"></i>
+                        <span>Certificates</span>
+                    </a>
+                </li>
+                 <li>
+                    <button data-collapse-toggle="submenu-settings" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg text-white bg-primary-dark">
+                        <span class="flex items-center"><i class="ri-settings-3-line mr-3 text-lg"></i><span>Settings</span></span>
+                        <i class="ri-arrow-down-s-line transition-transform duration-200 rotate-180"></i>
+                    </button>
+                    <ul id="submenu-settings" class="py-2 space-y-1 pl-8">
+                        <li><a href="organisation.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Organisation</a></li>
+                        <li><a href="logo-list.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Logos</a></li>
+                        <li><a href="user-list.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Users</a></li>
+                        <li><a href="selected-template-list.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Templates</a></li>
+                        <li><a href="recipient-list.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Recipients</a></li>
+                        <li><a href="account.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Account</a></li>
+                        <li><a href="topup-token.html" class="block py-2 px-4 rounded-lg text-sm text-white bg-primary">Top-up Token</a></li>
+                    </ul>
+                </li>
+                <li class="pt-4 mt-4 border-t border-gray-700">
+                    <a href="#" class="flex items-center py-2.5 px-4 rounded-lg text-red-500 hover:bg-gray-700 hover:text-white">
+                        <i class="ri-logout-box-r-line mr-3 text-lg"></i>
+                        <span>Log Out</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+    <!-- ===== Sidebar End ===== -->
+    
+    <!-- ===== Main Content Start ===== -->
+    <div id="main-content" class="relative min-h-screen transition-all duration-300 ease-in-out">
+        <!-- ===== Navbar Start ===== -->
+        <header class="sticky top-0 z-30 bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between p-4">
+                <div class="flex items-center space-x-4">
+                    <button id="sidebar-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
+                        <i class="ri-menu-line text-2xl"></i>
+                    </button>
+                    <a href="dashboard.html" class="flex items-center gap-x-2">
+                        <img src="../assets/images/logos/logo.png" alt="MySertifico Logo" class="h-8 w-8 rounded-lg" onerror="this.onerror=null;this.src='https://placehold.co/32x32/0d9488/ffffff?text=M';">
+                        <span class="font-poppins text-2xl font-bold text-primary hidden sm:block">MySertifico</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-moon-line block dark:hidden"></i><i class="ri-sun-line hidden dark:block"></i></button>
+                    <div class="relative">
+                        <button id="profile-menu-button" class="flex items-center space-x-2">
+                             <img class="h-9 w-9 rounded-full object-cover" src="https://i.pravatar.cc/150?u=admin" alt="Admin" onerror="this.onerror=null;this.src='https://placehold.co/150x150/0d9488/ffffff?text=A';">
+                             <div class="hidden md:block text-left">
+                                 <div class="text-sm font-semibold text-gray-800 dark:text-white">Taufik Nabil Irmiza</div>
+                                 <div class="text-xs text-gray-500 dark:text-gray-400">Super Admin</div>
+                             </div>
+                        </button>
+                        <div id="profile-menu" class="hidden absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <div class="py-1">
+                                <a href="my-profile.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-user-line mr-3"></i>My Profile</a>
+                                <a href="change-password.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-lock-password-line mr-3"></i>Change Password</a>
+                                <hr class="border-gray-200 dark:border-gray-700 my-1">
+                                <a href="#" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-logout-box-r-line mr-3"></i>Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- ===== Navbar End ===== -->
+        
+        <!-- ===== Page Content Start ===== -->
+        <main class="p-6 sm:p-8">
+            <div class="max-w-6xl mx-auto">
+                <div class="flex flex-col lg:flex-row items-start gap-8">
+                    
+                    <!-- Left Column: Packages and Summary -->
+                    <div class="w-full lg:w-3/5 space-y-8">
+                        <!-- Token Balance -->
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+                            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">Current Balance</h2>
+                            <div class="flex items-center gap-4">
+                                <i class="ri-copper-coin-line text-4xl text-accent"></i>
+                                <div>
+                                    <p class="text-3xl font-bold text-gray-800 dark:text-white">1,250</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">Tokens Available</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Top-up Packages -->
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+                            <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">1. Select a Top-up Package</h2>
+                            <div id="packages-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- Package Cards... -->
+                                <div class="package-card border-2 border-gray-200 dark:border-gray-700 rounded-lg p-4 cursor-pointer hover:border-primary dark:hover:border-primary transition-colors" data-package="Starter" data-tokens="100" data-price="50">
+                                    <h3 class="font-bold text-gray-800 dark:text-white">Starter Pack</h3>
+                                    <p class="text-2xl font-bold text-primary my-1">100 <span class="text-base font-medium">Tokens</span></p>
+                                    <p class="font-semibold text-gray-600 dark:text-gray-300">MYR 50.00</p>
+                                </div>
+                                <div class="package-card border-2 border-gray-200 dark:border-gray-700 rounded-lg p-4 cursor-pointer hover:border-primary dark:hover:border-primary transition-colors" data-package="Pro" data-tokens="500" data-price="225">
+                                    <h3 class="font-bold text-gray-800 dark:text-white">Pro Pack</h3>
+                                    <p class="text-2xl font-bold text-primary my-1">500 <span class="text-base font-medium">Tokens</span></p>
+                                    <p class="font-semibold text-gray-600 dark:text-gray-300">MYR 225.00 <span class="text-sm text-green-500 font-normal">(Save 10%)</span></p>
+                                </div>
+                                <div class="package-card border-2 border-gray-200 dark:border-gray-700 rounded-lg p-4 cursor-pointer hover:border-primary dark:hover:border-primary transition-colors" data-package="Business" data-tokens="1000" data-price="400">
+                                    <h3 class="font-bold text-gray-800 dark:text-white">Business Pack</h3>
+                                    <p class="text-2xl font-bold text-primary my-1">1000 <span class="text-base font-medium">Tokens</span></p>
+                                    <p class="font-semibold text-gray-600 dark:text-gray-300">MYR 400.00 <span class="text-sm text-green-500 font-normal">(Save 20%)</span></p>
+                                </div>
+                                <div class="package-card border-2 border-gray-200 dark:border-gray-700 rounded-lg p-4 cursor-pointer hover:border-primary dark:hover:border-primary transition-colors" data-package="Enterprise" data-tokens="5000" data-price="1750">
+                                    <h3 class="font-bold text-gray-800 dark:text-white">Enterprise Pack</h3>
+                                    <p class="text-2xl font-bold text-primary my-1">5000 <span class="text-base font-medium">Tokens</span></p>
+                                    <p class="font-semibold text-gray-600 dark:text-gray-300">MYR 1,750.00 <span class="text-sm text-green-500 font-normal">(Save 30%)</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Checkout Flow -->
+                    <div class="w-full lg:w-2/5">
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md sticky top-24 space-y-6">
+                            <h2 class="text-lg font-semibold text-gray-900 dark:text-white border-b dark:border-gray-700 pb-4">Checkout</h2>
+                            
+                            <!-- Order Summary -->
+                            <div id="order-summary-section">
+                                 <div id="summary-empty-state" class="text-center py-6">
+                                    <i class="ri-shopping-cart-2-line text-4xl text-gray-400 dark:text-gray-500"></i>
+                                    <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Select a package to view summary.</p>
+                                </div>
+                                <div id="summary-content" class="hidden space-y-3">
+                                    <h3 class="font-semibold text-gray-800 dark:text-white">Order Summary</h3>
+                                    <div class="flex justify-between items-center text-sm">
+                                        <span class="text-gray-600 dark:text-gray-300">Package:</span>
+                                        <span id="summary-package" class="font-medium text-gray-800 dark:text-white"></span>
+                                    </div>
+                                    <div class="flex justify-between items-center text-sm">
+                                        <span class="text-gray-600 dark:text-gray-300">Tokens:</span>
+                                        <span id="summary-tokens" class="font-medium text-gray-800 dark:text-white"></span>
+                                    </div>
+                                    <hr class="dark:border-gray-700 !my-2">
+                                    <div class="flex justify-between items-center text-sm">
+                                        <span class="text-gray-600 dark:text-gray-300">Subtotal:</span>
+                                        <span id="summary-subtotal" class="font-medium text-gray-800 dark:text-white"></span>
+                                    </div>
+                                    <div class="flex justify-between items-center text-sm">
+                                        <span class="text-gray-600 dark:text-gray-300">Discount:</span>
+                                        <span id="summary-discount" class="font-medium text-green-500"></span>
+                                    </div>
+                                    <div class="flex justify-between items-center text-sm">
+                                        <span class="text-gray-600 dark:text-gray-300">SST (6%):</span>
+                                        <span id="summary-sst" class="font-medium text-gray-800 dark:text-white"></span>
+                                    </div>
+                                    <div class="flex justify-between items-center text-lg pt-2 border-t dark:border-gray-600 mt-2">
+                                        <span class="font-bold text-gray-700 dark:text-gray-200">Grand Total:</span>
+                                        <span id="summary-grand-total" class="font-bold text-primary"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Payment Methods Selection -->
+                            <div id="payment-method-section" class="hidden">
+                                <h3 class="font-semibold text-gray-800 dark:text-white mb-3 pt-4 border-t dark:border-gray-700">2. Select Payment Method</h3>
+                                <div id="payment-methods-grid" class="space-y-2">
+                                    <div class="payment-method-card border-2 border-gray-200 dark:border-gray-700 rounded-lg p-3 cursor-pointer flex items-center gap-3 hover:border-primary dark:hover:border-primary transition-colors" data-method="fpx"><i class="ri-bank-line text-xl text-primary"></i><span class="text-sm font-semibold text-gray-700 dark:text-gray-200">Online Banking (FPX)</span></div>
+                                    <div class="payment-method-card border-2 border-gray-200 dark:border-gray-700 rounded-lg p-3 cursor-pointer flex items-center gap-3 hover:border-primary dark:hover:border-primary transition-colors" data-method="card"><i class="ri-mastercard-line text-xl text-primary"></i><span class="text-sm font-semibold text-gray-700 dark:text-gray-200">Credit / Debit Card</span></div>
+                                    <div class="payment-method-card border-2 border-gray-200 dark:border-gray-700 rounded-lg p-3 cursor-pointer flex items-center gap-3 hover:border-primary dark:hover:border-primary transition-colors" data-method="qr"><i class="ri-qr-code-line text-xl text-primary"></i><span class="text-sm font-semibold text-gray-700 dark:text-gray-200">DuitNow QR</span></div>
+                                </div>
+                            </div>
+
+                            <!-- Payment Details Area -->
+                            <div id="payment-details-area" class="hidden mt-4 pt-4 border-t dark:border-gray-700">
+                                <!-- FPX Bank List -->
+                                <div id="fpx-details" class="hidden">
+                                    <h4 class="font-semibold text-gray-800 dark:text-white mb-3 text-sm">Select Bank</h4>
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <img src="https://placehold.co/120x60/ffffff/000000?text=Maybank2u" alt="Maybank2u" class="h-14 w-full object-contain border rounded-lg p-2 cursor-pointer hover:border-primary">
+                                        <img src="https://placehold.co/120x60/ffffff/000000?text=CIMB+Clicks" alt="CIMB Clicks" class="h-14 w-full object-contain border rounded-lg p-2 cursor-pointer hover:border-primary">
+                                        <img src="https://placehold.co/120x60/ffffff/000000?text=Public+Bank" alt="Public Bank" class="h-14 w-full object-contain border rounded-lg p-2 cursor-pointer hover:border-primary">
+                                        <img src="https://placehold.co/120x60/ffffff/000000?text=RHB+Now" alt="RHB Now" class="h-14 w-full object-contain border rounded-lg p-2 cursor-pointer hover:border-primary">
+                                        <img src="https://placehold.co/120x60/ffffff/000000?text=Hong+Leong" alt="Hong Leong Connect" class="h-14 w-full object-contain border rounded-lg p-2 cursor-pointer hover:border-primary">
+                                        <img src="https://placehold.co/120x60/ffffff/000000?text=AmBank" alt="AmBank" class="h-14 w-full object-contain border rounded-lg p-2 cursor-pointer hover:border-primary">
+                                    </div>
+                                </div>
+                                <!-- Credit Card Form -->
+                                <div id="card-details" class="hidden space-y-3">
+                                    <h4 class="font-semibold text-gray-800 dark:text-white text-sm">Enter Card Details</h4>
+                                    <div>
+                                        <label for="card_number" class="block text-xs font-medium text-gray-600 dark:text-gray-300">Card Number</label>
+                                        <input type="text" id="card_number" placeholder="0000 0000 0000 0000" class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2 dark:bg-gray-700 dark:border-gray-600">
+                                    </div>
+                                    <div>
+                                        <label for="card_name" class="block text-xs font-medium text-gray-600 dark:text-gray-300">Name on Card</label>
+                                        <input type="text" id="card_name" placeholder="Full Name" class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2 dark:bg-gray-700 dark:border-gray-600">
+                                    </div>
+                                    <div class="flex gap-3">
+                                        <div class="w-1/2">
+                                            <label for="card_expiry" class="block text-xs font-medium text-gray-600 dark:text-gray-300">Expiry Date</label>
+                                            <input type="text" id="card_expiry" placeholder="MM/YY" class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2 dark:bg-gray-700 dark:border-gray-600">
+                                        </div>
+                                        <div class="w-1/2">
+                                            <label for="card_cvc" class="block text-xs font-medium text-gray-600 dark:text-gray-300">CVC</label>
+                                            <input type="text" id="card_cvc" placeholder="123" class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2 dark:bg-gray-700 dark:border-gray-600">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- QR Code Display -->
+                                <div id="qr-details" class="hidden text-center">
+                                    <h4 class="font-semibold text-gray-800 dark:text-white mb-2 text-sm">Scan to Pay</h4>
+                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=MySertifico-Payment-Demo" alt="DuitNow QR Code" class="mx-auto rounded-lg">
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Use your banking or e-wallet app to scan.</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Payment Button -->
+                            <div id="payment-button-area" class="hidden pt-4 border-t dark:border-gray-700">
+                                <button id="payment-button" class="w-full px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-4 focus:ring-primary/50 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed">
+                                    Pay Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- ===== Page Content End ===== -->
+    </div>
+    <!-- ===== Main Content End ===== -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Common Elements & Functions ---
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggleBtn = document.getElementById('sidebar-toggle');
+            const closeSidebarBtn = document.getElementById('close-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const mainContent = document.getElementById('main-content');
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const profileMenuButton = document.getElementById('profile-menu-button');
+            const profileMenu = document.getElementById('profile-menu');
+
+            function openSidebar() {
+                sidebar.classList.remove('-translate-x-full');
+                mainContent.classList.add('lg:ml-64');
+                if (window.innerWidth < 1024) {
+                    overlay.classList.remove('hidden');
+                }
+            }
+
+            function closeSidebar() {
+                sidebar.classList.add('-translate-x-full');
+                mainContent.classList.remove('lg:ml-64');
+                overlay.classList.add('hidden');
+            }
+
+            sidebarToggleBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (sidebar.classList.contains('-translate-x-full')) {
+                    openSidebar();
+                } else {
+                    closeSidebar();
+                }
+            });
+
+            closeSidebarBtn?.addEventListener('click', closeSidebar);
+            overlay.addEventListener('click', closeSidebar);
+
+            window.addEventListener('resize', () => {
+                if (!sidebar.classList.contains('-translate-x-full')) {
+                    if (window.innerWidth >= 1024) {
+                        overlay.classList.add('hidden');
+                    } else {
+                        overlay.classList.remove('hidden');
+                    }
+                }
+            });
+            
+            document.querySelectorAll('[data-collapse-toggle]').forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.getAttribute('data-collapse-toggle');
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.classList.toggle('hidden');
+                        const arrowIcon = button.querySelector('.ri-arrow-down-s-line');
+                        if(arrowIcon) arrowIcon.classList.toggle('rotate-180');
+                    }
+                });
+            });
+
+            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark')
+            }
+            themeToggleBtn.addEventListener('click', () => {
+                const isDark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('color-theme', isDark ? 'dark' : 'light');
+            });
+
+            profileMenuButton?.addEventListener('click', (e) => {
+                e.stopPropagation(); 
+                profileMenu.classList.toggle('hidden');
+            });
+
+            window.addEventListener('click', (e) => {
+                if (profileMenu && !profileMenu.classList.contains('hidden') && !profileMenuButton.contains(e.target) && !profileMenu.contains(e.target)) {
+                    profileMenu.classList.add('hidden');
+                }
+            });
+
+            // --- Top-up Page Specific Logic ---
+            const packageCards = document.querySelectorAll('.package-card');
+            const paymentMethodSection = document.getElementById('payment-method-section');
+            const paymentMethodCards = document.querySelectorAll('.payment-method-card');
+
+            const summaryEmptyState = document.getElementById('summary-empty-state');
+            const summaryContent = document.getElementById('summary-content');
+            
+            const paymentDetailsArea = document.getElementById('payment-details-area');
+            const fpxDetails = document.getElementById('fpx-details');
+            const cardDetails = document.getElementById('card-details');
+            const qrDetails = document.getElementById('qr-details');
+            
+            const paymentButtonArea = document.getElementById('payment-button-area');
+            const paymentButton = document.getElementById('payment-button');
+            
+            let selectedPackage = null;
+            let selectedPaymentMethod = null;
+            const TOKEN_BASE_RATE = 0.50; // MYR 0.50 per token
+
+            function updateCheckoutUI() {
+                // 1. Update Summary
+                if (selectedPackage) {
+                    const price = parseFloat(selectedPackage.price);
+                    const tokens = parseInt(selectedPackage.tokens);
+                    
+                    const subtotal = tokens * TOKEN_BASE_RATE;
+                    const discount = subtotal - price;
+                    const sst = price * 0.06;
+                    const grandTotal = price + sst;
+
+                    summaryEmptyState.classList.add('hidden');
+                    summaryContent.classList.remove('hidden');
+                    
+                    document.getElementById('summary-package').textContent = selectedPackage.name;
+                    document.getElementById('summary-tokens').textContent = tokens;
+                    document.getElementById('summary-subtotal').textContent = `MYR ${subtotal.toFixed(2)}`;
+                    document.getElementById('summary-discount').textContent = `- MYR ${discount.toFixed(2)}`;
+                    document.getElementById('summary-sst').textContent = `MYR ${sst.toFixed(2)}`;
+                    document.getElementById('summary-grand-total').textContent = `MYR ${grandTotal.toFixed(2)}`;
+                    
+                    paymentMethodSection.classList.remove('hidden');
+                } else {
+                    summaryEmptyState.classList.remove('hidden');
+                    summaryContent.classList.add('hidden');
+                    paymentMethodSection.classList.add('hidden');
+                }
+
+                // 2. Update Payment Details
+                paymentDetailsArea.classList.add('hidden');
+                fpxDetails.classList.add('hidden');
+                cardDetails.classList.add('hidden');
+                qrDetails.classList.add('hidden');
+                
+                if (selectedPaymentMethod) {
+                    paymentDetailsArea.classList.remove('hidden');
+                    paymentButtonArea.classList.remove('hidden');
+                    switch (selectedPaymentMethod) {
+                        case 'fpx':
+                            fpxDetails.classList.remove('hidden');
+                            break;
+                        case 'card':
+                            cardDetails.classList.remove('hidden');
+                            break;
+                        case 'qr':
+                            qrDetails.classList.remove('hidden');
+                            break;
+                    }
+                } else {
+                    paymentButtonArea.classList.add('hidden');
+                }
+            }
+
+            packageCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    packageCards.forEach(c => c.classList.remove('border-primary', 'dark:border-primary', 'ring-2', 'ring-primary/50'));
+                    card.classList.add('border-primary', 'dark:border-primary', 'ring-2', 'ring-primary/50');
+                    
+                    selectedPackage = {
+                        name: card.dataset.package,
+                        tokens: card.dataset.tokens,
+                        price: card.dataset.price
+                    };
+                    updateCheckoutUI();
+                });
+            });
+
+            paymentMethodCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    paymentMethodCards.forEach(c => c.classList.remove('border-primary', 'dark:border-primary', 'ring-2', 'ring-primary/50'));
+                    card.classList.add('border-primary', 'dark:border-primary', 'ring-2', 'ring-primary/50');
+                    
+                    selectedPaymentMethod = card.dataset.method;
+                    updateCheckoutUI();
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

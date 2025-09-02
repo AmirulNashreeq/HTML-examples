@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyWall - Sign In</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../assets/images/logos/favicon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Custom Tailwind Config with MyWall Theme -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        // Palet Aqua Lautan & Oren Senja
+                        'primary': {
+                            'DEFAULT': '#14B8A6',       // Aqua Lautan (Teal-500)
+                            '50': '#f0fdfa',
+                            '100': '#ccfbf1',
+                            '200': '#99f6e4',
+                            '300': '#5eead4',
+                            '400': '#2dd4bf',
+                            '500': '#14b8a6',
+                            '600': '#0d9488',
+                            '700': '#0f766e',
+                            '800': '#115e59',
+                            '900': '#134E4A',    // Aqua Gelap (Teal-900)
+                        },
+                        'accent': {
+                            'DEFAULT': '#F97316',        // Oren Senja (Orange-500)
+                            'hover': '#EA580C',  // Oren Hangat untuk hover (Orange-600)
+                        },
+                        'dark-bg': '#134E4A',       // Aqua Sangat Gelap untuk footer (Teal-900)
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900">
+
+    <div class="flex items-center justify-center min-h-screen">
+        <div class="relative flex flex-col m-6 space-y-8 bg-white dark:bg-gray-800 shadow-2xl rounded-2xl md:flex-row md:space-y-0">
+            <!-- Left Side -->
+            <div class="relative w-full md:w-1/2">
+                <img src="../assets/images/frontend/welcome4.png"
+                     alt="A student smiling and holding books"
+                     onerror="this.onerror=null; this.src='https://placehold.co/800x1200/134E4A/ffffff?text=MyWall';"
+                     class="w-full h-full hidden md:block rounded-l-2xl object-cover">
+                 <!-- Gradient overlay updated to the new theme -->
+                 <div class="absolute inset-0 bg-gradient-to-t from-primary-900 to-transparent opacity-90 md:rounded-l-2xl"></div>
+                 <div class="absolute bottom-10 left-10 text-white">
+                     <h2 class="text-4xl font-bold font-poppins">MyWall</h2>
+                     <p class="text-lg text-primary-200">Your Personal Wall of Achievements</p>
+                 </div>
+            </div>
+
+            <!-- Right Side -->
+            <div class="w-full md:w-1/2 p-8 md:p-12">
+                <h2 class="font-bold text-3xl text-gray-800 dark:text-white">Sign In to MyWall</h2>
+                <p class="text-sm font-normal text-gray-600 dark:text-gray-400 mb-8">Welcome back! Please enter your details.</p>
+
+                <form id="signinForm" class="space-y-5">
+                     <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+                        <input type="email" id="email" name="email" required class="mt-1 w-full p-3 border rounded-lg focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Password</label>
+                        <div class="relative">
+                            <input type="password" id="password" name="password" required class="mt-1 w-full p-3 border rounded-lg pr-10 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <button type="button" class="password-toggle absolute inset-y-0 right-0 px-3 text-gray-500 dark:text-gray-400">
+                                <i class="ri-eye-off-line"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="remember_me" name="remember_me" class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                            <label for="remember_me" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">Remember me</label>
+                        </div>
+                        <a href="forgot-password.html" class="text-sm font-semibold text-primary hover:underline">Forgot Password?</a>
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-accent text-white py-3 rounded-lg font-semibold hover:bg-accent-hover transition-colors">Sign In</button>
+                </form>
+
+                <div class="mt-8 text-center text-sm text-gray-600 dark:text-gray-400">
+                    Don't have an account? <a href="sign-up.html" class="font-semibold text-primary hover:underline">Sign Up here</a>.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script for password toggle and form submission -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Password Toggle
+            document.querySelectorAll('.password-toggle').forEach(button => {
+                button.addEventListener('click', function () {
+                    const input = this.closest('.relative').querySelector('input');
+                    const icon = this.querySelector('i');
+                    const isPassword = input.getAttribute('type') === 'password';
+                    input.setAttribute('type', isPassword ? 'text' : 'password');
+                    icon.classList.toggle('ri-eye-line', isPassword);
+                    icon.classList.toggle('ri-eye-off-line', !isPassword);
+                });
+            });
+            
+            // Form Submission Simulation
+            const signinForm = document.getElementById('signinForm');
+            signinForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                // Placeholder for sign-in logic
+                console.log('Sign-in attempt.');
+                // On successful login, you would redirect the user
+                // window.location.href = 'mywall.html'; 
+                alert('Sign-in successful! Redirecting...');
+            });
+        });
+    </script>
+</body>
+</html>

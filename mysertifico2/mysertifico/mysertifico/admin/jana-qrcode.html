@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contoh Penjana Kod QR</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 1. Sertakan pustaka QRCode.js -->
+    <script src="https://cdn.jsdelivr.net/npm/davidshimjs-qrcodejs@0.0.2/qrcode.min.js"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
+        <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">Penjana Kod QR Sijil</h1>
+        
+        <!-- Borang Input -->
+        <div class="space-y-4">
+            <div>
+                <label for="batchName" class="block text-sm font-medium text-gray-700">Nama Kelompok (Batch Name)</label>
+                <input type="text" id="batchName" value="graduasi-2025" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+            </div>
+            <div>
+                <label for="recipientId" class="block text-sm font-medium text-gray-700">ID Penerima (cth: No. KP)</label>
+                <input type="text" id="recipientId" value="900101105555" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-teal-500 focus:border-teal-500">
+            </div>
+        </div>
+
+        <button id="generateBtn" class="w-full bg-teal-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-teal-700 transition-colors mt-6">
+            Jana Kod QR
+        </button>
+
+        <!-- 2. Sediakan satu div untuk memaparkan kod QR -->
+        <div id="qrcode-container" class="mt-6 p-4 border-dashed border-2 border-gray-300 rounded-lg flex justify-center items-center min-h-[200px]">
+            <div id="qrcode"></div>
+            <p id="placeholder-text" class="text-gray-400">Kod QR akan dipaparkan di sini</p>
+        </div>
+
+    </div>
+
+    <script>
+        document.getElementById('generateBtn').addEventListener('click', () => {
+            const batchName = document.getElementById('batchName').value;
+            const recipientId = document.getElementById('recipientId').value;
+            const qrcodeContainer = document.getElementById('qrcode');
+            const placeholder = document.getElementById('placeholder-text');
+
+            // Kosongkan kod QR lama sebelum menjana yang baru
+            qrcodeContainer.innerHTML = '';
+            
+            if (batchName && recipientId) {
+                // Sembunyikan teks placeholder
+                placeholder.style.display = 'none';
+
+                // Gabungkan maklumat untuk mencipta satu ID unik. 
+                // Dalam aplikasi sebenar, ini sepatutnya ID unik dari pangkalan data.
+                const uniqueCertificateId = `${batchName}-${recipientId}`;
+                
+                // Cipta URL pengesahan yang lengkap
+                const verificationUrl = `https://www.mysertifico.com/verify?id=${uniqueCertificateId}`;
+
+                // 3. Jana kod QR menggunakan pustaka
+                new QRCode(qrcodeContainer, {
+                    text: verificationUrl,
+                    width: 200,
+                    height: 200,
+                    colorDark : "#000000",
+                    colorLight : "#ffffff",
+                    correctLevel : QRCode.CorrectLevel.H // Tahap pembetulan ralat yang tinggi
+                });
+
+            } else {
+                placeholder.style.display = 'block';
+                alert("Sila masukkan Nama Kelompok dan ID Penerima.");
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pratonton Templat Sijil - MP-GOLD-001</title>
+    
+    <!-- Memuatkan Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Memuatkan fon yang elegan untuk sijil -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&family=Montserrat:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Menetapkan fon kustom untuk elemen sijil */
+        body {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .font-serif-cert {
+            font-family: 'EB Garamond', serif;
+        }
+        .font-sans-cert {
+             font-family: 'Montserrat', sans-serif;
+        }
+
+        /* * Kontena utama sijil.
+         * Menggunakan 'position: relative' supaya elemen di dalamnya boleh diletakkan secara 'absolute'.
+         * 'aspect-ratio' memastikan ia mengekalkan bentuk A4 landskap (297/210).
+         * Imej latar belakang ditetapkan di sini.
+        */
+        #certificate-container {
+            position: relative;
+            width: 100%;
+            max-width: 1123px; /* Saiz tipikal untuk A4 pada 96 DPI */
+            aspect-ratio: 297 / 210;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        /* * Setiap elemen (teks/imej) diletakkan secara mutlak (absolute) di dalam kontena.
+         * 'transform' digunakan untuk menguruskan penjajaran (alignment) dengan tepat.
+         * Contoh: Untuk penjajaran tengah, kita letak di 50% dan alih semula sebanyak -50% dari saiz elemen itu sendiri.
+        */
+        .certificate-element {
+            position: absolute;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
+
+    <!-- Kontena Sijil -->
+    <!-- Semua elemen sijil akan dimasukkan ke dalam div ini oleh JavaScript -->
+    <div id="certificate-container" style="background-image: url('../assets/images/templates/ml-gold-002.svg');">
+        <!-- Elemen-elemen sijil akan dijana di sini -->
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Data JSON ini mewakili data yang akan disimpan dalam medan 'elements_data' di pangkalan data.
+            // Ia mengandungi semua maklumat yang diperlukan untuk meletakkan setiap elemen.
+            const elementsData = [
+                            {
+                "element_id": "logo", 
+                // Imej dummy logo ini akan diganti secara automatik semasa pihak organisasi/sekolah create-certificate
+                "type": "image", "content": "../assets/images/logos/logo.png", "position_x": 561, "position_y": 90, "width": 100, "height": 100, "alignment": "center"
+              },
+              {
+                "element_id": "organization_name", "type": "text", "content": "{OrganizationName}",
+                "position_x": 561, "position_y": 190, "font_family": "Montserrat", "font_size": 20, "font_weight": "500", "color": "#111827", "alignment": "center"
+              },
+              {
+                "element_id": "address_1", "type": "text", "content": "{OrganizationAddressLine1}",
+                "position_x": 561, "position_y": 214, "font_family": "Montserrat", "font_size": 14, "color": "#374151", "alignment": "center"
+              },
+              {
+                "element_id": "address_2", "type": "text", "content": "{OrganizationAddressLine2}",
+                "position_x": 561, "position_y": 230, "font_family": "Montserrat", "font_size": 14, "color": "#374151", "alignment": "center"
+              },
+              {
+                "element_id": "certificate_title", "type": "text", "content": "CERTIFICATE TITLE",
+                "position_x": 561, "position_y": 270, "font_family": "EB Garamond", "font_size": 60, "font_weight": "bold", "color": "#92400e", "alignment": "center"
+              },
+              {
+                "element_id": "certificate_body", "type": "text", "content": "Certificate body text",
+                "position_x": 561, "position_y": 370, "font_family": "Montserrat", "font_size": 16, "color": "#374151", "alignment": "center"
+              },
+              {
+                "element_id": "recipient_name", "type": "text", "content": "{RecipientName}",
+                "position_x": 561, "position_y": 410, "font_family": "EB Garamond", "font_size": 24, "font_weight": "bold", "color": "#000000", "alignment": "center"
+              },
+              {
+                "element_id": "event_description", "type": "text", "content": "Event description",
+                "position_x": 561, "position_y": 470, "font_family": "Montserrat", "font_size": 16, "color": "#374151", "alignment": "center"
+              },
+              {
+                "element_id": "event_date", "type": "text", "content": "EventDate",
+                "position_x": 561, "position_y": 495, "font_family": "Montserrat", "font_size": 18, "font_weight": "500", "color": "#111827", "alignment": "center"
+              },
+              {
+                // Imej dummy tandatangan ini akan diganti secara automatik semasa pihak organisasi/sekolah create-certificate
+                "element_id": "signature_image", "type": "image", "content": "../assets/images/logos/signature.png",
+                "position_x": 300, "position_y": 560, "width": 180, "height": 70, "alignment": "center"
+              },
+               {
+                "element_id": "signatory_name", "type": "text", "content": "{SignatoryName}",
+                "position_x": 300, "position_y": 640, "font_family": "Montserrat", "font_size": 14, "font_weight": "500", "color": "#000000", "alignment": "center"
+              },
+              {
+                "element_id": "signatory_position", "type": "text", "content": "{SignatoryPosition}",
+                "position_x": 300, "position_y": 660, "font_family": "Montserrat", "font_size": 12, "color": "#374151", "alignment": "center"
+              },
+              {
+                "element_id": "signed_date", "type": "text", "content": "{SignedDate}",
+                "position_x": 300, "position_y": 700, "font_family": "Montserrat", "font_size": 12, "color": "#374151", "alignment": "center"
+              },
+              {
+                // Imej dummy qr-code ini akan diganti secara automatik semasa pihak organisasi/sekolah create-certificate
+                "element_id": "qr_code", "type": "image", "content": "../assets/images/logos/qr-code.png",
+                "position_x": 820, "position_y": 590, "width": 100, "height": 100, "alignment": "center"
+              }
+              
+            ];
+
+            const container = document.getElementById('certificate-container');
+
+            // Fungsi untuk memaparkan setiap elemen ke dalam kontena sijil
+            elementsData.forEach(item => {
+                const el = document.createElement('div');
+                el.classList.add('certificate-element');
+
+                // Menetapkan kedudukan X dan Y
+                el.style.left = `${item.position_x}px`;
+                el.style.top = `${item.position_y}px`;
+
+                // Menguruskan penjajaran (alignment)
+                if (item.alignment === 'center') {
+                    el.style.transform = 'translateX(-50%)';
+                } else if (item.alignment === 'right') {
+                    el.style.transform = 'translateX(-100%)';
+                }
+                
+                // Memproses elemen berdasarkan jenisnya (teks atau imej)
+                if (item.type === 'text') {
+                    el.innerText = item.content;
+                    el.style.fontFamily = `'${item.font_family}', sans-serif`;
+                    el.style.fontSize = `${item.font_size}px`;
+                    el.style.fontWeight = item.font_weight || 'normal';
+                    el.style.color = item.color;
+                    el.style.whiteSpace = 'nowrap'; // Elak teks dari terpotong ke baris baru
+                } 
+                else if (item.type === 'image') {
+                    const img = document.createElement('img');
+                    img.src = item.content;
+                    img.style.width = `${item.width}px`;
+                    img.style.height = `${item.height}px`;
+                    el.appendChild(img);
+                }
+
+                container.appendChild(el);
+            });
+        });
+    </script>
+
+</body>
+</html>

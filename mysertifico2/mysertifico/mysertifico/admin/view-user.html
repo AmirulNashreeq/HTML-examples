@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" class=""> <!-- The 'dark' class will be added here by JS -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySertifico - View User</title>
+    <link rel="icon" type="image/png" href="../assets/images/logos/favicon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#0d9488', // Teal-600
+                        'primary-dark': '#0f766e', // Teal-700
+                        'accent': '#f59e0b', // Amber-500
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .sidebar { scrollbar-width: none; }
+        .sidebar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+
+    <!-- ===== Sidebar Start ===== -->
+    <aside id="sidebar" class="sidebar fixed top-0 left-0 z-50 h-full w-64 bg-gray-800 dark:bg-gray-950 text-white transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto">
+        <!-- Sidebar Header -->
+        <div class="flex items-center justify-between p-6">
+             <h2 class="font-poppins text-2xl font-bold text-white">Menu</h2>
+             <button id="close-sidebar" class="text-gray-400 hover:text-white lg:hidden">
+                 <i class="ri-close-line text-2xl"></i>
+             </button>
+        </div>
+        
+        <!-- Navigation Menu -->
+        <nav class="p-4">
+            <ul class="space-y-2">
+                <li><a href="dashboard.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white"><i class="ri-dashboard-3-line mr-3 text-lg"></i><span>Dashboard</span></a></li>
+                <li>
+                    <button data-collapse-toggle="submenu-sijil" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white">
+                        <span class="flex items-center"><i class="ri-award-line mr-3 text-lg"></i><span>Certificate</span></span>
+                        <i class="ri-arrow-down-s-line transition-transform duration-200"></i>
+                    </button>
+                    <ul id="submenu-sijil" class="hidden py-2 space-y-1 pl-8">
+                        <li><a href="#" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Issue Certificate</a></li>
+                        <li><a href="#" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Certificate List</a></li>
+                    </ul>
+                </li>
+                 <li>
+                    <button data-collapse-toggle="submenu-tetapan" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg text-white bg-primary-dark">
+                        <span class="flex items-center"><i class="ri-settings-3-line mr-3 text-lg"></i><span>Settings</span></span>
+                        <i class="ri-arrow-down-s-line transition-transform duration-200 rotate-180"></i>
+                    </button>
+                    <ul id="submenu-tetapan" class="py-2 space-y-1 pl-8">
+                        <li><a href="organisation.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Organization</a></li>
+                        <li><a href="users.html" class="block py-2 px-4 rounded-lg text-sm text-white bg-primary">Users</a></li>
+                        <li><a href="#" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Recipient</a></li>
+                        <li><a href="#" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Templates</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden lg:hidden"></div>
+    <!-- ===== Sidebar End ===== -->
+    
+    <!-- ===== Main Content Start ===== -->
+    <div id="main-content" class="relative min-h-screen transition-all duration-300 ease-in-out">
+        <!-- ===== Navbar Start ===== -->
+        <header class="sticky top-0 z-30 bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between p-4">
+                <!-- Left Navbar Section -->
+                <div class="flex items-center space-x-4">
+                    <button id="sidebar-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
+                        <i class="ri-menu-line text-2xl"></i>
+                    </button>
+                    <a href="#" class="font-poppins text-2xl font-bold text-gray-800 dark:text-white hidden sm:block">MySertifico</a>
+                </div>
+
+                <!-- Right Navbar Section -->
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-moon-line block dark:hidden"></i><i class="ri-sun-line hidden dark:block"></i></button>
+                    
+                    <!-- Profile Dropdown Menu -->
+                    <div class="relative">
+                        <button id="profile-menu-button" class="flex items-center space-x-2">
+                             <img class="h-9 w-9 rounded-full object-cover" src="https://i.pravatar.cc/150?u=admin" alt="Admin">
+                             <div class="hidden md:block text-left">
+                                 <div class="text-sm font-semibold text-gray-800 dark:text-white">Admin Webapp</div>
+                                 <div class="text-xs text-gray-500 dark:text-gray-400">Super Admin</div>
+                             </div>
+                        </button>
+                        <!-- Dropdown Menu -->
+                        <div id="profile-menu" class="hidden absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <div class="py-1">
+                                <a href="#" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-user-line mr-3"></i>My Profile</a>
+                                <a href="#" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-lock-password-line mr-3"></i>Change Password</a>
+                                <hr class="border-gray-200 dark:border-gray-700 my-1">
+                                <a href="#" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-logout-box-r-line mr-3"></i>Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- ===== Navbar End ===== -->
+        
+        <!-- ===== Page Content Start ===== -->
+        <main class="p-6 sm:p-8">
+            <div class="max-w-4xl mx-auto">
+                <!-- Page Title and Back Button -->
+                <div class="flex items-center justify-between gap-4 mb-6">
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">View User</h1>
+                    <a href="users.html" class="px-3 py-2 rounded-lg bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:focus:ring-offset-gray-900 flex-shrink-0" title="Back">
+                        <i class="ri-arrow-left-line text-xl"></i>
+                    </a>
+                </div>
+                
+                <!-- Main Content Card -->
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        <!-- Left Section: Profile Picture -->
+                        <div class="lg:col-span-1">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Profile Picture</h3>
+                            <div class="flex flex-col items-center">
+                                <img src="https://i.pravatar.cc/300?u=robaei" alt="Profile Picture" class="w-48 h-48 rounded-full object-cover">
+                            </div>
+                        </div>
+                        
+                        <!-- Right Section: User Details -->
+                        <div class="lg:col-span-2">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">User Details</h3>
+                            <dl class="space-y-4 text-sm">
+                                <!-- Full Name -->
+                                <div>
+                                    <dt class="font-medium text-gray-500 dark:text-gray-400">Full Name</dt>
+                                    <dd class="mt-1 font-semibold text-gray-900 dark:text-white">Robaei Wan Mahmood</dd>
+                                </div>
+                                <!-- Email -->
+                                <div>
+                                    <dt class="font-medium text-gray-500 dark:text-gray-400">Email</dt>
+                                    <dd class="mt-1 text-gray-900 dark:text-white">robaei@example.com</dd>
+                                </div>
+                                <!-- Position -->
+                                <div>
+                                    <dt class="font-medium text-gray-500 dark:text-gray-400">Position</dt>
+                                    <dd class="mt-1 text-gray-900 dark:text-white">Super Admin</dd>
+                                </div>
+                                <!-- Status -->
+                                <div>
+                                    <dt class="font-medium text-gray-500 dark:text-gray-400">Status</dt>
+                                    <dd class="mt-1">
+                                        <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Active</span>
+                                    </dd>
+                                </div>
+                            </dl>
+                        </div>
+                    </div>
+                    <!-- Action Button -->
+                    <div class="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700 flex justify-end">
+                        <a href="edit-user.html" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark flex items-center" title="Edit User">
+                            <i class="ri-pencil-line mr-2"></i>Edit
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- ===== Page Content End ===== -->
+    </div>
+    <!-- ===== Main Content End ===== -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggleBtn = document.getElementById('sidebar-toggle');
+            const closeSidebarBtn = document.getElementById('close-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const mainContent = document.getElementById('main-content');
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const profileMenuButton = document.getElementById('profile-menu-button');
+            const profileMenu = document.getElementById('profile-menu');
+
+            // --- Sidebar Logic ---
+            function openSidebar() {
+                sidebar.classList.remove('-translate-x-full');
+                if (window.innerWidth < 1024) overlay.classList.remove('hidden'); else mainContent.classList.add('lg:ml-64');
+            }
+            function closeSidebar() {
+                sidebar.classList.add('-translate-x-full');
+                 if (window.innerWidth < 1024) overlay.classList.add('hidden'); else mainContent.classList.remove('lg:ml-64');
+            }
+            sidebarToggleBtn.addEventListener('click', (e) => { e.stopPropagation(); if (sidebar.classList.contains('-translate-x-full')) openSidebar(); else closeSidebar(); });
+            closeSidebarBtn?.addEventListener('click', closeSidebar);
+            overlay.addEventListener('click', closeSidebar);
+            
+            // --- Sidebar Dropdown Menu Logic ---
+            document.querySelectorAll('[data-collapse-toggle]').forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.getAttribute('data-collapse-toggle');
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.classList.toggle('hidden');
+                        const arrowIcon = button.querySelector('.ri-arrow-down-s-line');
+                        if(arrowIcon) arrowIcon.classList.toggle('rotate-180');
+                    }
+                });
+            });
+
+            // --- Dark/Light Mode Logic ---
+            if (localStorage.getItem('color-theme') === 'dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark');
+            themeToggleBtn.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                localStorage.setItem('color-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+            });
+
+            // --- Profile Dropdown Logic ---
+            profileMenuButton?.addEventListener('click', (e) => { e.stopPropagation(); profileMenu.classList.toggle('hidden'); });
+            window.addEventListener('click', (e) => { if (profileMenu && !profileMenu.classList.contains('hidden') && !profileMenuButton.contains(e.target)) profileMenu.classList.add('hidden'); });
+        });
+    </script>
+
+</body>
+</html>

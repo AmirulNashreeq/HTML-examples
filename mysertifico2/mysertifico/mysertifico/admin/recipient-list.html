@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySertifico - Recipient Management</title>
+    <link rel="icon" type="image/png" href="../assets/images/logos/favicon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': {
+                            'DEFAULT': '#0d9488', // Teal-600
+                            'dark': '#0f766e', // Teal-700
+                        },
+                        'accent': {
+                            'DEFAULT': '#f59e0b', // Amber-500
+                            'hover': '#d97706', // Amber-600
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .sidebar { scrollbar-width: none; }
+        .sidebar::-webkit-scrollbar { display: none; }
+        .modal-content {
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+
+    <!-- ===== Sidebar Start ===== -->
+    <aside id="sidebar" class="sidebar fixed top-0 left-0 z-50 h-full w-64 bg-gray-800 dark:bg-gray-950 text-white transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto">
+        <div class="flex items-center justify-between p-6">
+             <h2 class="font-poppins text-2xl font-bold text-white">Menu</h2>
+             <button id="close-sidebar" class="text-gray-400 hover:text-white lg:hidden">
+                 <i class="ri-close-line text-2xl"></i>
+             </button>
+        </div>
+        <nav class="p-4">
+            <ul class="space-y-2">
+                <li><a href="dashboard.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white"><i class="ri-dashboard-3-line mr-3 text-lg"></i><span>Dashboard</span></a></li>
+                <li>
+                    <button data-collapse-toggle="submenu-gallery" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white">
+                        <span class="flex items-center"><i class="ri-gallery-line mr-3 text-lg"></i><span>Gallery</span></span>
+                        <i class="ri-arrow-down-s-line transition-transform duration-200"></i>
+                    </button>
+                    <ul id="submenu-gallery" class="hidden py-2 space-y-1 pl-8">
+                        <li><a href="templates-list.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Templates</a></li>
+                        <li><a href="logos-badges.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Logos & Badges</a></li>
+                    </ul>
+                </li>
+                <li><a href="certificate-list.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white"><i class="ri-award-line mr-3 text-lg"></i><span>Certificates</span></a></li>
+                 <li>
+                    <button data-collapse-toggle="submenu-settings" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg text-white bg-primary-dark">
+                        <span class="flex items-center"><i class="ri-settings-3-line mr-3 text-lg"></i><span>Settings</span></span>
+                        <i class="ri-arrow-down-s-line transition-transform duration-200 rotate-180"></i>
+                    </button>
+                    <ul id="submenu-settings" class="py-2 space-y-1 pl-8">
+                        <li><a href="organisation.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Organisation</a></li>
+                        <li><a href="logo-list.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Logos</a></li>
+                        <li><a href="user-list.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Users</a></li>
+                        <li><a href="selected-template-list.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Templates</a></li>
+                        <li><a href="recipient-list.html" class="block py-2 px-4 rounded-lg text-sm text-white bg-primary">Recipients</a></li>
+                        <li><a href="account.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Account</a></li>
+                    </ul>
+                </li>
+                <li class="pt-4 mt-4 border-t border-gray-700"><a href="#" class="flex items-center py-2.5 px-4 rounded-lg text-red-500 hover:bg-gray-700 hover:text-white"><i class="ri-logout-box-r-line mr-3 text-lg"></i><span>Log Out</span></a></li>
+            </ul>
+        </nav>
+    </aside>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+    <!-- ===== Sidebar End ===== -->
+    
+    <!-- ===== Main Content Start ===== -->
+    <div id="main-content" class="relative min-h-screen transition-all duration-300 ease-in-out">
+        <!-- ===== Navbar Start ===== -->
+        <header class="sticky top-0 z-30 bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between p-4">
+                <div class="flex items-center space-x-4">
+                    <button id="sidebar-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none"><i class="ri-menu-line text-2xl"></i></button>
+                    <a href="dashboard.html" class="flex items-center gap-x-2">
+                        <img src="../assets/images/logos/logo.png" alt="MySertifico Logo" class="h-8 w-8 rounded-lg" onerror="this.onerror=null;this.src='https://placehold.co/32x32/0d9488/ffffff?text=M';">
+                        <span class="font-poppins text-2xl font-bold text-primary hidden sm:block">MySertifico</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-moon-line block dark:hidden"></i><i class="ri-sun-line hidden dark:block"></i></button>
+                    <div class="relative">
+                        <button id="profile-menu-button" class="flex items-center space-x-2">
+                             <img class="h-9 w-9 rounded-full object-cover" src="https://i.pravatar.cc/150?u=admin" alt="Admin" onerror="this.onerror=null;this.src='https://placehold.co/150x150/0d9488/ffffff?text=A';">
+                             <div class="hidden md:block text-left">
+                                 <div class="text-sm font-semibold text-gray-800 dark:text-white">Taufik Nabil Irmiza</div>
+                                 <div class="text-xs text-gray-500 dark:text-gray-400">Super Admin</div>
+                             </div>
+                        </button>
+                        <div id="profile-menu" class="hidden absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <div class="py-1">
+                                <a href="my-profile.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-user-line mr-3"></i>My Profile</a>
+                                <a href="change-password.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-lock-password-line mr-3"></i>Change Password</a>
+                                <hr class="border-gray-200 dark:border-gray-700 my-1">
+                                <a href="#" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-logout-box-r-line mr-3"></i>Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- ===== Navbar End ===== -->
+        
+        <!-- ===== Page Content Start ===== -->
+        <main class="p-6 sm:p-8">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">Recipient Management</h1>
+                    <div class="flex space-x-2 w-full md:w-auto">
+                        <a href="add-recipient.html" class="flex-1 md:flex-initial justify-center px-4 py-2 text-sm bg-primary text-white rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-4 focus:ring-primary/50 flex items-center transition-colors" title="Add Recipient"><i class="ri-add-line mr-2"></i>Add Recipient</a>
+                        <a href="import-recipients.html" class="inline-flex items-center px-3 py-2 rounded-lg bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400" title="Import from CSV"><i class="ri-upload-2-line"></i></a>
+                    </div>
+                </div>
+                
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0 mb-6">
+                        <div class="relative w-full md:w-1/3">
+                            <input type="text" id="search-input" placeholder="Search by name or ID..." class="w-full pl-10 pr-4 py-2 border rounded-lg bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary">
+                            <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        </div>
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-2 w-full md:w-auto">
+                           <select class="w-full sm:w-auto border rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary appearance-none pr-8">
+                               <option>All Classes</option>
+                               <option>5 Amanah</option>
+                               <option>5 Bestari</option>
+                           </select>
+                           <select class="w-full sm:w-auto border rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary appearance-none pr-8">
+                               <option>All Status</option>
+                               <option>Active</option>
+                               <option>Inactive</option>
+                           </select>
+                        </div>
+                    </div>
+
+                    <!-- Data Display Area -->
+                    <div id="recipient-data-container">
+                        <!-- Desktop Table View -->
+                        <div class="overflow-x-auto hidden md:block">
+                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-300">
+                                    <tr>
+                                        <th scope="col" class="p-4"><input type="checkbox" class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"></th>
+                                        <th scope="col" class="px-6 py-3">Name</th>
+                                        <th scope="col" class="px-6 py-3">National ID</th>
+                                        <th scope="col" class="px-6 py-3">Class</th>
+                                        <th scope="col" class="px-6 py-3">Status</th>
+                                        <th scope="col" class="px-6 py-3 text-right">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Recipient Row 1 -->
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" data-name="Ahmad bin Abdullah">
+                                        <td class="p-4"><input type="checkbox" class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"></td>
+                                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Ahmad bin Abdullah</td>
+                                        <td class="px-6 py-4">080101-03-5287</td>
+                                        <td class="px-6 py-4">5 Amanah</td>
+                                        <td class="px-6 py-4"><span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Active</span></td>
+                                        <td class="px-6 py-4 text-right">
+                                            <div class="relative inline-block">
+                                                <button class="action-menu-button p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300"><i class="ri-more-2-fill"></i></button>
+                                                <div class="action-menu-template hidden">
+                                                    <a href="view-recipient.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-eye-line mr-3"></i>View</a>
+                                                    <a href="edit-recipient.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-pencil-line mr-3"></i>Edit</a>
+                                                    <a href="#" data-action="delete" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-delete-bin-line mr-3"></i>Delete</a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- Recipient Row 2 -->
+                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600" data-name="Siti Nurhaliza binti Tarudin">
+                                        <td class="p-4"><input type="checkbox" class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"></td>
+                                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Siti Nurhaliza binti Tarudin</td>
+                                        <td class="px-6 py-4">080512-10-1234</td>
+                                        <td class="px-6 py-4">5 Bestari</td>
+                                        <td class="px-6 py-4"><span class="bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Active</span></td>
+                                        <td class="px-6 py-4 text-right">
+                                            <div class="relative inline-block">
+                                                <button class="action-menu-button p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300"><i class="ri-more-2-fill"></i></button>
+                                                <div class="action-menu-template hidden">
+                                                    <a href="view-recipient.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-eye-line mr-3"></i>View</a>
+                                                    <a href="edit-recipient.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-pencil-line mr-3"></i>Edit</a>
+                                                    <a href="#" data-action="delete" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-delete-bin-line mr-3"></i>Delete</a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <!-- Recipient Row 3 -->
+                                    <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600" data-name="Lee Chong Wei">
+                                        <td class="p-4"><input type="checkbox" class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"></td>
+                                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Lee Chong Wei</td>
+                                        <td class="px-6 py-4">081020-01-4321</td>
+                                        <td class="px-6 py-4">5 Amanah</td>
+                                        <td class="px-6 py-4"><span class="bg-red-100 text-red-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">Inactive</span></td>
+                                        <td class="px-6 py-4 text-right">
+                                            <div class="relative inline-block">
+                                                <button class="action-menu-button p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300"><i class="ri-more-2-fill"></i></button>
+                                                <div class="action-menu-template hidden">
+                                                    <a href="view-recipient.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-eye-line mr-3"></i>View</a>
+                                                    <a href="edit-recipient.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-pencil-line mr-3"></i>Edit</a>
+                                                    <a href="#" data-action="delete" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-delete-bin-line mr-3"></i>Delete</a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Mobile List View -->
+                        <div class="space-y-4 md:hidden">
+                            <!-- Recipient Card 1 -->
+                            <div class="bg-white dark:bg-gray-700/50 p-4 rounded-lg shadow flex items-center justify-between" data-name="Ahmad bin Abdullah">
+                                <div class="space-y-1">
+                                    <p class="font-bold text-gray-900 dark:text-white text-base">Ahmad bin Abdullah</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                                        <span>080101-03-5287</span>
+                                        <span class="mx-1">·</span>
+                                        <span>5 Amanah</span>
+                                    </p>
+                                    <div><span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Active</span></div>
+                                </div>
+                                <div class="relative inline-block flex-shrink-0 ml-4">
+                                    <button class="action-menu-button p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300"><i class="ri-more-2-fill"></i></button>
+                                    <div class="action-menu-template hidden">
+                                        <a href="view-recipient.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-eye-line mr-3"></i>View</a>
+                                        <a href="edit-recipient.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-pencil-line mr-3"></i>Edit</a>
+                                        <a href="#" data-action="delete" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-delete-bin-line mr-3"></i>Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Recipient Card 2 -->
+                            <div class="bg-white dark:bg-gray-700/50 p-4 rounded-lg shadow flex items-center justify-between" data-name="Siti Nurhaliza binti Tarudin">
+                                <div class="space-y-1">
+                                    <p class="font-bold text-gray-900 dark:text-white text-base">Siti Nurhaliza binti Tarudin</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                                        <span>080512-10-1234</span>
+                                        <span class="mx-1">·</span>
+                                        <span>5 Bestari</span>
+                                    </p>
+                                    <div><span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Active</span></div>
+                                </div>
+                                <div class="relative inline-block flex-shrink-0 ml-4">
+                                    <button class="action-menu-button p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300"><i class="ri-more-2-fill"></i></button>
+                                    <div class="action-menu-template hidden">
+                                        <a href="view-recipient.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-eye-line mr-3"></i>View</a>
+                                        <a href="edit-recipient.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-pencil-line mr-3"></i>Edit</a>
+                                        <a href="#" data-action="delete" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-delete-bin-line mr-3"></i>Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Recipient Card 3 -->
+                            <div class="bg-white dark:bg-gray-700/50 p-4 rounded-lg shadow flex items-center justify-between" data-name="Lee Chong Wei">
+                                <div class="space-y-1">
+                                    <p class="font-bold text-gray-900 dark:text-white text-base">Lee Chong Wei</p>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                                        <span>081020-01-4321</span>
+                                        <span class="mx-1">·</span>
+                                        <span>5 Amanah</span>
+                                    </p>
+                                    <div><span class="bg-red-100 text-red-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">Inactive</span></div>
+                                </div>
+                                <div class="relative inline-block flex-shrink-0 ml-4">
+                                    <button class="action-menu-button p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300"><i class="ri-more-2-fill"></i></button>
+                                    <div class="action-menu-template hidden">
+                                        <a href="view-recipient.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-eye-line mr-3"></i>View</a>
+                                        <a href="edit-recipient.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-pencil-line mr-3"></i>Edit</a>
+                                        <a href="#" data-action="delete" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-delete-bin-line mr-3"></i>Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- No Results Message -->
+                    <div id="no-results-message" class="hidden text-center py-16">
+                        <i class="ri-user-search-line text-5xl text-gray-400 mb-4"></i>
+                        <h3 class="text-xl font-semibold text-gray-800 dark:text-white">No Recipients Found</h3>
+                        <p class="mt-2 text-gray-500 dark:text-gray-400">Your search did not match any recipients. Please try again.</p>
+                    </div>
+
+                    <!-- Pagination -->
+                    <nav id="pagination" class="flex flex-col md:flex-row items-center justify-between pt-6 mt-6 border-t border-gray-200 dark:border-gray-700 space-y-4 md:space-y-0" aria-label="Pagination">
+                         <span class="text-sm text-gray-700 dark:text-gray-400">
+                            Showing <span class="font-semibold text-gray-900 dark:text-white">1</span> to <span class="font-semibold text-gray-900 dark:text-white">3</span> of <span class="font-semibold text-gray-900 dark:text-white">540</span> Recipients
+                        </span>
+                        <ul class="inline-flex items-center -space-x-px text-sm">
+                            <li><a href="#" class="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"><span class="sr-only">Previous</span><i class="ri-arrow-left-s-line"></i></a></li>
+                            <li><a href="#" aria-current="page" class="z-10 flex items-center justify-center px-3 h-8 leading-tight text-white border border-primary bg-primary hover:bg-primary-dark dark:border-gray-700 dark:bg-gray-700 dark:text-white">1</a></li>
+                            <li><a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a></li>
+                            <li><a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"><span class="sr-only">Next</span><i class="ri-arrow-right-s-line"></i></a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </main>
+        <!-- ===== Page Content End ===== -->
+    </div>
+    <!-- ===== Main Content End ===== -->
+    
+    <!-- Delete Modal -->
+    <div id="deleteModal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm hidden">
+        <div class="modal-content relative bg-white dark:bg-gray-800 w-full max-w-md p-6 rounded-xl shadow-lg transform scale-95 opacity-0">
+            <div class="text-center">
+                <div class="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mx-auto mb-4">
+                    <i class="ri-delete-bin-line text-4xl text-red-600 dark:text-red-400"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white">Confirm Deletion</h3>
+                <p id="deleteModalContent" class="text-gray-600 dark:text-gray-400 mt-2"></p>
+                <div class="flex justify-center space-x-4 mt-6">
+                    <button type="button" class="modal-close-button px-6 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600">Cancel</button>
+                    <button type="button" id="confirmDeleteButton" class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">Yes, Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Common Elements & Functions ---
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggleBtn = document.getElementById('sidebar-toggle');
+            const closeSidebarBtn = document.getElementById('close-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const mainContent = document.getElementById('main-content');
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const profileMenuButton = document.getElementById('profile-menu-button');
+            const profileMenu = document.getElementById('profile-menu');
+            
+            function openSidebar() { sidebar.classList.remove('-translate-x-full'); mainContent.classList.add('lg:ml-64'); if(window.innerWidth < 1024) { overlay.classList.remove('hidden'); } }
+            function closeSidebar() { sidebar.classList.add('-translate-x-full'); mainContent.classList.remove('lg:ml-64'); overlay.classList.add('hidden'); }
+            
+            sidebarToggleBtn.addEventListener('click', (e) => { e.stopPropagation(); if (sidebar.classList.contains('-translate-x-full')) openSidebar(); else closeSidebar(); });
+            closeSidebarBtn?.addEventListener('click', closeSidebar);
+            overlay.addEventListener('click', closeSidebar);
+             window.addEventListener('resize', () => { if (!sidebar.classList.contains('-translate-x-full')) { if (window.innerWidth >= 1024) { overlay.classList.add('hidden'); } else { overlay.classList.remove('hidden'); } } });
+
+            document.querySelectorAll('[data-collapse-toggle]').forEach(button => { button.addEventListener('click', () => { const target = document.getElementById(button.dataset.collapseToggle); target.classList.toggle('hidden'); button.querySelector('.ri-arrow-down-s-line')?.classList.toggle('rotate-180'); }); });
+            
+            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); } else { document.documentElement.classList.remove('dark'); }
+            themeToggleBtn.addEventListener('click', () => { document.documentElement.classList.toggle('dark'); localStorage.setItem('color-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); });
+            
+            profileMenuButton?.addEventListener('click', (e) => { e.stopPropagation(); profileMenu.classList.toggle('hidden'); });
+
+            // --- Action Menu & Modal Logic ---
+            const deleteModal = document.getElementById('deleteModal');
+            let activeMenu = { element: null, row: null };
+
+            function showModal(modal) {
+                modal.classList.remove('hidden');
+                setTimeout(() => {
+                    modal.classList.remove('opacity-0');
+                    modal.querySelector('.modal-content').classList.remove('scale-95', 'opacity-0');
+                }, 10);
+            }
+
+            function hideModal(modal) {
+                if (!modal) return;
+                modal.querySelector('.modal-content').classList.add('scale-95', 'opacity-0');
+                setTimeout(() => {
+                    modal.classList.add('opacity-0');
+                    setTimeout(() => { modal.classList.add('hidden'); activeMenu.row = null; }, 300);
+                }, 200);
+            }
+
+            document.querySelectorAll('.modal-close-button').forEach(button => button.addEventListener('click', () => hideModal(button.closest('.modal'))));
+
+            document.getElementById('confirmDeleteButton').addEventListener('click', () => {
+                if (activeMenu.row) {
+                    const mobileCard = document.querySelector(`.md\\:hidden [data-name="${activeMenu.row.dataset.name}"]`);
+                    activeMenu.row.remove();
+                    if(mobileCard) mobileCard.remove();
+                }
+                hideModal(deleteModal);
+            });
+
+            function closeActiveMenu() {
+                if (activeMenu.element) {
+                    activeMenu.element.remove();
+                    activeMenu.element = null;
+                    activeMenu.row = null;
+                }
+            }
+
+            window.addEventListener('click', (e) => {
+                if (profileMenu && !profileMenu.classList.contains('hidden') && !profileMenuButton.contains(e.target)) {
+                    profileMenu.classList.add('hidden');
+                }
+                if (activeMenu.element && !activeMenu.element.contains(e.target) && !e.target.closest('.action-menu-button')) {
+                    closeActiveMenu();
+                }
+            });
+
+            document.querySelectorAll('.action-menu-button').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const currentRow = button.closest('tr') || button.closest('[data-name]');
+
+                    if (activeMenu.row === currentRow) {
+                        closeActiveMenu();
+                        return;
+                    }
+                    closeActiveMenu();
+
+                    const template = button.nextElementSibling;
+                    const newDropdown = template.cloneNode(true);
+                    
+                    newDropdown.classList.remove('hidden', 'action-menu-template');
+                    newDropdown.classList.add('w-48', 'bg-white', 'dark:bg-gray-800', 'rounded-md', 'shadow-lg', 'py-1', 'ring-1', 'ring-black', 'ring-opacity-5');
+                    newDropdown.style.position = 'fixed';
+                    newDropdown.style.zIndex = '100';
+                    document.body.appendChild(newDropdown);
+
+                    activeMenu.element = newDropdown;
+                    activeMenu.row = currentRow;
+
+                    const btnRect = button.getBoundingClientRect();
+                    const menuRect = newDropdown.getBoundingClientRect();
+                    
+                    let top = btnRect.top - menuRect.height;
+                    let left = btnRect.left - menuRect.width;
+
+                    if (top < 0) { top = btnRect.bottom; }
+                    if (left < 0) { left = btnRect.left; }
+                    
+                    newDropdown.style.top = `${top}px`;
+                    newDropdown.style.left = `${left}px`;
+
+                    newDropdown.addEventListener('click', (event) => {
+                        const actionTarget = event.target.closest('[data-action="delete"]');
+                        if (actionTarget) {
+                            event.preventDefault();
+                            const recipientName = activeMenu.row.dataset.name;
+                            document.getElementById('deleteModalContent').textContent = `Are you sure you want to delete recipient '${recipientName}'? This action cannot be undone.`;
+                            showModal(deleteModal);
+                            closeActiveMenu();
+                        }
+                    });
+                });
+            });
+
+            // --- Search Logic ---
+            const searchInput = document.getElementById('search-input');
+            const dataContainer = document.getElementById('recipient-data-container');
+            const noResultsMessage = document.getElementById('no-results-message');
+            const pagination = document.getElementById('pagination');
+            const allTableRows = dataContainer.querySelectorAll('tbody tr');
+            const allMobileCards = dataContainer.querySelectorAll('.md\\:hidden > div[data-name]');
+
+            function filterRecipients() {
+                const query = searchInput.value.toLowerCase().trim();
+                let visibleCount = 0;
+
+                allTableRows.forEach(row => {
+                    const name = row.dataset.name.toLowerCase();
+                    const shouldShow = name.includes(query);
+                    row.style.display = shouldShow ? '' : 'none';
+                    if (shouldShow) {
+                        visibleCount++;
+                    }
+                });
+
+                allMobileCards.forEach(card => {
+                    const name = card.dataset.name.toLowerCase();
+                    const shouldShow = name.includes(query);
+                    card.style.display = shouldShow ? 'flex' : 'none';
+                });
+                
+                const hasResults = visibleCount > 0;
+                dataContainer.style.display = hasResults ? '' : 'block';
+                pagination.style.display = hasResults ? 'flex' : 'none';
+                noResultsMessage.style.display = hasResults ? 'none' : 'block';
+            }
+
+            searchInput.addEventListener('input', filterRecipients);
+        });
+    </script>
+
+</body>
+</html>

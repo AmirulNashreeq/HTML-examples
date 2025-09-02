@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Certificate - MySertifico</title>
+    <link rel="icon" type="image/png" href="../../src/images/logos/favicon.png" onerror="this.onerror=null;this.src='https://placehold.co/32x32/0d9488/ffffff?text=M';">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+    <!-- QRCode.js (davidshimjs) untuk jana QR terus di kanvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"
+        integrity="sha512-MnUaDzzRPTfSxFrHcfYq9k1RR6wfyZTQt9MZ6dL1mYJ9x9Z7UIkQ0K5S9XRwI5CeTt3u1RQYAlEMaGaZ5V4GUQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+    </script>
+
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&family=EB+Garamond:wght@700&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                        garamond: ['EB Garamond', 'serif'],
+                        montserrat: ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': {
+                            'DEFAULT': '#0d9488', // Teal-600
+                            'dark': '#0f766e', // Teal-700
+                            'light': '#ccfbf1', // Teal-100
+                        },
+                        'accent': {
+                            'DEFAULT': '#f59e0b', // Amber-500
+                            'hover': '#d97706', // Amber-600
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .sidebar, .inspector-pane { scrollbar-width: none; }
+        .sidebar::-webkit-scrollbar, .inspector-pane::-webkit-scrollbar { display: none; }
+        #certificate-canvas {
+            transition: width 0.4s ease, height 0.4s ease, transform 0.4s ease;
+            transform-origin: center;
+        }
+        .canvas-element {
+            position: absolute;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            text-align: center;
+            z-index: 10;
+            transition: left 0.4s ease, top 0.4s ease;
+            cursor: move;
+            border: 2px solid transparent;
+        }
+        .canvas-element.selected {
+            border-color: #3b82f6; /* blue-500 */
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+        .canvas-element.dragging {
+            transition: none;
+        }
+        #grid-overlay {
+            background-image: 
+                linear-gradient(to right, rgba(0, 0, 0, 0.08) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.08) 1px, transparent 1px);
+            background-size: 20px 20px;
+            z-index: 1;
+        }
+        .guideline {
+            position: absolute;
+            z-index: 20;
+            background-color: rgba(239, 68, 68, 0.5); /* red-500 with 50% opacity */
+        }
+        .guideline.after-rotation {
+            transition: all 0.4s ease;
+        }
+        .guideline-h {
+            width: 100%;
+            height: 3px;
+            cursor: ns-resize;
+        }
+        .guideline-v {
+            height: 100%;
+            width: 3px;
+            cursor: ew-resize;
+        }
+        .guideline.dragging {
+            background-color: rgba(220, 38, 38, 0.8); /* red-600 with 80% opacity */
+        }
+        .inspector-toggle-btn.active {
+            background-color: #0d9488; /* primary */
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+
+    <!-- ===== Sidebar Start ===== -->
+    <aside id="sidebar" class="sidebar fixed top-0 left-0 z-50 h-full w-64 bg-gray-800 dark:bg-gray-950 text-white transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto">
+        <!-- Sidebar Header -->
+        <div class="flex items-center justify-between p-6">
+             <h2 class="font-poppins text-2xl font-bold text-white">Menu</h2>
+             <button id="close-sidebar" class="text-gray-400 hover:text-white">
+                 <i class="ri-close-line text-2xl"></i>
+             </button>
+        </div>
+        <!-- Sidebar Navigation -->
+        <nav class="p-4">
+            <ul class="space-y-2">
+                <li>
+                    <a href="dashboard.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white">
+                        <i class="ri-dashboard-3-line mr-3 text-lg"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <button data-collapse-toggle="submenu-gallery" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white transition-colors">
+                        <span class="flex items-center"><i class="ri-gallery-line mr-3 text-lg"></i><span>Gallery</span></span>
+                        <i class="ri-arrow-down-s-line transition-transform duration-200"></i>
+                    </button>
+                    <ul id="submenu-gallery" class="hidden py-2 space-y-1 pl-8">
+                        <li><a href="templates-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Templates</a></li>
+                        <li><a href="logos-badges.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Logos & Badges</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="certificate-list.html" class="flex items-center py-2.5 px-4 rounded-lg bg-primary text-white transition-colors">
+                        <i class="ri-award-line mr-3 text-lg"></i>
+                        <span>Certificates</span>
+                    </a>
+                </li>
+                <li>
+            <a href="find-certificate.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white transition-colors">
+                <i class="ri-user-search-line mr-3 text-lg"></i>
+                <span>Find Certificate</span>
+            </a>
+        </li>
+                 <li>
+                    <button data-collapse-toggle="submenu-settings" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white transition-colors">
+                        <span class="flex items-center"><i class="ri-settings-3-line mr-3 text-lg"></i><span>Settings</span></span>
+                        <i class="ri-arrow-down-s-line transition-transform duration-200"></i>
+                    </button>
+                    <ul id="submenu-settings" class="hidden py-2 space-y-1 pl-8">
+                        <li><a href="organisation.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Organisation</a></li>
+                        <li><a href="logo-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Logos</a></li>
+                        <li><a href="selected-template-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Selected Templates</a></li>
+                        <li><a href="user-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Users</a></li>
+                        <li class="px-4"><hr class="border-gray-700 my-1"></li>
+                        <li><a href="account.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Account</a></li>
+                    </ul>
+                </li>
+                <li class="pt-4 mt-4 border-t border-gray-700">
+                    <a href="#" id="logout-sidebar" class="flex items-center py-2.5 px-4 rounded-lg text-red-400 hover:bg-red-500 hover:text-white transition-colors">
+                        <i class="ri-logout-box-r-line mr-3 text-lg"></i>
+                        <span>Log Out</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+    <!-- ===== Sidebar End ===== -->
+    
+    <!-- ===== Main Content Start ===== -->
+    <div id="main-content" class="relative min-h-screen transition-all duration-300 ease-in-out">
+        <!-- ===== Navbar Start ===== -->
+        <header class="sticky top-0 z-30 bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between p-4">
+                <div class="flex items-center space-x-4">
+                    <button id="sidebar-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
+                        <i class="ri-menu-line text-2xl"></i>
+                    </button>
+                    <a href="dashboard.html" class="flex items-center gap-x-2">
+                        <img src="../../src/images/logos/logo.png" alt="MySertifico Logo" class="h-8 w-8 rounded-lg" onerror="this.onerror=null;this.src='https://placehold.co/32x32/0d9488/ffffff?text=M';">
+                        <span class="font-poppins text-2xl font-bold text-primary hidden sm:block">MySertifico</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-moon-line block dark:hidden"></i><i class="ri-sun-line hidden dark:block"></i></button>
+                    <div class="relative">
+                        <button id="profile-menu-button" class="flex items-center space-x-2">
+                             <img class="h-9 w-9 rounded-full object-cover" src="https://i.pravatar.cc/150?u=admin" alt="Admin" onerror="this.onerror=null;this.src='https://placehold.co/40x40/0d9488/ffffff?text=A';">
+                             <div class="hidden md:block text-left">
+                                 <div class="text-sm font-semibold text-gray-800 dark:text-white">Fikri Nabil</div>
+                                 <div class="text-xs text-gray-500 dark:text-gray-400">Super Admin</div>
+                             </div>
+                        </button>
+                        <div id="profile-menu" class="hidden absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <div class="py-1">
+                                <a href="my-profile.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-user-line mr-3"></i>My Profile</a>
+                                <a href="change-password.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-lock-password-line mr-3"></i>Change Password</a>
+                                <hr class="border-gray-200 dark:border-gray-700 my-1">
+                                <a href="#" id="logout-navbar" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-logout-box-r-line mr-3"></i>Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- ===== Navbar End ===== -->
+        
+        <!-- ===== Page Content Start ===== -->
+        <main class="flex flex-col" style="height: calc(100vh - 68px);">
+            <!-- Toolbar -->
+            <div class="w-full bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+                <div class="max-w-7xl mx-auto p-2 flex items-center justify-between gap-x-2">
+                    <div class="flex items-center gap-x-2">
+                        <!-- Function Group -->
+                        <div class="relative group">
+                            <button id="rotate-canvas-btn" class="p-2 text-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 flex items-center transition-colors">
+                                <i class="ri-loop-left-line"></i>
+                            </button>
+                            <div class="absolute top-full mt-2 left-1/2 -translate-x-1/2 whitespace-nowrap px-3 py-1.5 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none dark:bg-gray-600">
+                                Rotate Canvas
+                                <div class="absolute left-1/2 -translate-x-1/2 bottom-full w-0 h-0 border-x-4 border-x-transparent border-b-4 border-b-gray-900 dark:border-b-gray-600"></div>
+                            </div>
+                        </div>
+                        <div class="relative group">
+                            <button id="zoom-in-btn" class="p-2 text-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 flex items-center transition-colors">
+                                <i class="ri-zoom-in-line"></i>
+                            </button>
+                            <div class="absolute top-full mt-2 left-1/2 -translate-x-1/2 whitespace-nowrap px-3 py-1.5 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none dark:bg-gray-600">
+                                Zoom In
+                                <div class="absolute left-1/2 -translate-x-1/2 bottom-full w-0 h-0 border-x-4 border-x-transparent border-b-4 border-b-gray-900 dark:border-b-gray-600"></div>
+                            </div>
+                        </div>
+                         <div class="relative group">
+                            <button id="zoom-out-btn" class="p-2 text-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 flex items-center transition-colors">
+                                <i class="ri-zoom-out-line"></i>
+                            </button>
+                            <div class="absolute top-full mt-2 left-1/2 -translate-x-1/2 whitespace-nowrap px-3 py-1.5 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none dark:bg-gray-600">
+                                Zoom Out
+                                <div class="absolute left-1/2 -translate-x-1/2 bottom-full w-0 h-0 border-x-4 border-x-transparent border-b-4 border-b-gray-900 dark:border-b-gray-600"></div>
+                            </div>
+                        </div>
+
+                        <!-- Separator -->
+                        <div class="h-6 w-px bg-gray-300 dark:bg-gray-600 mx-2"></div>
+
+                        <!-- Element Group -->
+                        <div class="relative group">
+                            <button id="change-blanko-btn" class="p-2 text-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 flex items-center transition-colors">
+                                <i class="ri-image-line"></i>
+                            </button>
+                            <div class="absolute top-full mt-2 left-1/2 -translate-x-1/2 whitespace-nowrap px-3 py-1.5 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none dark:bg-gray-600">
+                                Add/Change Blanko
+                                <div class="absolute left-1/2 -translate-x-1/2 bottom-full w-0 h-0 border-x-4 border-x-transparent border-b-4 border-b-gray-900 dark:border-b-gray-600"></div>
+                            </div>
+                        </div>
+                        <div class="relative group">
+                            <button id="add-logo-btn" class="p-2 text-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 flex items-center transition-colors">
+                                <i class="ri-shield-star-line"></i>
+                            </button>
+                            <div class="absolute top-full mt-2 left-1/2 -translate-x-1/2 whitespace-nowrap px-3 py-1.5 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none dark:bg-gray-600">
+                                Add Logo
+                                <div class="absolute left-1/2 -translate-x-1/2 bottom-full w-0 h-0 border-x-4 border-x-transparent border-b-4 border-b-gray-900 dark:border-b-gray-600"></div>
+                            </div>
+                        </div>
+                        <div class="relative group">
+                            <button id="add-signatory-btn" class="p-2 text-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 flex items-center transition-colors">
+                                <i class="ri-quill-pen-line"></i>
+                            </button>
+                            <div class="absolute top-full mt-2 left-1/2 -translate-x-1/2 whitespace-nowrap px-3 py-1.5 text-sm font-medium text-white bg-gray-900 rounded-lg shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none dark:bg-gray-600">
+                                Add Signatory
+                                <div class="absolute left-1/2 -translate-x-1/2 bottom-full w-0 h-0 border-x-4 border-x-transparent border-b-4 border-b-gray-900 dark:border-b-gray-600"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Save Button -->
+                    <div>
+                        <button id="save-btn" class="py-2 px-4 text-sm bg-primary text-white font-semibold rounded-lg hover:bg-primary-dark flex items-center transition-colors gap-x-2">
+                            <i class="ri-save-line text-lg"></i>
+                            <span>Save</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Canvas Container -->
+            <div class="flex-grow flex items-center justify-center overflow-auto p-4 sm:p-8">
+                <div id="certificate-canvas" class="bg-white shadow-lg relative overflow-hidden" style="width: 1123px; height: 794px; transform: scale(0.7);">
+                    <div id="background-layer" class="absolute inset-0 bg-cover bg-center"></div>
+                    <div id="grid-overlay" class="absolute inset-0"></div>
+                    <div id="elements-layer" class="absolute inset-0">
+                        <!-- Certificate elements will go here -->
+                    </div>
+                    <!-- Guidelines -->
+                    <div id="guideline-top" class="guideline guideline-h"></div>
+                    <div id="guideline-bottom" class="guideline guideline-h"></div>
+                    <div id="guideline-left" class="guideline guideline-v"></div>
+                    <div id="guideline-right" class="guideline guideline-v"></div>
+                </div>
+            </div>
+        </main>
+        <!-- ===== Page Content End ===== -->
+    </div>
+    <!-- ===== Main Content End ===== -->
+
+    <!-- ===== Inspector Pane Start ===== -->
+    <aside id="inspector-pane" class="inspector-pane fixed top-0 right-0 z-40 h-full w-72 bg-white dark:bg-gray-800 border-l border-gray-200 dark:border-gray-700 transform translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto">
+        <div class="sticky top-0 bg-white dark:bg-gray-800 z-10">
+            <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 class="font-poppins text-xl font-bold text-gray-800 dark:text-white">Inspector</h3>
+                <button id="close-inspector" class="text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white">
+                    <i class="ri-close-line text-2xl"></i>
+                </button>
+            </div>
+        </div>
+        <div id="inspector-content" class="p-4 space-y-6">
+            <!-- Visibility Section -->
+            <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                    <h4 class="font-semibold text-gray-700 dark:text-gray-300">Visibility</h4>
+                    <label for="visibility-toggle" class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="visibility-toggle" class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-teal-300 dark:peer-focus:ring-teal-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+                    </label>
+                </div>
+            </div>
+            <!-- Position Section -->
+            <div class="space-y-2">
+                <h4 class="font-semibold text-gray-700 dark:text-gray-300">Position & Alignment</h4>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label for="pos-x-input" class="text-xs text-gray-500">X</label>
+                        <input type="number" id="pos-x-input" class="w-full p-1.5 text-sm rounded-md border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-primary focus:border-primary">
+                    </div>
+                    <div>
+                        <label for="pos-y-input" class="text-xs text-gray-500">Y</label>
+                        <input type="number" id="pos-y-input" class="w-full p-1.5 text-sm rounded-md border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-primary focus:border-primary">
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-1 pt-2">
+                    <button id="align-left-btn" class="p-2 text-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"><i class="ri-align-left"></i></button>
+                    <button id="align-center-btn" class="p-2 text-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"><i class="ri-align-center"></i></button>
+                    <button id="align-right-btn" class="p-2 text-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"><i class="ri-align-right"></i></button>
+                </div>
+            </div>
+            <!-- Size Section -->
+            <div id="inspector-size-section" class="space-y-2">
+                <div class="flex justify-between items-center">
+                    <h4 class="font-semibold text-gray-700 dark:text-gray-300">Size</h4>
+                    <span id="size-value-display" class="text-xs text-gray-500 dark:text-gray-400"></span>
+                </div>
+                <div>
+                    <input type="range" id="size-slider" min="20" max="500" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700">
+                </div>
+            </div>
+            <!-- Font Section -->
+            <div id="inspector-font-section" class="space-y-2">
+                <h4 class="font-semibold text-gray-700 dark:text-gray-300">Typography</h4>
+                <div id="text-content-section">
+                    <label for="text-content-input" class="text-xs text-gray-500">Text Content</label>
+                    <textarea id="text-content-input" rows="3" class="w-full p-1.5 text-sm rounded-md border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-primary focus:border-primary"></textarea>
+                </div>
+                <div id="variable-text-display" class="p-2 bg-gray-100 dark:bg-gray-900 rounded-md">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">This is a variable. Its value will be filled in automatically.</p>
+                </div>
+                <div>
+                    <label for="font-family-select" class="text-xs text-gray-500">Font Family</label>
+                    <select id="font-family-select" class="w-full p-1.5 text-sm rounded-md border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-primary focus:border-primary">
+                        <option>Inter</option>
+                        <option>Poppins</option>
+                        <option>EB Garamond</option>
+                        <option>Montserrat</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-xs text-gray-500">Style</label>
+                        <div class="grid grid-cols-3 gap-1">
+                            <button id="font-bold-btn" class="inspector-toggle-btn p-2 text-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"><i class="ri-bold"></i></button>
+                            <button id="font-italic-btn" class="inspector-toggle-btn p-2 text-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"><i class="ri-italic"></i></button>
+                            <button id="font-underline-btn" class="inspector-toggle-btn p-2 text-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"><i class="ri-underline"></i></button>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="font-color-input" class="text-xs text-gray-500">Color</label>
+                        <input type="color" id="font-color-input" class="w-full h-9 p-1 rounded-md border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
+                    </div>
+                </div>
+                <div class="space-y-1">
+                    <div class="flex justify-between items-center">
+                        <label class="text-xs text-gray-500">Font Size</label>
+                        <span id="font-size-value-display" class="text-xs text-gray-500 dark:text-gray-400"></span>
+                    </div>
+                    <input type="range" id="font-size-slider" min="8" max="150" value="16" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700">
+                </div>
+                <div>
+                    <label class="text-xs text-gray-500">Text Align</label>
+                    <div class="grid grid-cols-3 gap-1">
+                        <button id="text-align-left-btn" class="inspector-toggle-btn p-2 text-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"><i class="ri-align-left"></i></button>
+                        <button id="text-align-center-btn" class="inspector-toggle-btn p-2 text-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"><i class="ri-align-center"></i></button>
+                        <button id="text-align-right-btn" class="inspector-toggle-btn p-2 text-lg bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"><i class="ri-align-right"></i></button>
+                    </div>
+                </div>
+            </div>
+            <!-- No element selected message -->
+            <div id="inspector-placeholder" class="text-center py-10">
+                <p class="text-sm text-gray-500 dark:text-gray-400">Select an element on the canvas to edit its properties.</p>
+            </div>
+        </div>
+    </aside>
+    <!-- ===== Inspector Pane End ===== -->
+
+    <!-- Change Blanko Modal -->
+    <div id="blanko-modal" class="fixed inset-0 z-[100] bg-black/60 hidden items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-5xl max-h-[80vh] flex flex-col">
+            <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-bold text-gray-800 dark:text-white">Select a Blanko</h3>
+                <button id="close-blanko-modal" class="text-gray-400 hover:text-gray-600 dark:hover:text-white"><i class="ri-close-line text-2xl"></i></button>
+            </div>
+            <div id="blanko-grid" class="p-6 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                <!-- Blanko options will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Logo Modal -->
+    <div id="logo-modal" class="fixed inset-0 z-[100] bg-black/60 hidden items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-5xl max-h-[80vh] flex flex-col">
+            <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-bold text-gray-800 dark:text-white">Select a Logo</h3>
+                <button id="close-logo-modal" class="text-gray-400 hover:text-gray-600 dark:hover:text-white"><i class="ri-close-line text-2xl"></i></button>
+            </div>
+            <div id="logo-grid" class="p-6 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                <!-- Logo options will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Signatory Modal -->
+    <div id="signatory-modal" class="fixed inset-0 z-[100] bg-black/60 hidden items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-5xl max-h-[80vh] flex flex-col">
+            <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-bold text-gray-800 dark:text-white">Select a Signatory</h3>
+                <button id="close-signatory-modal" class="text-gray-400 hover:text-gray-600 dark:hover:text-white"><i class="ri-close-line text-2xl"></i></button>
+            </div>
+            <div id="signatory-grid" class="p-6 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <!-- Signatory options will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Save Modal -->
+    <div id="save-modal" class="fixed inset-0 z-[100] bg-black/60 hidden items-center justify-center p-4 backdrop-blur-sm">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-xl w-full max-w-md flex flex-col">
+            <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-bold text-gray-800 dark:text-white">Save Certificate Design</h3>
+                <button id="close-save-modal" class="text-gray-400 hover:text-gray-600 dark:hover:text-white"><i class="ri-close-line text-2xl"></i></button>
+            </div>
+            <form id="save-form" class="p-6 space-y-4">
+                <div>
+                    <label for="file-name-input" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">File Name</label>
+                    <input type="text" id="file-name-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="e.g., Sijil Graduasi 2025" required>
+                </div>
+                <div class="flex justify-end pt-2">
+                    <button type="submit" class="text-white bg-primary hover:bg-primary-dark focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-teal-800">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed top-5 right-5 z-[150] space-y-2"></div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const sidebar = document.getElementById('sidebar');
+  const sidebarToggleBtn = document.getElementById('sidebar-toggle');
+  const closeSidebarBtn = document.getElementById('close-sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+
+  function openSidebar() {
+    sidebar.classList.remove('-translate-x-full');
+    overlay.classList.remove('hidden');
+  }
+  function closeSidebar() {
+    sidebar.classList.add('-translate-x-full');
+    overlay.classList.add('hidden');
+  }
+  sidebarToggleBtn.addEventListener('click', (e) => { e.stopPropagation(); openSidebar(); });
+  closeSidebarBtn.addEventListener('click', closeSidebar);
+  overlay.addEventListener('click', closeSidebar);
+
+  document.querySelectorAll('[data-collapse-toggle]').forEach(button => {
+    button.addEventListener('click', () => {
+      const targetId = button.getAttribute('data-collapse-toggle');
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        targetElement.classList.toggle('hidden');
+        const arrowIcon = button.querySelector('.ri-arrow-down-s-line');
+        if (arrowIcon) arrowIcon.classList.toggle('rotate-180');
+      }
+    });
+  });
+
+  const themeToggleBtn = document.getElementById('theme-toggle');
+  const applyTheme = () => {
+    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  };
+  applyTheme();
+  themeToggleBtn.addEventListener('click', () => {
+    const isDark = document.documentElement.classList.toggle('dark');
+    localStorage.setItem('color-theme', isDark ? 'dark' : 'light');
+  });
+
+  const profileMenuButton = document.getElementById('profile-menu-button');
+  const profileMenu = document.getElementById('profile-menu');
+  profileMenuButton?.addEventListener('click', (e) => { e.stopPropagation(); profileMenu.classList.toggle('hidden'); });
+  window.addEventListener('click', (e) => {
+    if (profileMenu && !profileMenu.classList.contains('hidden') && !profileMenuButton.contains(e.target) && !profileMenu.contains(e.target)) {
+      profileMenu.classList.add('hidden');
+    }
+  });
+
+  // --- Logout Logic ---
+  const logoutBtnSidebar = document.getElementById('logout-sidebar');
+  const logoutBtnNavbar = document.getElementById('logout-navbar');
+  function logout() { window.location.href = "../landing/home.html"; }
+  logoutBtnSidebar.addEventListener('click', (e) => { e.preventDefault(); logout(); });
+  logoutBtnNavbar.addEventListener('click', (e) => { e.preventDefault(); logout(); });
+
+  // --- Create Certificate Page Logic ---
+  const rotateBtn = document.getElementById('rotate-canvas-btn');
+  const zoomInBtn = document.getElementById('zoom-in-btn');
+  const zoomOutBtn = document.getElementById('zoom-out-btn');
+  const changeBlankoBtn = document.getElementById('change-blanko-btn');
+  const addLogoBtn = document.getElementById('add-logo-btn');
+  const addSignatoryBtn = document.getElementById('add-signatory-btn');
+  const saveBtn = document.getElementById('save-btn');
+
+  const blankoModal = document.getElementById('blanko-modal');
+  const logoModal = document.getElementById('logo-modal');
+  const signatoryModal = document.getElementById('signatory-modal');
+  const saveModal = document.getElementById('save-modal');
+
+  const closeBlankoModalBtn = document.getElementById('close-blanko-modal');
+  const closeLogoModalBtn = document.getElementById('close-logo-modal');
+  const closeSignatoryModalBtn = document.getElementById('close-signatory-modal');
+  const closeSaveModalBtn = document.getElementById('close-save-modal');
+
+  const blankoGrid = document.getElementById('blanko-grid');
+  const logoGrid = document.getElementById('logo-grid');
+  const signatoryGrid = document.getElementById('signatory-grid');
+  const saveForm = document.getElementById('save-form');
+
+  const canvas = document.getElementById('certificate-canvas');
+  const elementsLayer = document.getElementById('elements-layer');
+
+  let selectedElement = null;
+  let isLandscape = true;
+  let currentScale = 0.7;
+  const MAX_SCALE = 1.8;
+  const MIN_SCALE = 0.2;
+  const ZOOM_STEP = 0.1;
+
+  const landscapeWidth = 1123;
+  const landscapeHeight = 794;
+  const cmToPx = 37.795; // 96DPI
+  const margin = 2 * cmToPx; // 2cm
+
+  function updateCanvasTransform() { canvas.style.transform = `scale(${currentScale})`; }
+  zoomInBtn.addEventListener('click', () => { if (currentScale < MAX_SCALE) { currentScale = +(currentScale + ZOOM_STEP).toFixed(2); updateCanvasTransform(); } });
+  zoomOutBtn.addEventListener('click', () => { if (currentScale > MIN_SCALE) { currentScale = +(currentScale - ZOOM_STEP).toFixed(2); updateCanvasTransform(); } });
+
+  rotateBtn.addEventListener('click', () => {
+    isLandscape = !isLandscape;
+    const newWidth  = isLandscape ? landscapeWidth  : landscapeHeight;
+    const newHeight = isLandscape ? landscapeHeight : landscapeWidth;
+    canvas.style.width = `${newWidth}px`;
+    canvas.style.height = `${newHeight}px`;
+    setTimeout(() => updateLayout(newWidth, newHeight), 0);
+  });
+
+  // --- Template Loading Logic ---
+  const certificateTemplates = {
+    '1': {
+      templateUrl: '../../src/images/templates/cllc-gold-001.svg',
+      elements: [
+        { "element_id": "logo", "type": "image", "content": "../../src/images/logos-badges/logo-srsa.svg", "position_x": 561, "position_y": 70, "width": 140, "height": 140, "visible": true, "aspect_ratio": 1},
+        { "element_id": "organization_name", "type": "text", "content": "SEKOLAH RENDAH SRI ANGKASA", "position_x": 561, "position_y": 200, "font_family": "Montserrat", "font_size": 16, "font_weight": "600", "color": "#111827", "visible": true},
+        { "element_id": "address_1", "type": "text", "content": "Jalan Sultan Yahya Petra", "position_x": 561, "position_y": 220, "font_family": "Montserrat", "font_size": 14, "font_weight": "normal", "color": "#374151", "visible": true},
+        { "element_id": "address_2", "type": "text", "content": "Kota Bharu, Kelantan", "position_x": 561, "position_y": 235, "font_family": "Montserrat", "font_size": 14, "font_weight": "normal", "color": "#374151", "visible": true},
+        { "element_id": "certificate_title", "type": "text", "content": "CERTIFICATE TITLE", "position_x": 561, "position_y": 300, "font_family": "EB Garamond", "font_size": 46, "font_weight": "bold", "color": "#B8860B", "visible": true},
+        { "element_id": "certificate_body", "type": "text", "content": "Certificate body text", "position_x": 561, "position_y": 400, "font_family": "Montserrat", "font_size": 14, "font_weight": "normal", "color": "#374151", "visible": true},
+        { "element_id": "recipient_name", "type": "text", "content": "[RECIPIENT_NAME]", "position_x": 561, "position_y": 430, "font_family": "Montserrat", "font_size": 18, "font_weight": "600", "color": "#000000", "visible": true},
+        { "element_id": "event_description", "type": "text", "content": "certificate event description", "position_x": 561, "position_y": 480, "font_family": "Montserrat", "font_size": 14, "font_weight": "normal", "color": "#374151", "visible": true},
+        { "element_id": "event_date", "type": "text", "content": "Event date", "position_x": 561, "position_y": 500, "font_family": "Montserrat", "font_size": 16, "font_weight": "600", "color": "#111827", "visible": true},
+        { "element_id": "signature_image", "type": "image", "content": "../../src/images/signatures/sample-signature.png", "position_x": 300, "position_y": 520, "width": 180, "height": 130, "visible": true, "aspect_ratio": 90/200},
+        { "element_id": "signatory_name", "type": "text", "content": "[SIGNATORY_NAME]", "position_x": 300, "position_y": 610, "font_family": "Montserrat", "font_size": 14, "font_weight": "500", "color": "#000000", "visible": true},
+        { "element_id": "signatory_position", "type": "text", "content": "[SIGNATORY_POSITION]", "position_x": 300, "position_y": 630, "font_family": "Montserrat", "font_size": 14, "font_weight": "normal", "color": "#374151", "visible": true},
+        { "element_id": "signature_image_2", "type": "image", "content": "../../src/images/signatures/sample-signature2.png", "position_x": 822, "position_y": 520, "width": 180, "height": 130, "visible": true, "aspect_ratio": 90/200},
+        { "element_id": "signatory_name_2", "type": "text", "content": "[SIGNATORY_NAME2]", "position_x": 822, "position_y": 610, "font_family": "Montserrat", "font_size": 14, "font_weight": "500", "color": "#000000", "visible": true},
+        { "element_id": "signatory_position_2", "type": "text", "content": "[SIGNATORY_POSITION2]", "position_x": 822, "position_y": 630, "font_family": "Montserrat", "font_size": 14, "font_weight": "normal", "color": "#374151", "visible": true},
+        { "element_id": "signed_date", "type": "text", "content": "31 Disember 2025", "position_x": 300, "position_y": 680, "font_family": "Montserrat", "font_size": 12, "font_weight": "normal", "color": "#374151", "visible": true},
+        { "element_id": "qr_code", "type": "image", "content": "../../src/images/qrcodes/sample-qrcode.svg", "position_x": 561, "position_y": 580, "width": 140, "height": 140, "visible": true, "aspect_ratio": 1}
+      ]
+    },
+    '2': { templateUrl: '../../src/images/templates/mdlc-gold-004.svg', elements: [] },
+
+    /* === Tambahan 6 blanko dalam modal "Select a Blanko" === */
+    '3': { templateUrl: '../../src/images/templates/mdpl-green-001.svg',  elements: [] },
+    '4': { templateUrl: '../../src/images/templates/clpc-gold-010.svg',   elements: [] },
+    '5': { templateUrl: '../../src/images/templates/mdpr-blue-003.svg',   elements: [] },
+    '6': { templateUrl: '../../src/images/templates/clll-red-004.svg',    elements: [] },
+    '7': { templateUrl: '../../src/images/templates/mdlc-purple-003.svg', elements: [] },
+    '8': { templateUrl: '../../src/images/templates/mdpc-red-005.svg',    elements: [] },
+  };
+
+  const organizationLogos = [
+    { id: 'logo1', url: '../../src/images/logos-badges/anugerah-pelajar-harapan5.png' },
+    { id: 'logo2', url: '../../src/images/logos-badges/completion-badge1.png' },
+    { id: 'logo3', url: '../../src/images/logos-badges/best-student-award2.png' },
+    { id: 'logo4', url: '../../src/images/logos-badges/anugerah-pelajar-harapan4.png' },
+    { id: 'logo5', url: '../../src/images/logos-badges/best-student.svg' },
+    { id: 'logo6', url: '../../src/images/logos-badges/employee-ot-month1.png' },
+    { id: 'logo7', url: '../../src/images/logos-badges/validation-seal2.png' },
+    { id: 'logo8', url: '../../src/images/logos-badges/anugerah-pelajar-harapan2.png' },
+    { id: 'logo9', url: '../../src/images/logos-badges/anugerah-pelajar-harapan1.png' },
+    { id: 'logo4', url: '../../src/images/logos-badges/anugerah-pelajar-harapan6.png' },
+  ];
+
+  const organizationSignatories = [
+    { id: 'sig1', name: 'Fadzil Hajazi Ismail', position: 'Guru Besar',         signatureUrl: '../../src/images/signatures/sample-signature.png' },
+    { id: 'sig2', name: 'Datin Edriana Suhaili', position: 'GPK Pentadbiran',   signatureUrl: '../../src/images/signatures/sample-signature2.png' },
+    { id: 'sig3', name: 'John Doe',              position: 'Head of Department', signatureUrl: '../../src/images/signatures/sample-signature3.png' }
+  ];
+
+  /* ===========================
+     === QR Code (QRious) ======
+     =========================== */
+
+  // Muatkan QRious (render ke Canvas, tidak guna data: URL)
+  function ensureQRCodeLib() {
+    if (window.QRious) return Promise.resolve();
+    return new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js';
+      s.crossOrigin = 'anonymous';
+      s.referrerPolicy = 'no-referrer';
+      s.onload = () => resolve();
+      s.onerror = () => reject(new Error('Gagal memuat QRious'));
+      document.head.appendChild(s);
+    });
+  }
+
+  // URL verifikasi sistem (ubah ikut keperluan sistem anda)
+  function getVerificationUrl() {
+    const up = new URLSearchParams(window.location.search);
+    const batchName   = up.get('batchName')   || up.get('batch') || 'DEMO';
+    const recipientId = up.get('recipientId') || up.get('rid')   || '0001';
+    return `https://www.mysertifico.com/verify?id=${batchName}-${recipientId}`;
+  }
+
+  // Jana QR sebagai <canvas> menggunakan QRious
+  function createQrCanvas(elData) {
+    const size = Math.min(elData.width || 140, elData.height || 140);
+    const qr = new QRious({
+      value: getVerificationUrl(),
+      size: size,
+      level: 'H',
+      background: 'white',
+      foreground: 'black'
+    });
+    const node = qr.canvas; // <canvas>
+    node.style.width  = `${elData.width  || size}px`;
+    node.style.height = `${elData.height || size}px`;
+    node.style.objectFit = 'contain';
+    node.dataset.aspectRatio = 1; // 1:1
+    return node;
+  }
+
+  function placeElement(el, elData) {
+    const originalX = elData.position_x;
+    const originalY = elData.position_y;
+    if (isLandscape) {
+      el.style.left = `${originalX}px`;
+      el.style.top  = `${originalY}px`;
+    } else {
+      const percentX = originalX / landscapeWidth;
+      const percentY = originalY / landscapeHeight;
+      el.style.left = `${percentX * canvas.offsetWidth}px`;
+      el.style.top  = `${percentY * canvas.offsetHeight}px`;
+    }
+  }
+
+  function appendAndWire(elDiv, elData) {
+    elDiv.classList.add('canvas-element');
+    elDiv.dataset.elementId = elData.element_id;
+    elDiv.dataset.originalX = elData.position_x;
+    elDiv.dataset.originalY = elData.position_y;
+    elementsLayer.appendChild(elDiv);
+    placeElement(elDiv, elData);
+    makeElementDraggable(elDiv);
+    elDiv.addEventListener('click', (e) => { e.stopPropagation(); selectElement(elDiv); });
+  }
+
+  function isQrElementId(id) {
+    if (!id) return false;
+    const key = String(id).toLowerCase();
+    return key === 'qr' || key === 'qr_code' || key === 'qrcode';
+  }
+
+  function loadCertificateTemplate(templateId, keepElements = false) {
+    const template = certificateTemplates[templateId];
+    const backgroundLayer = document.getElementById('background-layer');
+
+    if (!template) {
+      elementsLayer.innerHTML = `<div class="flex items-center justify-center h-full text-gray-500">No template selected.</div>`;
+      return;
+    }
+
+    backgroundLayer.style.backgroundImage = `url('${template.templateUrl}')`;
+
+    if (!keepElements) {
+      elementsLayer.innerHTML = '';
+      template.elements.forEach(elData => {
+        if (elData.visible === false) return;
+
+        // Intercept QR → jana dinamik sebagai <canvas> (QRious)
+        if (elData.type === 'image' && isQrElementId(elData.element_id)) {
+          ensureQRCodeLib()
+            .then(() => {
+              const qrNode = createQrCanvas(elData);
+              appendAndWire(qrNode, elData);
+            })
+            .catch(() => {
+              // Fallback: gunakan imej asal sekiranya perpustakaan gagal dimuat
+              const fallback = document.createElement('img');
+              fallback.src = elData.content || 'https://placehold.co/140x140?text=QR';
+              fallback.style.width = `${elData.width || 140}px`;
+              fallback.style.height = `${elData.height || 140}px`;
+              fallback.dataset.aspectRatio = 1;
+              appendAndWire(fallback, elData);
+            });
+          return; // proses QR async
+        }
+
+        // Elemen biasa (image/text)
+        let elDiv;
+        if (elData.type === 'image') {
+          elDiv = document.createElement('img');
+          elDiv.src = elData.content;
+          elDiv.style.width = `${elData.width}px`;
+          elDiv.style.height = `${elData.height}px`;
+          elDiv.dataset.aspectRatio = elData.aspect_ratio || (elData.height / elData.width);
+        } else {
+          elDiv = document.createElement('div');
+          elDiv.textContent = elData.content;
+          elDiv.style.fontFamily = `'${elData.font_family}', sans-serif`;
+          elDiv.style.fontSize = `${elData.font_size}px`;
+          elDiv.style.fontWeight = elData.font_weight || 'normal';
+          elDiv.style.color = elData.color;
+        }
+        appendAndWire(elDiv, elData);
+      });
+    }
+    updateLayout(canvas.offsetWidth, canvas.offsetHeight);
+  }
+
+  // --- Guideline and Element Layout Logic ---
+  const guidelineTop = document.getElementById('guideline-top');
+  const guidelineBottom = document.getElementById('guideline-bottom');
+  const guidelineLeft = document.getElementById('guideline-left');
+  const guidelineRight = document.getElementById('guideline-right');
+
+  function makeElementDraggable(el) {
+    el.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      el.classList.add('dragging');
+
+      const canvasRect = canvas.getBoundingClientRect();
+      const scale = canvasRect.width / canvas.offsetWidth;
+
+      const startX = e.clientX;
+      const startY = e.clientY;
+      const startLeft = el.offsetLeft;
+      const startTop = el.offsetTop;
+
+      function onMouseMove(moveEvent) {
+        requestAnimationFrame(() => {
+          let newLeft = startLeft + (moveEvent.clientX - startX) / scale;
+          let newTop  = startTop  + (moveEvent.clientY - startY) / scale;
+
+          const minX = guidelineLeft.offsetLeft + (el.offsetWidth / 2);
+          const maxX = guidelineRight.offsetLeft - (el.offsetWidth / 2);
+          const minY = guidelineTop.offsetTop;
+          const maxY = guidelineBottom.offsetTop - el.offsetHeight;
+
+          newLeft = Math.max(minX, Math.min(newLeft, maxX));
+          newTop  = Math.max(minY, Math.min(newTop, maxY));
+
+          el.style.left = `${newLeft}px`;
+          el.style.top  = `${newTop}px`;
+        });
+      }
+      function onMouseUp() {
+        el.classList.remove('dragging');
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+      }
+
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    });
+  }
+
+  function updateLayout(width, height) { initializeGuidelines(width, height); repositionElements(); }
+  function initializeGuidelines(width, height) {
+    guidelineTop.style.top = `${margin}px`;
+    guidelineBottom.style.top = `${height - margin}px`;
+    guidelineLeft.style.left = `${margin}px`;
+    guidelineRight.style.left = `${width - margin}px`;
+  }
+  function repositionElements() {
+    const elements = document.querySelectorAll('.canvas-element');
+    elements.forEach(el => {
+      const originalX = parseFloat(el.dataset.originalX);
+      const originalY = parseFloat(el.dataset.originalY);
+      if (isLandscape) {
+        el.style.left = `${originalX}px`;
+        el.style.top  = `${originalY}px`;
+      } else {
+        const percentX = originalX / landscapeWidth;
+        const percentY = originalY / landscapeHeight;
+        el.style.left = `${percentX * landscapeHeight}px`;
+        el.style.top  = `${percentY * landscapeWidth}px`;
+      }
+    });
+  }
+
+  function makeGuidelineDraggable(guideline, axis) {
+    guideline.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      guideline.classList.add('dragging');
+      guideline.classList.remove('after-rotation');
+
+      const canvasRect = canvas.getBoundingClientRect();
+      const scale = canvasRect.width / canvas.offsetWidth;
+
+      function onMouseMove(moveEvent) {
+        requestAnimationFrame(() => {
+          if (axis === 'y') {
+            let newY = (moveEvent.clientY - canvasRect.top) / scale;
+            newY = Math.max(margin, Math.min(newY, canvas.offsetHeight - margin));
+            guideline.style.top = `${newY}px`;
+          } else {
+            let newX = (moveEvent.clientX - canvasRect.left) / scale;
+            newX = Math.max(margin, Math.min(newX, canvas.offsetWidth - margin));
+            guideline.style.left = `${newX}px`;
+          }
+        });
+      }
+      function onMouseUp() {
+        guideline.classList.remove('dragging');
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+      }
+
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+    });
+  }
+
+  [guidelineTop, guidelineBottom, guidelineLeft, guidelineRight].forEach(el => {
+    el.addEventListener('transitionend', () => { el.classList.remove('after-rotation'); });
+  });
+  rotateBtn.addEventListener('click', () => {
+    [guidelineTop, guidelineBottom, guidelineLeft, guidelineRight].forEach(el => { el.classList.add('after-rotation'); });
+  });
+
+  makeGuidelineDraggable(guidelineTop, 'y');
+  makeGuidelineDraggable(guidelineBottom, 'y');
+  makeGuidelineDraggable(guidelineLeft, 'x');
+  makeGuidelineDraggable(guidelineRight, 'x');
+
+  // --- Change Blanko Modal Logic ---
+  changeBlankoBtn.addEventListener('click', () => {
+    blankoGrid.innerHTML = '';
+    Object.keys(certificateTemplates).forEach(key => {
+      const template = certificateTemplates[key];
+      const card = `
+        <div class="cursor-pointer group" data-template-id="${key}">
+          <div class="aspect-video bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden border-2 border-transparent group-hover:border-primary transition-colors">
+            <img src="${template.templateUrl}" class="w-full h-full object-cover" onerror="this.onerror=null;this.src='https://placehold.co/300x212/cccccc/333333?text=Image+Error';">
+          </div>
+        </div>
+      `;
+      blankoGrid.insertAdjacentHTML('beforeend', card);
+    });
+    blankoModal.classList.remove('hidden');
+    blankoModal.classList.add('flex');
+  });
+  closeBlankoModalBtn.addEventListener('click', () => { blankoModal.classList.add('hidden'); blankoModal.classList.remove('flex'); });
+  blankoGrid.addEventListener('click', (e) => {
+    const card = e.target.closest('.group');
+    if (card) {
+      const templateId = card.dataset.templateId;
+      loadCertificateTemplate(templateId, true);
+      closeBlankoModalBtn.click();
+    }
+  });
+
+  // --- Add Logo Modal Logic ---
+  addLogoBtn.addEventListener('click', () => {
+    logoGrid.innerHTML = '';
+    organizationLogos.forEach(logo => {
+      const card = `
+        <div class="cursor-pointer group" data-logo-src="${logo.url}">
+          <div class="aspect-square bg-gray-200 dark:bg-gray-700 rounded-lg overflow-hidden border-2 border-transparent group-hover:border-primary transition-colors p-2">
+            <img src="${logo.url}" class="w-full h-full object-contain" onerror="this.onerror=null;this.src='https://placehold.co/150x150/cccccc/333333?text=Logo+Error';">
+          </div>
+        </div>
+      `;
+      logoGrid.insertAdjacentHTML('beforeend', card);
+    });
+    logoModal.classList.remove('hidden');
+    logoModal.classList.add('flex');
+  });
+  closeLogoModalBtn.addEventListener('click', () => { logoModal.classList.add('hidden'); logoModal.classList.remove('flex'); });
+  logoGrid.addEventListener('click', (e) => {
+    const card = e.target.closest('.group');
+    if (card) { addLogoToCanvas(card.dataset.logoSrc); closeLogoModalBtn.click(); }
+  });
+
+  function addLogoToCanvas(src) {
+    const img = document.createElement('img');
+    img.src = src;
+    img.className = 'canvas-element';
+    img.onload = () => {
+      const aspectRatio = img.naturalHeight / img.naturalWidth;
+      img.dataset.aspectRatio = aspectRatio;
+      const defaultWidth = 100;
+      img.style.width = `${defaultWidth}px`;
+      img.style.height = `${defaultWidth * aspectRatio}px`;
+    };
+    img.style.left = `${canvas.offsetWidth / 2}px`;
+    img.style.top  = `${canvas.offsetHeight / 2}px`;
+    img.style.objectFit = 'contain';
+    elementsLayer.appendChild(img);
+    makeElementDraggable(img);
+    img.addEventListener('click', (e) => { e.stopPropagation(); selectElement(img); });
+  }
+
+  // --- Add Signatory Modal Logic ---
+  addSignatoryBtn.addEventListener('click', () => {
+    signatoryGrid.innerHTML = '';
+    organizationSignatories.forEach((sig, index) => {
+      const card = `
+        <div class="cursor-pointer group border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:border-primary dark:hover:border-primary transition-colors" data-signatory-index="${index}">
+          <div class="h-24 mb-4 flex items-center justify-center bg-gray-100 dark:bg-gray-900 rounded">
+            <img src="${sig.signatureUrl}" class="max-h-full max-w-full object-contain" onerror="this.onerror=null;this.src='https://placehold.co/200x90/cccccc/333333?text=Signature';">
+          </div>
+          <div class="text-center">
+            <p class="font-semibold text-gray-800 dark:text-gray-200">${sig.name}</p>
+            <p class="text-sm text-gray-500 dark:text-gray-400">${sig.position}</p>
+          </div>
+        </div>
+      `;
+      signatoryGrid.insertAdjacentHTML('beforeend', card);
+    });
+    signatoryModal.classList.remove('hidden'); signatoryModal.classList.add('flex');
+  });
+  closeSignatoryModalBtn.addEventListener('click', () => { signatoryModal.classList.add('hidden'); signatoryModal.classList.remove('flex'); });
+  signatoryGrid.addEventListener('click', (e) => {
+    const card = e.target.closest('.group');
+    if (card) {
+      const idx = card.dataset.signatoryIndex;
+      addSignatoryToCanvas(organizationSignatories[idx]);
+      closeSignatoryModalBtn.click();
+    }
+  });
+
+  function addSignatoryToCanvas(signatoryData) {
+    const centerX = canvas.offsetWidth / 2;
+    const centerY = canvas.offsetHeight / 2;
+
+    const sigImg = document.createElement('img');
+    sigImg.src = signatoryData.signatureUrl;
+    sigImg.className = 'canvas-element';
+    sigImg.onload = () => {
+      const aspectRatio = sigImg.naturalHeight / sigImg.naturalWidth;
+      sigImg.dataset.aspectRatio = aspectRatio;
+      const defaultWidth = 200;
+      sigImg.style.width = `${defaultWidth}px`;
+      sigImg.style.height = `${defaultWidth * aspectRatio}px`;
+    };
+    sigImg.style.left = `${centerX}px`;
+    sigImg.style.top  = `${centerY}px`;
+    elementsLayer.appendChild(sigImg);
+    makeElementDraggable(sigImg);
+    sigImg.addEventListener('click', (e) => { e.stopPropagation(); selectElement(sigImg); });
+
+    const nameDiv = document.createElement('div');
+    nameDiv.textContent = signatoryData.name;
+    nameDiv.className = 'canvas-element';
+    nameDiv.dataset.elementId = 'signatory_name';
+    nameDiv.style.fontFamily = "'Montserrat', sans-serif";
+    nameDiv.style.fontSize = '14px';
+    nameDiv.style.fontWeight = '500';
+    nameDiv.style.color = '#000000';
+    nameDiv.style.left = `${centerX}px`;
+    nameDiv.style.top  = `${centerY + 60}px`;
+    elementsLayer.appendChild(nameDiv);
+    makeElementDraggable(nameDiv);
+    nameDiv.addEventListener('click', (e) => { e.stopPropagation(); selectElement(nameDiv); });
+
+    const posDiv = document.createElement('div');
+    posDiv.textContent = signatoryData.position;
+    posDiv.className = 'canvas-element';
+    posDiv.dataset.elementId = 'signatory_position';
+    posDiv.style.fontFamily = "'Montserrat', sans-serif";
+    posDiv.style.fontSize = '14px';
+    posDiv.style.fontWeight = 'normal';
+    posDiv.style.color = '#374151';
+    posDiv.style.left = `${centerX}px`;
+    posDiv.style.top  = `${centerY + 85}px`;
+    elementsLayer.appendChild(posDiv);
+    makeElementDraggable(posDiv);
+    posDiv.addEventListener('click', (e) => { e.stopPropagation(); selectElement(posDiv); });
+  }
+
+  // --- Save Modal Logic ---
+  saveBtn.addEventListener('click', () => { saveModal.classList.remove('hidden'); saveModal.classList.add('flex'); });
+  closeSaveModalBtn.addEventListener('click', () => { saveModal.classList.add('hidden'); saveModal.classList.remove('flex'); });
+  saveForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const fileNameInput = document.getElementById('file-name-input');
+    const fileName = fileNameInput.value;
+    if (fileName) {
+      console.log('Saving certificate design as:', fileName);
+      showToast(`Design '${fileName}' saved successfully!`);
+      fileNameInput.value = '';
+      closeSaveModalBtn.click();
+    }
+  });
+
+  // --- Toast Notification Logic ---
+  function showToast(message) {
+    const toastContainer = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    toast.className = 'flex items-center w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow-lg dark:text-gray-400 dark:bg-gray-800 transition-all duration-300 transform translate-x-full opacity-0';
+    toast.innerHTML = `
+      <div class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
+        <i class="ri-check-line"></i>
+      </div>
+      <div class="ml-3 text-sm font-normal">${message}</div>
+    `;
+    toastContainer.appendChild(toast);
+    setTimeout(() => { toast.classList.remove('translate-x-full', 'opacity-0'); }, 100);
+    setTimeout(() => {
+      toast.classList.add('translate-x-full', 'opacity-0');
+      toast.addEventListener('transitionend', () => { toast.remove(); });
+    }, 3000);
+  }
+
+  // --- Inspector Logic ---
+  const inspectorPane = document.getElementById('inspector-pane');
+  const inspectorContent = document.getElementById('inspector-content');
+  const inspectorPlaceholder = document.getElementById('inspector-placeholder');
+  const closeInspectorBtn = document.getElementById('close-inspector');
+
+  const visibilityToggle = document.getElementById('visibility-toggle');
+  const posXInput = document.getElementById('pos-x-input');
+  const posYInput = document.getElementById('pos-y-input');
+  const sizeSlider = document.getElementById('size-slider');
+  const sizeValueDisplay = document.getElementById('size-value-display');
+  const textContentSection = document.getElementById('text-content-section');
+  const textContentInput = document.getElementById('text-content-input');
+  const variableTextDisplay = document.getElementById('variable-text-display');
+  const fontFamilySelect = document.getElementById('font-family-select');
+  const fontBoldBtn = document.getElementById('font-bold-btn');
+  const fontItalicBtn = document.getElementById('font-italic-btn');
+  const fontUnderlineBtn = document.getElementById('font-underline-btn');
+  const fontSizeSlider = document.getElementById('font-size-slider');
+  const fontSizeValueDisplay = document.getElementById('font-size-value-display');
+  const fontColorInput = document.getElementById('font-color-input');
+  const textAlignLeftBtn = document.getElementById('text-align-left-btn');
+  const textAlignCenterBtn = document.getElementById('text-align-center-btn');
+  const textAlignRightBtn = document.getElementById('text-align-right-btn');
+  const alignLeftBtn = document.getElementById('align-left-btn');
+  const alignCenterBtn = document.getElementById('align-center-btn');
+  const alignRightBtn = document.getElementById('align-right-btn');
+
+  const sizeSection = document.getElementById('inspector-size-section');
+  const fontSection = document.getElementById('inspector-font-section');
+
+  function openInspector() { inspectorPane.classList.remove('translate-x-full'); }
+  function closeInspector() { inspectorPane.classList.add('translate-x-full'); deselectAllElements(); }
+  function selectElement(el) { deselectAllElements(); selectedElement = el; el.classList.add('selected'); populateInspector(el); openInspector(); }
+  function deselectAllElements() { document.querySelectorAll('.canvas-element.selected').forEach(el => el.classList.remove('selected')); selectedElement = null; }
+
+  function populateInspector(el) {
+    inspectorPlaceholder.classList.add('hidden');
+    inspectorContent.querySelectorAll('div[class*="space-y-2"]').forEach(s => s.classList.remove('hidden'));
+
+    visibilityToggle.checked = el.style.display !== 'none';
+
+    const isVisual = el.tagName === 'IMG' || el.tagName === 'CANVAS';
+    sizeSection.style.display = isVisual ? 'block' : 'none';
+    fontSection.style.display = isVisual ? 'none'  : 'block';
+
+    posXInput.value = parseInt(el.style.left) || 0;
+    posYInput.value = parseInt(el.style.top)  || 0;
+
+    if (isVisual) {
+      const currentWidth = parseInt(el.style.width) || el.offsetWidth || 100;
+      sizeSlider.value = currentWidth;
+      sizeValueDisplay.textContent = `${currentWidth}px`;
+    } else {
+      const variableElementIds = ['organization_name', 'address_1', 'address_2', 'recipient_name'];
+      const elementId = el.dataset.elementId || '';
+      const isVariable = variableElementIds.includes(elementId) ||
+                         elementId.startsWith('signatory_name') ||
+                         elementId.startsWith('signatory_position') ||
+                         (el.textContent.startsWith('[') && el.textContent.endsWith(']'));
+
+      textContentSection.style.display = isVariable ? 'none' : 'block';
+      variableTextDisplay.style.display = isVariable ? 'block' : 'none';
+      if (!isVariable) textContentInput.value = el.textContent;
+
+      const currentFontSize = parseInt(el.style.fontSize) || 16;
+      fontSizeSlider.value = currentFontSize;
+      fontSizeValueDisplay.textContent = `${currentFontSize}px`;
+      fontColorInput.value = rgbToHex(el.style.color || 'rgb(0, 0, 0)');
+      const currentFont = (el.style.fontFamily || 'Montserrat').split(',')[0].replace(/['"]/g, '').trim();
+      fontFamilySelect.value = currentFont;
+      fontBoldBtn.classList.toggle('active', el.style.fontWeight === 'bold' || el.style.fontWeight === '600' || el.style.fontWeight === '700');
+      fontItalicBtn.classList.toggle('active', el.style.fontStyle === 'italic');
+      fontUnderlineBtn.classList.toggle('active', (el.style.textDecoration || '').includes('underline'));
+      updateTextAlignButtons(el.style.textAlign || 'center');
+    }
+  }
+
+  function updateElementFromInspector(property, value) {
+    if (!selectedElement) return;
+    switch(property) {
+      case 'left':  selectedElement.style.left  = value + 'px'; break;
+      case 'top':   selectedElement.style.top   = value + 'px'; break;
+      case 'color': selectedElement.style.color = value; break;
+    }
+  }
+
+  visibilityToggle.addEventListener('change', (e) => { if (selectedElement) selectedElement.style.display = e.target.checked ? '' : 'none'; });
+  posXInput.addEventListener('input', (e) => updateElementFromInspector('left', e.target.value));
+  posYInput.addEventListener('input', (e) => updateElementFromInspector('top',  e.target.value));
+  fontColorInput.addEventListener('input', (e) => updateElementFromInspector('color', e.target.value));
+
+  textContentInput.addEventListener('input', (e) => { if (selectedElement) selectedElement.textContent = e.target.value; });
+  fontFamilySelect.addEventListener('change', (e) => { if (selectedElement) selectedElement.style.fontFamily = `'${e.target.value}', sans-serif`; });
+
+  fontBoldBtn.addEventListener('click', () => {
+    if (!selectedElement) return;
+    const isBold = selectedElement.style.fontWeight === 'bold' || selectedElement.style.fontWeight === '600' || selectedElement.style.fontWeight === '700';
+    selectedElement.style.fontWeight = isBold ? 'normal' : 'bold';
+    fontBoldBtn.classList.toggle('active', !isBold);
+  });
+  fontItalicBtn.addEventListener('click', () => {
+    if (!selectedElement) return;
+    const isItalic = selectedElement.style.fontStyle === 'italic';
+    selectedElement.style.fontStyle = isItalic ? 'normal' : 'italic';
+    fontItalicBtn.classList.toggle('active', !isItalic);
+  });
+  fontUnderlineBtn.addEventListener('click', () => {
+    if (!selectedElement) return;
+    const isU = (selectedElement.style.textDecoration || '').includes('underline');
+    selectedElement.style.textDecoration = isU ? 'none' : 'underline';
+    fontUnderlineBtn.classList.toggle('active', !isU);
+  });
+
+  function updateTextAlign(align) { if (selectedElement) { selectedElement.style.textAlign = align; updateTextAlignButtons(align); } }
+  function updateTextAlignButtons(currentAlign) {
+    [textAlignLeftBtn, textAlignCenterBtn, textAlignRightBtn].forEach(btn => btn.classList.remove('active'));
+    if (currentAlign === 'left') textAlignLeftBtn.classList.add('active');
+    else if (currentAlign === 'center') textAlignCenterBtn.classList.add('active');
+    else if (currentAlign === 'right') textAlignRightBtn.classList.add('active');
+  }
+  textAlignLeftBtn.addEventListener('click', () => updateTextAlign('left'));
+  textAlignCenterBtn.addEventListener('click', () => updateTextAlign('center'));
+  textAlignRightBtn.addEventListener('click', () => updateTextAlign('right'));
+
+  // Saiz untuk IMG & CANVAS
+  sizeSlider.addEventListener('input', (e) => {
+    if (!selectedElement) return;
+    const isVisual = selectedElement.tagName === 'IMG' || selectedElement.tagName === 'CANVAS';
+    if (!isVisual) return;
+
+    const newWidth = parseInt(e.target.value);
+    const aspectRatio = parseFloat(selectedElement.dataset.aspectRatio) || 1;
+    const newHeight = newWidth * aspectRatio;
+
+    selectedElement.style.width  = newWidth + 'px';
+    selectedElement.style.height = newHeight + 'px';
+    sizeValueDisplay.textContent = `${newWidth}px`;
+  });
+
+  fontSizeSlider.addEventListener('input', (e) => {
+    if (!selectedElement || (selectedElement.tagName === 'IMG' || selectedElement.tagName === 'CANVAS')) return;
+    const newSize = e.target.value;
+    selectedElement.style.fontSize = newSize + 'px';
+    fontSizeValueDisplay.textContent = `${newSize}px`;
+  });
+
+  function alignElement(alignment) {
+    if (!selectedElement) return;
+    const guidelineLeftPos = guidelineLeft.offsetLeft;
+    const guidelineRightPos = guidelineRight.offsetLeft;
+    const elementHalfWidth = selectedElement.offsetWidth / 2;
+    let newLeft;
+    switch (alignment) {
+      case 'left':   newLeft = guidelineLeftPos + elementHalfWidth; break;
+      case 'center': newLeft = guidelineLeftPos + (guidelineRightPos - guidelineLeftPos) / 2; break;
+      case 'right':  newLeft = guidelineRightPos - elementHalfWidth; break;
+    }
+    selectedElement.style.left = `${newLeft}px`;
+    posXInput.value = Math.round(newLeft);
+  }
+  alignLeftBtn.addEventListener('click', () => alignElement('left'));
+  alignCenterBtn.addEventListener('click', () => alignElement('center'));
+  alignRightBtn.addEventListener('click', () => alignElement('right'));
+
+  closeInspectorBtn.addEventListener('click', closeInspector);
+  canvas.addEventListener('click', (e) => {
+    if (e.target === canvas || e.target === elementsLayer || e.target === document.getElementById('background-layer') || e.target === document.getElementById('grid-overlay')) {
+      closeInspector();
+    }
+  });
+
+  function rgbToHex(rgb) {
+    let [r, g, b] = rgb.match(/\d+/g).map(Number);
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+  }
+
+  // Initial load
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialTemplateId = urlParams.get('template_id') || '1';
+  loadCertificateTemplate(initialTemplateId);
+});
+</script>
+
+
+</body>
+</html>

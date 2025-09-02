@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Selected Templates - MySertifico</title>
+    <link rel="icon" type="image/png" href="../../src/images/logos/favicon.png" onerror="this.onerror=null;this.src='https://placehold.co/32x32/0d9488/ffffff?text=M';">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&family=EB+Garamond:wght@400;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                        garamond: ['EB Garamond', 'serif'],
+                        montserrat: ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': {
+                            'DEFAULT': '#0d9488', // Teal-600
+                            'dark': '#0f766e', // Teal-700
+                            'light': '#ccfbf1', // Teal-100
+                        },
+                        'accent': {
+                            'DEFAULT': '#f59e0b', // Amber-500
+                            'hover': '#d97706', // Amber-600
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .sidebar { scrollbar-width: none; }
+        .sidebar::-webkit-scrollbar { display: none; }
+        select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        .dark select {
+             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23d1d5db' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        }
+        .preview-element {
+            position: absolute;
+            transform: translateX(-50%);
+            white-space: nowrap;
+        }
+        #toast-notification {
+            transition: opacity 0.3s, transform 0.3s;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+
+    <!-- ===== Sidebar Start ===== -->
+    <aside id="sidebar" class="sidebar fixed top-0 left-0 z-50 h-full w-64 bg-gray-800 dark:bg-gray-950 text-white transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto">
+        <!-- Sidebar Header -->
+        <div class="flex items-center justify-between p-6">
+             <h2 class="font-poppins text-2xl font-bold text-white">Menu</h2>
+             <button id="close-sidebar" class="text-gray-400 hover:text-white">
+                 <i class="ri-close-line text-2xl"></i>
+             </button>
+        </div>
+        <!-- Sidebar Navigation -->
+        <nav class="p-4">
+            <ul class="space-y-2">
+                <li>
+                    <a href="dashboard.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white">
+                        <i class="ri-dashboard-3-line mr-3 text-lg"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <button data-collapse-toggle="submenu-gallery" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white transition-colors">
+                        <span class="flex items-center"><i class="ri-gallery-line mr-3 text-lg"></i><span>Gallery</span></span>
+                        <i class="ri-arrow-down-s-line transition-transform duration-200"></i>
+                    </button>
+                    <ul id="submenu-gallery" class="hidden py-2 space-y-1 pl-8">
+                        <li><a href="templates-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Templates</a></li>
+                        <li><a href="logos-badges.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Logos & Badges</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="certificate-list.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white transition-colors">
+                        <i class="ri-award-line mr-3 text-lg"></i>
+                        <span>Certificates</span>
+                    </a>
+                </li>
+                 <li>
+                    <button data-collapse-toggle="submenu-settings" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg bg-gray-700 text-white transition-colors">
+                        <span class="flex items-center"><i class="ri-settings-3-line mr-3 text-lg"></i><span>Settings</span></span>
+                        <i class="ri-arrow-down-s-line transition-transform duration-200 rotate-180"></i>
+                    </button>
+                    <ul id="submenu-settings" class="py-2 space-y-1 pl-8">
+                        <li><a href="organisation.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Organisation</a></li>
+                        <li><a href="logo-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Logos</a></li>
+                        <li><a href="selected-template-list.html" class="block py-2 px-4 rounded-lg text-sm text-white bg-primary">Selected Templates</a></li>
+                        <li><a href="user-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Users</a></li>
+                        <li class="px-4"><hr class="border-gray-700 my-1"></li>
+                        <li><a href="account.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Account</a></li>
+                    </ul>
+                </li>
+                <li class="pt-4 mt-4 border-t border-gray-700">
+                    <a href="#" id="logout-sidebar" class="flex items-center py-2.5 px-4 rounded-lg text-red-400 hover:bg-red-500 hover:text-white transition-colors">
+                        <i class="ri-logout-box-r-line mr-3 text-lg"></i>
+                        <span>Log Out</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+    <!-- ===== Sidebar End ===== -->
+    
+    <!-- ===== Main Content Start ===== -->
+    <div id="main-content" class="relative min-h-screen transition-all duration-300 ease-in-out">
+        <!-- ===== Navbar Start ===== -->
+        <header class="sticky top-0 z-30 bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between p-4">
+                <div class="flex items-center space-x-4">
+                    <button id="sidebar-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
+                        <i class="ri-menu-line text-2xl"></i>
+                    </button>
+                    <a href="dashboard.html" class="flex items-center gap-x-2">
+                        <img src="../../src/images/logos/logo.png" alt="MySertifico Logo" class="h-8 w-8 rounded-lg" onerror="this.onerror=null;this.src='https://placehold.co/32x32/0d9488/ffffff?text=M';">
+                        <span class="font-poppins text-2xl font-bold text-primary hidden sm:block">MySertifico</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-moon-line block dark:hidden"></i><i class="ri-sun-line hidden dark:block"></i></button>
+                    <div class="relative">
+                        <button id="profile-menu-button" class="flex items-center space-x-2">
+                             <img class="h-9 w-9 rounded-full object-cover" src="https://i.pravatar.cc/150?u=admin" alt="Admin" onerror="this.onerror=null;this.src='https://placehold.co/40x40/0d9488/ffffff?text=A';">
+                             <div class="hidden md:block text-left">
+                                 <div class="text-sm font-semibold text-gray-800 dark:text-white">Fikri Nabil</div>
+                                 <div class="text-xs text-gray-500 dark:text-gray-400">Super Admin</div>
+                             </div>
+                        </button>
+                        <div id="profile-menu" class="hidden absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <div class="py-1">
+                                <a href="my-profile.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-user-line mr-3"></i>My Profile</a>
+                                <a href="change-password.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-lock-password-line mr-3"></i>Change Password</a>
+                                <hr class="border-gray-200 dark:border-gray-700 my-1">
+                                <a href="#" id="logout-navbar" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-logout-box-r-line mr-3"></i>Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- ===== Navbar End ===== -->
+        
+        <!-- ===== Page Content Start ===== -->
+        <main class="p-6 sm:p-8">
+            <div class="max-w-7xl mx-auto">
+                
+                <!-- Header -->
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
+                    <div>
+                        <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Selected Templates</h1>
+                        <p class="text-gray-500 dark:text-gray-400 mt-1">Manage your chosen templates or add new ones from the gallery.</p>
+                    </div>
+                    <a href="templates-list.html" class="w-full md:w-auto justify-center px-4 py-2 text-sm bg-primary text-white rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-4 focus:ring-primary/50 flex items-center transition-colors">
+                        <i class="ri-add-line mr-2"></i>Add From Gallery
+                    </a>
+                </div>
+
+                <!-- Filters -->
+                <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md mb-6 flex flex-col lg:flex-row gap-4">
+                    <div class="relative flex-grow">
+                        <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="search-input" placeholder="Search templates by code..." class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary">
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 lg:flex lg:w-auto gap-4">
+                        <select id="style-filter" class="w-full lg:w-44 py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option value="all">All Styles</option>
+                            <option value="Modern">Modern</option>
+                            <option value="Classic">Classic</option>
+                        </select>
+                        <select id="orientation-filter" class="w-full lg:w-44 py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option value="all">All Orientations</option>
+                            <option value="Landscape">Landscape</option>
+                            <option value="Portrait">Portrait</option>
+                        </select>
+                        <select id="alignment-filter" class="w-full lg:w-44 py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option value="all">All Alignments</option>
+                        </select>
+                        <select id="color-filter" class="w-full lg:w-44 py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option value="all">All Colors</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Templates Grid -->
+                <div id="templates-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <!-- Template cards will be inserted here by JavaScript -->
+                </div>
+                <div id="no-results" class="hidden text-center py-16">
+                    <i class="ri-search-eye-line text-6xl text-gray-400 mb-4"></i>
+                    <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-200">No Templates Found</h3>
+                    <p class="text-gray-500 dark:text-gray-400 mt-1">Your search or filter did not match any templates.</p>
+                </div>
+
+            </div>
+        </main>
+        <!-- ===== Page Content End ===== -->
+    </div>
+    <!-- ===== Main Content End ===== -->
+
+    <!-- Preview Modal -->
+    <div id="preview-modal" class="fixed inset-0 bg-black/70 z-[120] hidden items-center justify-center p-4 backdrop-blur-sm">
+        <div id="preview-modal-panel" class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-4xl transform transition-all opacity-0 scale-95 flex flex-col">
+            <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 id="preview-modal-title" class="font-poppins font-bold text-lg text-gray-800 dark:text-white">Template Preview</h3>
+                <button type="button" id="close-preview-modal" class="text-gray-400 hover:text-gray-600 dark:hover:text-white"><i class="ri-close-line text-2xl"></i></button>
+            </div>
+            <div class="p-6 flex-grow overflow-auto bg-gray-100 dark:bg-gray-900 flex items-center justify-center">
+                <div id="preview-container" class="relative shadow-lg">
+                    <img id="preview-blanko" src="" class="w-full h-auto">
+                    <div id="preview-elements" class="absolute inset-0">
+                        <!-- Dynamic elements go here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toast Notification -->
+    <div id="toast-notification" class="fixed top-24 right-6 bg-green-100 border border-green-200 text-green-700 dark:bg-green-900/30 dark:text-green-300 px-4 py-3 rounded-lg shadow-md flex items-center gap-3 transition-transform transform translate-x-full opacity-0 z-[150]">
+        <i class="ri-checkbox-circle-fill text-xl"></i>
+        <span id="toast-message"></span>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggleBtn = document.getElementById('sidebar-toggle');
+            const closeSidebarBtn = document.getElementById('close-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            function openSidebar() {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            }
+
+            function closeSidebar() {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+            
+            sidebarToggleBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openSidebar();
+            });
+            
+            closeSidebarBtn.addEventListener('click', closeSidebar);
+            overlay.addEventListener('click', closeSidebar);
+            
+            document.querySelectorAll('[data-collapse-toggle]').forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.getAttribute('data-collapse-toggle');
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.classList.toggle('hidden');
+                        const arrowIcon = button.querySelector('.ri-arrow-down-s-line');
+                        if(arrowIcon) arrowIcon.classList.toggle('rotate-180');
+                    }
+                });
+            });
+
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const applyTheme = () => {
+                if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                }
+            };
+            applyTheme();
+            themeToggleBtn.addEventListener('click', () => {
+                const isDark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('color-theme', isDark ? 'dark' : 'light');
+            });
+
+            const profileMenuButton = document.getElementById('profile-menu-button');
+            const profileMenu = document.getElementById('profile-menu');
+            profileMenuButton?.addEventListener('click', (e) => {
+                e.stopPropagation(); 
+                profileMenu.classList.toggle('hidden');
+            });
+            window.addEventListener('click', (e) => {
+                if (profileMenu && !profileMenu.classList.contains('hidden') && !profileMenuButton.contains(e.target) && !profileMenu.contains(e.target)) {
+                    profileMenu.classList.add('hidden');
+                }
+            });
+
+            // --- Logout Logic ---
+            const logoutBtnSidebar = document.getElementById('logout-sidebar');
+            const logoutBtnNavbar = document.getElementById('logout-navbar');
+
+            function logout() {
+                window.location.href = "../landing/home.html";
+            }
+
+            logoutBtnSidebar.addEventListener('click', (e) => { e.preventDefault(); logout(); });
+            logoutBtnNavbar.addEventListener('click', (e) => { e.preventDefault(); logout(); });
+
+            // --- Templates List Page Logic ---
+            const templatesGrid = document.getElementById('templates-grid');
+            const noResultsDiv = document.getElementById('no-results');
+            const searchInput = document.getElementById('search-input');
+            const styleFilter = document.getElementById('style-filter');
+            const orientationFilter = document.getElementById('orientation-filter');
+            const alignmentFilter = document.getElementById('alignment-filter');
+            const colorFilter = document.getElementById('color-filter');
+
+            // --- Data Source ---
+            const landscapeContent = [
+                { "element_id": "logo", "type": "image", "content": "../../src/images/logos-badges/sample-logo.svg", "position_x": 561, "position_y": 70, "width": 80, "height": 80 },
+                { "element_id": "organization_name", "type": "text", "content": "{Organization_Name}", "position_x": 561, "position_y": 150, "font_family": "Montserrat", "font_size": 18, "font_weight": "500", "color": "#111827" },
+                { "element_id": "certificate_title", "type": "text", "content": "CERTIFICATE TITLE", "position_x": 561, "position_y": 200, "font_family": "EB Garamond", "font_size": 46, "font_weight": "bold", "color": "#AA8F29" },
+                { "element_id": "certificate_body", "type": "text", "content": "Certificate body text here", "position_x": 561, "position_y": 280, "font_family": "Montserrat", "font_size": 16, "color": "#374151" },
+                { "element_id": "recipient_name", "type": "text", "content": "{Recipient_Name}", "position_x": 561, "position_y": 310, "font_family": "Montserrat", "font_size": 20, "font_weight": "bold", "color": "#000000" },
+                { "element_id": "event_description", "type": "text", "content": "Certificate text event description here", "position_x": 561, "position_y": 350, "font_family": "Montserrat", "font_size": 16, "color": "#374151" },
+                { "element_id": "event_date", "type": "text", "content": "on {Event_Date}", "position_x": 561, "position_y": 375, "font_family": "Montserrat", "font_size": 16, "font_weight": "500", "color": "#111827" },
+                { "element_id": "signature_image", "type": "image", "content": "../../src/images/signatures/sample-signature.svg", "position_x": 210, "position_y": 400, "width": 150, "height": 67 },
+                { "element_id": "signatory_name", "type": "text", "content": "{Signatory_Name}", "position_x": 210, "position_y": 480, "font_family": "Montserrat", "font_size": 14, "font_weight": "500", "color": "#000000" },
+                { "element_id": "signatory_position", "type": "text", "content": "{Signatory_Position}", "position_x": 210, "position_y": 460, "font_family": "Montserrat", "font_size": 14, "color": "#374151" },
+                { "element_id": "qr_code", "type": "image", "content": "../../src/images/qrcodes/sample-qrcode.svg", "position_x": 950, "position_y": 400, "width": 100, "height": 100 },
+                { "element_id": "signed_date", "type": "text", "content": "{Signed_Date}", "position_x": 561, "position_y": 500, "font_family": "Montserrat", "font_size": 14, "color": "#374151" },
+            ];
+            
+            const portraitContent = [
+                { "element_id": "logo", "type": "image", "content": "../../src/images/logos-badges/sample-logo.svg", "position_x": 400, "position_y": 70, "width": 70, "height": 70 },
+                { "element_id": "organization_name", "type": "text", "content": "{Organization_Name}", "position_x": 400, "position_y": 190, "font_family": "Montserrat", "font_size": 18, "font_weight": "500", "color": "#111827" },
+                { "element_id": "address_1", "type": "text", "content": "{Address_row1}", "position_x": 400, "position_y": 225, "font_family": "Montserrat", "font_size": 14, "color": "#374151" },
+                { "element_id": "address_2", "type": "text", "content": "{Address_row2}", "position_x": 400, "position_y": 250, "font_family": "Montserrat", "font_size": 14, "color": "#374151" },
+                { "element_id": "certificate_title", "type": "text", "content": "CERTIFICATE TITLE", "position_x": 400, "position_y": 310, "font_family": "EB Garamond", "font_size": 34, "font_weight": "bold", "color": "#111827" },
+                { "element_id": "certificate_body", "type": "text", "content": "Certificate text body", "position_x": 400, "position_y": 430, "font_family": "Montserrat", "font_size": 16, "color": "#374151" },
+                { "element_id": "recipient_name", "type": "text", "content": "{Recipient_Name}", "position_x": 400, "position_y": 470, "font_family": "Montserrat", "font_size": 18, "font_weight": "bold", "color": "#000000" },
+                { "element_id": "event_description", "type": "text", "content": "Certificate text event description", "position_x": 400, "position_y": 530, "font_family": "Montserrat", "font_size": 18, "color": "#374151" },
+                { "element_id": "event_date", "type": "text", "content": "{Even_tName} on {Event_Date}", "position_x": 400, "position_y": 565, "font_family": "Montserrat", "font_size": 18, "font_weight": "500", "color": "#111827" },
+                { "element_id": "signature_image", "type": "image", "content": "../../src/images/signatures/sample-signature.svg", "position_x": 240, "position_y": 760, "width": 200, "height": 50 },
+                { "element_id": "signatory_name", "type": "text", "content": "{Signatory_Name}", "position_x": 240, "position_y": 840, "font_family": "Montserrat", "font_size": 14, "font_weight": "500", "color": "#000000" },
+                { "element_id": "signatory_position", "type": "text", "content": "{Signatory_Position}", "position_x": 240, "position_y": 870, "font_family": "Montserrat", "font_size": 14, "color": "#374151" },
+                { "element_id": "signed_date", "type": "text", "content": "{Signed_Date}", "position_x": 240, "position_y": 960, "font_family": "Montserrat", "font_size": 12, "color": "#374151" },
+                { "element_id": "qr_code", "type": "image", "content": "../../src/images/qrcodes/sample-qrcode.svg", "position_x": 620, "position_y": 780, "width": 80, "height": 80 }
+            ];
+
+            const templatesData = [
+                { id: 1, template_code: 'CLLC-GOLD-001', style: 'Classic', orientation: 'Landscape', alignment: 'Center', theme_color: 'Gold', imageUrl: '../../src/images/templates/cllc-purple-005.svg', content: landscapeContent },
+                { id: 2, template_code: 'CLPC-GREEN-006', style: 'Classic', orientation: 'Portrait', alignment: 'Center', theme_color: 'Green', imageUrl: '../../src/images/templates/mdpc-gold-002.svg', content: portraitContent },
+            ];
+
+            function populateFilters() {
+                const alignments = [...new Set(templatesData.map(t => t.alignment))];
+                const colors = [...new Set(templatesData.map(t => t.theme_color))];
+                
+                alignments.forEach(align => {
+                    alignmentFilter.innerHTML += `<option value="${align}">${align}</option>`;
+                });
+                colors.forEach(color => {
+                    colorFilter.innerHTML += `<option value="${color}">${color}</option>`;
+                });
+            }
+
+            function renderTemplates(filteredData) {
+                templatesGrid.innerHTML = '';
+                if (filteredData.length === 0) {
+                    noResultsDiv.classList.remove('hidden');
+                    return;
+                }
+                noResultsDiv.classList.add('hidden');
+
+                filteredData.forEach(template => {
+                    const imageClass = template.orientation === 'Portrait' ? 'object-contain h-48 w-full' : 'object-cover w-full h-48';
+                    const card = `
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden group transform hover:-translate-y-1 transition-all duration-300">
+                            <div class="relative bg-gray-200 dark:bg-gray-700">
+                                <img class="${imageClass}" src="${template.imageUrl}" alt="${template.template_code}" onerror="this.onerror=null;this.src='https://placehold.co/600x424/cccccc/333333?text=Image+Error';">
+                                <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-60 transition-all duration-300 flex items-center justify-center gap-2">
+                                    <button data-id="${template.id}" class="preview-btn opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 bg-white/80 text-gray-800 font-semibold py-2 px-4 rounded-lg inline-flex items-center gap-2 hover:bg-white">
+                                        <i class="ri-eye-line"></i>
+                                        <span>Preview</span>
+                                    </button>
+                                    <button data-id="${template.id}" class="select-btn opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 delay-75 bg-primary text-white font-semibold py-2 px-4 rounded-lg inline-flex items-center gap-2">
+                                        <i class="ri-check-line"></i>
+                                        <span>Select</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h3 class="font-semibold text-gray-800 dark:text-white">${template.template_code}</h3>
+                                <div class="flex items-center flex-wrap gap-2 mt-2 text-xs text-gray-600 dark:text-gray-300">
+                                    <span class="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded-full">${template.style}</span>
+                                    <span class="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded-full">${template.orientation}</span>
+                                    <span class="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded-full">${template.alignment}</span>
+                                    <span class="px-2 py-1 bg-gray-200 dark:bg-gray-700 rounded-full">${template.theme_color}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    templatesGrid.insertAdjacentHTML('beforeend', card);
+                });
+            }
+
+            function applyFilters() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const selectedStyle = styleFilter.value;
+                const selectedOrientation = orientationFilter.value;
+                const selectedAlignment = alignmentFilter.value;
+                const selectedColor = colorFilter.value;
+
+                const filtered = templatesData.filter(template => {
+                    const matchesSearch = template.template_code.toLowerCase().includes(searchTerm);
+                    const matchesStyle = selectedStyle === 'all' || template.style === selectedStyle;
+                    const matchesOrientation = selectedOrientation === 'all' || template.orientation === selectedOrientation;
+                    const matchesAlignment = selectedAlignment === 'all' || template.alignment === selectedAlignment;
+                    const matchesColor = selectedColor === 'all' || template.theme_color === selectedColor;
+                    return matchesSearch && matchesStyle && matchesOrientation && matchesAlignment && matchesColor;
+                });
+
+                renderTemplates(filtered);
+            }
+
+            [searchInput, styleFilter, orientationFilter, alignmentFilter, colorFilter].forEach(el => {
+                el.addEventListener('input', applyFilters);
+            });
+
+            // --- Preview Modal Logic ---
+            const previewModal = document.getElementById('preview-modal');
+            const previewModalPanel = document.getElementById('preview-modal-panel');
+            const previewModalTitle = document.getElementById('preview-modal-title');
+            const closePreviewModalBtn = document.getElementById('close-preview-modal');
+            const previewContainer = document.getElementById('preview-container');
+            const previewBlanko = document.getElementById('preview-blanko');
+            const previewElements = document.getElementById('preview-elements');
+
+            function openPreviewModal(templateId) {
+                const template = templatesData.find(t => t.id === templateId);
+                if (!template) return;
+
+                previewModalTitle.textContent = `Preview: ${template.template_code}`;
+                previewBlanko.src = template.imageUrl;
+                
+                const originalWidth = template.orientation === 'Portrait' ? 794 : 1123;
+                const originalHeight = template.orientation === 'Portrait' ? 1123 : 794;
+                
+                previewContainer.style.aspectRatio = `${originalWidth} / ${originalHeight}`;
+                if (template.orientation === 'Portrait') {
+                    previewContainer.style.maxWidth = '450px';
+                } else {
+                    previewContainer.style.maxWidth = '100%';
+                }
+
+                previewElements.innerHTML = '';
+                
+                setTimeout(() => {
+                    const previewRect = previewContainer.getBoundingClientRect();
+                    const scaleFactor = previewRect.width / originalWidth;
+
+                    template.content.forEach(el => {
+                        const elDiv = document.createElement(el.type === 'image' ? 'img' : 'div');
+                        elDiv.className = 'preview-element';
+                        
+                        const topPercent = (el.position_y / originalHeight) * 100;
+                        const leftPercent = (el.position_x / originalWidth) * 100;
+
+                        elDiv.style.top = `${topPercent}%`;
+                        elDiv.style.left = `${leftPercent}%`;
+                        
+                        if (el.type === 'text') {
+                            elDiv.textContent = el.content;
+                            elDiv.style.fontFamily = `'${el.font_family}', sans-serif`;
+                            elDiv.style.fontSize = `${el.font_size * scaleFactor}px`;
+                            elDiv.style.fontWeight = el.font_weight || 'normal';
+                            elDiv.style.color = el.color;
+                        } else { // image
+                            elDiv.src = el.content;
+                            elDiv.style.width = `${el.width * scaleFactor}px`;
+                            elDiv.style.height = `${el.height * scaleFactor}px`;
+                        }
+                        
+                        elDiv.style.transform = `translateX(-50%)`;
+                        elDiv.style.textAlign = 'center';
+
+                        previewElements.appendChild(elDiv);
+                    });
+                }, 0);
+
+                previewModal.classList.remove('hidden');
+                previewModal.classList.add('flex');
+                setTimeout(() => {
+                    previewModalPanel.classList.remove('opacity-0', 'scale-95');
+                }, 10);
+            }
+
+            function closePreviewModal() {
+                previewModalPanel.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => {
+                     previewModal.classList.add('hidden');
+                     previewModal.classList.remove('flex');
+                }, 300);
+            }
+
+            closePreviewModalBtn.addEventListener('click', closePreviewModal);
+
+            // --- Toast Notification Logic ---
+            const toast = document.getElementById('toast-notification');
+            const toastMessage = document.getElementById('toast-message');
+
+            function showToast(message) {
+                toastMessage.textContent = message;
+                toast.classList.remove('translate-x-full', 'opacity-0');
+                setTimeout(() => {
+                    toast.classList.add('translate-x-full', 'opacity-0');
+                }, 3000); // Hide after 3 seconds
+            }
+
+            templatesGrid.addEventListener('click', (e) => {
+                const selectBtn = e.target.closest('.select-btn');
+                if (selectBtn) {
+                    const templateId = selectBtn.dataset.id;
+                    showToast("Template selected! Available in 'Selected Templates'.");
+                }
+
+                const previewBtn = e.target.closest('.preview-btn');
+                if (previewBtn) {
+                    openPreviewModal(parseInt(previewBtn.dataset.id));
+                }
+            });
+
+            // Initial render
+            populateFilters();
+            renderTemplates(templatesData);
+        });
+    </script>
+
+</body>
+</ht

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Data Simulation - MySertifico</title>
+    <link rel="icon" type="image/png" href="../../src/images/logos/favicon.png" onerror="this.onerror=null;this.src='https://placehold.co/32x32/0d9488/ffffff?text=M';">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&family=EB+Garamond:wght@400;700&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Custom Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                        garamond: ['EB Garamond', 'serif'],
+                        montserrat: ['Montserrat', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': {
+                            'DEFAULT': '#0d9488', // Teal-600
+                            'dark': '#0f766e', // Teal-700
+                        },
+                        'accent': {
+                            'DEFAULT': '#f59e0b', // Amber-500
+                            'hover': '#d97706'
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        .preview-element {
+            position: absolute;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 flex items-center justify-center min-h-screen">
+
+    <div class="text-center p-4">
+        <h1 class="font-poppins text-4xl font-bold text-primary mb-2">Template Data Simulation</h1>
+        <p class="text-gray-600 dark:text-gray-400 mb-8">Step 1: Select a template configuration to simulate.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <!-- Portrait Options -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+                <h2 class="text-2xl font-bold mb-4">Portrait</h2>
+                <div class="space-y-3">
+                    <button data-sim="portrait-left" class="simulation-btn w-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 font-semibold py-3 px-4 rounded-lg transition-colors">Left Alignment</button>
+                    <button data-sim="portrait-center" class="simulation-btn w-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 font-semibold py-3 px-4 rounded-lg transition-colors">Center Alignment</button>
+                    <button data-sim="portrait-right" class="simulation-btn w-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 font-semibold py-3 px-4 rounded-lg transition-colors">Right Alignment</button>
+                </div>
+            </div>
+            <!-- Landscape Options -->
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+                <h2 class="text-2xl font-bold mb-4">Landscape</h2>
+                <div class="space-y-3">
+                    <button data-sim="landscape-left" class="simulation-btn w-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 font-semibold py-3 px-4 rounded-lg transition-colors">Left Alignment</button>
+                    <button data-sim="landscape-center" class="simulation-btn w-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 font-semibold py-3 px-4 rounded-lg transition-colors">Center Alignment</button>
+                    <button data-sim="landscape-right" class="simulation-btn w-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 font-semibold py-3 px-4 rounded-lg transition-colors">Right Alignment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Simulation Modal -->
+    <div id="simulation-modal" class="fixed inset-0 bg-black/70 z-[120] hidden items-center justify-center p-4 backdrop-blur-sm">
+        <div id="modal-panel" class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-7xl max-h-[95vh] flex flex-col transform transition-all opacity-0 scale-95">
+            <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 id="modal-title" class="font-poppins font-bold text-lg text-gray-800 dark:text-white"></h3>
+                <button type="button" id="close-modal-btn" class="text-gray-400 hover:text-gray-600 dark:hover:text-white"><i class="ri-close-line text-2xl"></i></button>
+            </div>
+            <div id="modal-content-area" class="flex-grow p-6 overflow-y-auto">
+                <!-- Content for each step will be injected here -->
+            </div>
+             <div id="modal-footer" class="px-6 py-4 bg-gray-50 dark:bg-gray-900/50 border-t border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                <!-- Buttons for each step will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const A4_MARGIN_CM = 2.0;
+            const DPI = 96;
+            const CM_TO_PX = DPI / 2.54;
+            const MARGIN_PX = A4_MARGIN_CM * CM_TO_PX;
+
+            const baseElements = [
+                { "element_id": "logo", "type": "image", "content": "../../src/images/logos-badges/sample-logo.svg", "width": 100, "height": 100 },
+                { "element_id": "organization_name", "type": "text", "content": "{Organization_Name}", "font_family": "Montserrat", "font_size": 18, "font_weight": "700", "color": "#111827" },
+                { "element_id": "address_1", "type": "text", "content": "{Address_row1}", "font_family": "Montserrat", "font_size": 14, "color": "#374151" },
+                { "element_id": "address_2", "type": "text", "content": "{Address_row2}", "font_family": "Montserrat", "font_size": 14, "color": "#374151" },
+                { "element_id": "certificate_title", "type": "text", "content": "CERTIFICATE TITLE", "font_family": "EB Garamond", "font_size": 42, "font_weight": "bold", "color": "#AA8F29" },
+                { "element_id": "certificate_body", "type": "text", "content": "Certificate text body", "font_family": "Montserrat", "font_size": 18, "color": "#374151" },
+                { "element_id": "recipient_name", "type": "text", "content": "{Recipient_Name}", "font_family": "Montserrat", "font_size": 20 , "font_weight": "bold", "color": "#000000" },
+                { "element_id": "event_description", "type": "text", "content": "Certificate text event description", "font_family": "Montserrat", "font_size": 18, "color": "#374151" },
+                { "element_id": "event_date", "type": "text", "content": "{EventName} on {EventDate}", "font_family": "Montserrat", "font_size": 18, "font_weight": "600", "color": "#111827" },
+                { "element_id": "signature_image", "type": "image", "content": "../../src/images/signatures/sample-signature.svg", "width": 150, "height": 67 },
+                { "element_id": "signatory_name", "type": "text", "content": "{Signatory_Name}", "font_family": "Montserrat", "font_size": 14, "font_weight": "500", "color": "#000000" },
+                { "element_id": "signatory_position", "type": "text", "content": "{Signatory_Position}", "font_family": "Montserrat", "font_size": 14, "color": "#374151" },
+                { "element_id": "signed_date", "type": "text", "content": "{SignedDate}", "font_family": "Montserrat", "font_size": 14, "color": "#374151" },
+                { "element_id": "qr_code", "type": "image", "content": "../../src/images/qrcodes/sample-qrcode.svg", "width": 100, "height": 100 }
+            ];
+
+            function generateContent(orientation, alignment) {
+                const isPortrait = orientation === 'Portrait';
+                const width = isPortrait ? 794 : 1123;
+                const height = isPortrait ? 1123 : 794;
+                
+                let x_pos;
+                if (alignment === 'Left') x_pos = MARGIN_PX;
+                else if (alignment === 'Right') x_pos = width - MARGIN_PX;
+                else x_pos = width / 2;
+
+                const y_positions = isPortrait 
+                    ? [120, 180, 200, 220, 310, 430, 480, 530, 555, 720, 750, 770, 800, 950] // Portrait Y
+                    : [120, 180, null, null, 260, 320, 355, 390, 410, 490, 520, 540, 570, 665]; // Landscape Y
+
+                return baseElements.map((el, index) => {
+                    if (y_positions[index] === null) return null;
+                    return { ...el, position_x: x_pos, position_y: y_positions[index] };
+                }).filter(Boolean);
+            }
+
+            const templateSimulations = {
+                'portrait-left': { style: 'Modern', orientation: 'Portrait', default_alignment: 'Left', theme_color: 'Green', template_code: 'mdpl-green-001', blanko_url: '../../src/images/templates/mdpl-green-001.svg', content: generateContent('Portrait', 'Left') },
+                'portrait-center': { style: 'Classic', orientation: 'Portrait', default_alignment: 'Center', theme_color: 'Gold', template_code: 'mdpc-gold-002', blanko_url: '../../src/images/templates/clpc-gold-010.svg', content: generateContent('Portrait', 'Center') },
+                'portrait-right': { style: 'Modern', orientation: 'Portrait', default_alignment: 'Right', theme_color: 'Blue', template_code: 'mdpr-blue-003', blanko_url: '../../src/images/templates/mdpr-blue-003.svg', content: generateContent('Portrait', 'Right') },
+                'landscape-left': { style: 'Classic', orientation: 'Landscape', default_alignment: 'Left', theme_color: 'Red', template_code: 'clll-red-004', blanko_url: '../../src/images/templates/clll-red-004.svg', content: generateContent('Landscape', 'Left') },
+                'landscape-center': { style: 'Modern', orientation: 'Landscape', default_alignment: 'Center', theme_color: 'Purple', template_code: 'mdlc-purple-005', blanko_url: '../../src/images/templates/mdlc-purple-003.svg', content: generateContent('Landscape', 'Center') },
+                'landscape-right': { style: 'Modern', orientation: 'Landscape', default_alignment: 'Right', theme_color: 'Black', template_code: 'cllr-black-006', blanko_url: '../../src/images/templates/cllr-black-006.svg', content: generateContent('Landscape', 'Right') }
+            };
+
+            const modal = document.getElementById('simulation-modal');
+            const modalPanel = document.getElementById('modal-panel');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const modalTitle = document.getElementById('modal-title');
+            const modalContentArea = document.getElementById('modal-content-area');
+            const modalFooter = document.getElementById('modal-footer');
+            
+            let currentSimData = null;
+            let currentStep = 1;
+
+            function navigateStep(direction) {
+                currentStep += direction;
+                renderStep(currentStep);
+            }
+
+            function renderStep(step) {
+                modalTitle.textContent = `Step ${step}: ${getStepTitle(step)}`;
+                modalContentArea.innerHTML = getStepContent(step);
+                modalFooter.innerHTML = getStepFooter(step);
+                
+                if (step === 3) { // Special handling for visual preview scaling
+                    setTimeout(renderPreviewElements, 0);
+                }
+
+                // Re-attach listeners for new buttons
+                document.getElementById('step-back-btn')?.addEventListener('click', () => navigateStep(-1));
+                document.getElementById('step-next-btn')?.addEventListener('click', () => navigateStep(1));
+            }
+
+            function getStepTitle(step) {
+                switch(step) {
+                    case 2: return "Review Properties & JSON Data";
+                    case 3: return "Visual Preview";
+                    case 4: return "Final Data Object for Backend";
+                    default: return "";
+                }
+            }
+
+            function getStepContent(step) {
+                switch(step) {
+                    case 2:
+                        return `
+                            <div class="flex flex-col gap-4 h-full">
+                                <div class="border dark:border-gray-700 rounded-lg p-4">
+                                    <h4 class="font-bold text-lg mb-2">Template Properties</h4>
+                                    <div class="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                                        <span>Style:</span> <span class="font-semibold">${currentSimData.style}</span>
+                                        <span>Orientation:</span> <span class="font-semibold">${currentSimData.orientation}</span>
+                                        <span>Alignment:</span> <span class="font-semibold">${currentSimData.default_alignment}</span>
+                                        <span>Theme Color:</span> <span class="font-semibold">${currentSimData.theme_color}</span>
+                                        <span class="col-span-2">Template Code: <span class="font-semibold">${currentSimData.template_code}</span></span>
+                                    </div>
+                                </div>
+                                <div class="border dark:border-gray-700 rounded-lg p-4 flex-grow flex flex-col">
+                                    <h4 class="font-bold text-lg mb-2">Generated JSON \`content\`</h4>
+                                    <pre class="text-xs bg-gray-100 dark:bg-gray-900 p-3 rounded-md overflow-auto flex-grow">${JSON.stringify(currentSimData.content, null, 2)}</pre>
+                                </div>
+                            </div>
+                        `;
+                    case 3:
+                        return `
+                            <div class="bg-gray-200 dark:bg-gray-900 p-4 rounded-lg flex items-center justify-center h-full">
+                                <div id="preview-container" class="relative shadow-lg">
+                                    <img id="preview-blanko" src="${currentSimData.blanko_url}" class="w-full h-auto">
+                                    <div id="preview-elements" class="absolute inset-0"></div>
+                                </div>
+                            </div>
+                        `;
+                    case 4:
+                        const finalDataObject = {
+                            style: currentSimData.style,
+                            orientation: currentSimData.orientation,
+                            alignment: currentSimData.default_alignment,
+                            theme_color: currentSimData.theme_color,
+                            template_code: currentSimData.template_code,
+                            content: JSON.stringify(currentSimData.content),
+                            created_at: new Date().toISOString(),
+                            created_by: 101,
+                            is_active: true
+                        };
+                        return `
+                             <div class="flex flex-col h-full">
+                                <p class="text-sm text-center text-gray-500 dark:text-gray-400 mb-4">This is the complete object that the backend will receive to save into the \`templates\` table.</p>
+                                <pre class="text-xs bg-gray-100 dark:bg-gray-900 p-4 rounded-md overflow-auto flex-grow">${JSON.stringify(finalDataObject, null, 2)}</pre>
+                            </div>
+                        `;
+                }
+            }
+            
+            function getStepFooter(step) {
+                 const backBtn = `<button id="step-back-btn" class="bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 font-semibold py-2 px-6 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors">Back</button>`;
+                 const nextBtn = `<button id="step-next-btn" class="bg-primary text-white font-semibold py-2 px-6 rounded-lg hover:bg-primary-dark transition-colors">Next</button>`;
+                 const closeBtn = `<button id="close-modal-btn-footer" class="bg-primary text-white font-semibold py-2 px-6 rounded-lg hover:bg-primary-dark transition-colors">Close</button>`;
+
+                switch(step) {
+                    case 2: return `<div></div>${nextBtn}`;
+                    case 3: return `${backBtn}${nextBtn}`;
+                    case 4: return `${backBtn}${closeBtn}`;
+                }
+            }
+
+            function renderPreviewElements() {
+                const previewContainer = document.getElementById('preview-container');
+                const previewElements = document.getElementById('preview-elements');
+                if (!previewContainer || !previewElements) return;
+
+                const originalWidth = currentSimData.orientation === 'Portrait' ? 794 : 1123;
+                const originalHeight = currentSimData.orientation === 'Portrait' ? 1123 : 794;
+                
+                previewContainer.style.width = `${originalWidth}px`;
+                previewContainer.style.height = `${originalHeight}px`;
+                previewContainer.style.maxWidth = '100%';
+
+                const previewRect = previewContainer.getBoundingClientRect();
+                const scaleFactor = previewRect.width / originalWidth;
+
+                previewElements.innerHTML = '';
+                currentSimData.content.forEach(el => {
+                    const elDiv = document.createElement(el.type === 'image' ? 'img' : 'div');
+                    elDiv.className = 'preview-element';
+                    
+                    elDiv.style.top = `${(el.position_y / originalHeight) * 100}%`;
+                    elDiv.style.left = `${(el.position_x / originalWidth) * 100}%`;
+                    
+                    if (el.type === 'text') {
+                        elDiv.textContent = el.content;
+                        elDiv.style.fontFamily = `'${el.font_family}', sans-serif`;
+                        elDiv.style.fontSize = `${el.font_size * scaleFactor}px`;
+                        elDiv.style.fontWeight = el.font_weight || 'normal';
+                        elDiv.style.color = el.color;
+                    } else {
+                        elDiv.src = el.content;
+                        elDiv.style.width = `${el.width * scaleFactor}px`;
+                        elDiv.style.height = `${el.height * scaleFactor}px`;
+                    }
+                    
+                    if (currentSimData.default_alignment === 'Left') elDiv.style.transform = `translateX(0) translateY(-50%)`;
+                    else if (currentSimData.default_alignment === 'Right') elDiv.style.transform = `translateX(-100%) translateY(-50%)`;
+                    else elDiv.style.transform = `translateX(-50%) translateY(-50%)`;
+                    elDiv.style.textAlign = currentSimData.default_alignment.toLowerCase();
+
+                    previewElements.appendChild(elDiv);
+                });
+            }
+
+            function openModal(simKey) {
+                currentStep = 2; // Start at step 2
+                currentSimData = templateSimulations[simKey];
+                renderStep(currentStep);
+
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                setTimeout(() => {
+                    modalPanel.classList.remove('opacity-0', 'scale-95');
+                }, 10);
+            }
+
+            function closeModal() {
+                modalPanel.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => {
+                     modal.classList.add('hidden');
+                     modal.classList.remove('flex');
+                }, 300);
+            }
+
+            document.querySelectorAll('.simulation-btn').forEach(btn => {
+                btn.addEventListener('click', () => openModal(btn.dataset.sim));
+            });
+            closeModalBtn.addEventListener('click', closeModal);
+            modalFooter.addEventListener('click', (e) => {
+                if (e.target.id === 'close-modal-btn-footer') {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

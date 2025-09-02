@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Preview - MyWall</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="../../src/images/logos/favicon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+
+    <!-- html2pdf.js CDN for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" xintegrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#0f766e', // Teal-700
+                        'dark': '#1f2937',    // Gray-800
+                        'medium': '#4b5563',  // Gray-600
+                        'light-bg': '#f9fafb',// Gray-50
+                        'accent': '#F97316',
+                        'accent-hover': '#EA580C',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* A4 paper size: 210mm x 297mm */
+        /* We use a container that has the same aspect ratio */
+        .a4-container {
+            width: 210mm;
+            min-height: 297mm;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .page-break-avoid { 
+            page-break-inside: avoid; 
+        }
+    </style>
+</head>
+<body class="bg-gray-200">
+
+    <!-- Action Bar -->
+    <div class="bg-white shadow-md w-full py-4 px-6 flex justify-center items-center gap-4 fixed bottom-0 z-50">
+        <a href="myprofile.html" class="bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-6 rounded-full transition-colors flex items-center gap-2">
+            <i class="ri-arrow-left-line"></i>
+            <span>Back to Profile</span>
+        </a>
+        <button id="download-pdf-button" class="bg-accent hover:bg-accent-hover text-white font-semibold py-2 px-6 rounded-full transition-colors flex items-center gap-2">
+            <i class="ri-download-2-line"></i>
+            <span>Download PDF</span>
+        </button>
+    </div>
+
+    <!-- Main content is the resume preview itself -->
+    <main class="py-12">
+        <!-- A4 Aspect Ratio Container for PDF generation -->
+        <div id="resume-content" class="a4-container bg-white shadow-lg">
+            <div class="flex">
+                <!-- Left Sidebar -->
+                <aside class="w-1/3 bg-light-bg p-[16mm] flex flex-col">
+                    <div class="text-center">
+                        <img src="../../src/images/users/nabil.png" onerror="this.onerror=null;this.src='https://placehold.co/128x128/cccccc/333333?text=A';" alt="User Avatar" class="w-32 h-32 rounded-full border-4 border-white shadow-md inline-block">
+                    </div>
+                    
+                    <div class="mt-8">
+                        <h3 class="font-poppins font-bold text-primary text-sm tracking-widest uppercase">About Me</h3>
+                        <p class="text-xs text-medium mt-2 border-l-2 border-primary pl-3">Driven professional with a passion for software engineering and machine learning. Eager to apply technical knowledge to real-world challenges.</p>
+                    </div>
+
+                    <div class="mt-8">
+                        <h3 class="font-poppins font-bold text-primary text-sm tracking-widest uppercase">Contact</h3>
+                        <div class="mt-2 text-xs text-medium space-y-2 border-l-2 border-primary pl-3">
+                            <p class="flex items-center"><i class="ri-phone-fill w-4 mr-2"></i> +60 12-345 6789</p>
+                            <p class="flex items-center"><i class="ri-mail-fill w-4 mr-2"></i> t.nabil@email.com</p>
+                            <p class="flex items-center"><i class="ri-map-pin-fill w-4 mr-2"></i> 807-D, Jalan Angsana 2, 123456 Puchong, Selangor, MALAYSIA</p>
+                            <p class="flex items-center"><i class="ri-linkedin-box-fill w-4 mr-2"></i> /in/taufiknabil</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <h3 class="font-poppins font-bold text-primary text-sm tracking-widest uppercase">Skills</h3>
+                        <div class="mt-2 text-xs text-medium space-y-1 border-l-2 border-primary pl-3">
+                            <p>• Python, JavaScript, React</p>
+                            <p>• SQL, AWS, Docker</p>
+                            <p>• Agile, Scrum, Project Management</p>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Right Main Content -->
+                <div class="w-2/3 p-[16mm]">
+                    <header>
+                        <h1 class="text-3xl font-bold font-poppins text-dark leading-tight">Nabil Taufik Yusoff</h1>
+                        <p class="text-medium mt-1">National ID: 950101-03-1234</p>
+                    </header>
+
+                    <section class="mt-8">
+                        <h2 class="font-poppins font-bold text-primary text-sm tracking-widest uppercase">Achievements & Credentials</h2>
+                        <div class="mt-4 space-y-6">
+                            
+                            <div class="page-break-avoid">
+                                <h3 class="font-bold text-lg text-dark">Universiti Teknologi Petronas</h3>
+                                <div class="mt-2 space-y-3 pl-3 text-sm border-l-2 border-light-bg">
+                                    <div class="flex"><p class="w-1/4 font-semibold text-medium">May 2024</p><p class="w-3/4">Dean’s List, Semester 2, 2023/2024</p></div>
+                                    <div class="flex"><p class="w-1/4 font-semibold text-medium">Jan 2024</p><p class="w-3/4">Technical Executive, Google Developer Student Club UTP</p></div>
+                                    <div class="flex"><p class="w-1/4 font-semibold text-medium">Dec 2023</p><p class="w-3/4">Dean’s List, Semester 1, 2023/2024</p></div>
+                                </div>
+                            </div>
+
+                            <div class="page-break-avoid">
+                                <h3 class="font-bold text-lg text-dark">PETRONAS Digital Sdn. Bhd.</h3>
+                                <div class="mt-2 space-y-3 pl-3 text-sm border-l-2 border-light-bg">
+                                    <div class="flex"><p class="w-1/4 font-semibold text-medium">Aug 2023</p><p class="w-3/4">Internship Completion Certificate (Software Engineering)</p></div>
+                                </div>
+                            </div>
+
+                            <div class="page-break-avoid">
+                                <h3 class="font-bold text-lg text-dark">Professional Certifications</h3>
+                                <div class="mt-2 space-y-3 pl-3 text-sm border-l-2 border-light-bg">
+                                    <div class="flex"><p class="w-1/4 font-semibold text-medium">Dec 2023</p><p class="w-3/4">Professional Scrum Master I (Scrum.org)</p></div>
+                                    <div class="flex"><p class="w-1/4 font-semibold text-medium">Nov 2023</p><p class="w-3/4">AWS Certified Cloud Practitioner (Amazon Web Services)</p></div>
+                                </div>
+                            </div>
+                            
+                            <div class="page-break-avoid">
+                                <h3 class="font-bold text-lg text-dark">SM Sains Machang, Kelantan</h3>
+                                 <div class="mt-2 space-y-3 pl-3 text-sm border-l-2 border-light-bg">
+                                    <div class="flex"><p class="w-1/4 font-semibold text-medium">Mar 2022</p><p class="w-3/4">Best SPM Student Award (9As)</p></div>
+                                    <div class="flex"><p class="w-1/4 font-semibold text-medium">Aug 2021</p><p class="w-3/4">Champion, State-level Robotics Competition</p></div>
+                                    <div class="flex"><p class="w-1/4 font-semibold text-medium">Jan 2021</p><p class="w-3/4">Head Prefect</p></div>
+                                    <div class="flex"><p class="w-1/4 font-semibold text-medium">Nov 2020</p><p class="w-3/4">1st in Form Award</p></div>
+                                    <div class="flex"><p class="w-1/4 font-semibold text-medium">Jul 2020</p><p class="w-3/4">Participant, National Chemistry Quiz</p></div>
+                                    <div class="flex"><p class="w-1/4 font-semibold text-medium">Mar 2019</p><p class="w-3/4">Best Student, Lower Secondary Assessment (PMR)</p></div>
+                                </div>
+                            </div>
+
+                            <div class="page-break-avoid">
+                                <h3 class="font-bold text-lg text-dark">SK Kubang Kerian 3, Kelantan</h3>
+                                 <div class="mt-2 space-y-3 pl-3 text-sm border-l-2 border-light-bg">
+                                    <div class="flex"><p class="w-1/4 font-semibold text-medium">Nov 2016</p><p class="w-3/4">Best UPSR Student Award (5As)</p></div>
+                                    <div class="flex"><p class="w-1/4 font-semibold text-medium">Jan 2016</p><p class="w-3/4">Head Prefect</p></div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Main Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const profileMenuButton = document.getElementById('profile-menu-button');
+            const profileMenu = document.getElementById('profile-menu');
+
+            if (profileMenuButton) {
+                profileMenuButton.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    profileMenu.classList.toggle('hidden');
+                });
+            }
+            
+            window.addEventListener('click', (event) => {
+                if (profileMenu && !profileMenu.classList.contains('hidden') && !profileMenuButton.contains(event.target)) {
+                    profileMenu.classList.add('hidden');
+                }
+            });
+
+            // --- PDF Download Functionality ---
+            const downloadButton = document.getElementById('download-pdf-button');
+            if (downloadButton) {
+                downloadButton.addEventListener('click', () => {
+                    const element = document.getElementById('resume-content');
+                    const opt = {
+                      margin:       0,
+                      filename:     'Resume-Taufik-Nabil.pdf',
+                      image:        { type: 'jpeg', quality: 1.0 },
+                      html2canvas:  { scale: 4, useCORS: true },
+                      jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                    };
+
+                    html2pdf().set(opt).from(element).save();
+                });
+            }
+        });
+    </script>
+</body>
+</html>

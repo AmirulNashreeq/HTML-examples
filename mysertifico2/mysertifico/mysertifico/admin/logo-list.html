@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Logo Management - MySertifico</title>
+  <link rel="icon" type="image/png" href="../../src/images/logos/favicon.png" onerror="this.onerror=null;this.src='https://placehold.co/32x32/0d9488/ffffff?text=M';"/>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            poppins: ['Poppins', 'sans-serif'],
+          },
+          colors: {
+            primary: { DEFAULT:'#0d9488', dark:'#0f766e', light:'#ccfbf1' },
+            accent:  { DEFAULT:'#f59e0b', hover:'#d97706' },
+            danger:  { DEFAULT:'#dc2626', dark:'#b91c1c' }
+          }
+        }
+      }
+    }
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet"/>
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .sidebar { scrollbar-width: none; }
+    .sidebar::-webkit-scrollbar { display: none; }
+    .modal { transition: opacity .3s ease; }
+    .modal-content { transition: transform .3s ease; }
+    .logo-card .actions { opacity: 0; transition: opacity .3s ease; }
+    .logo-card:hover .actions { opacity: 1; }
+  </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+
+  <aside id="sidebar" class="sidebar fixed top-0 left-0 z-50 h-full w-64 bg-gray-800 dark:bg-gray-950 text-white transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto">
+    <div class="flex items-center justify-between p-6">
+      <h2 class="font-poppins text-2xl font-bold text-white">Menu</h2>
+      <button id="close-sidebar" type="button" class="text-gray-400 hover:text-white">
+        <i class="ri-close-line text-2xl"></i>
+      </button>
+    </div>
+    <nav class="p-4">
+      <ul class="space-y-2">
+        <li>
+          <a href="dashboard.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white transition-colors">
+            <i class="ri-dashboard-3-line mr-3 text-lg"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+
+        <li>
+          <button data-collapse-toggle="submenu-gallery" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white transition-colors">
+            <span class="flex items-center"><i class="ri-gallery-line mr-3 text-lg"></i><span>Gallery</span></span>
+            <i class="ri-arrow-down-s-line transition-transform duration-200"></i>
+          </button>
+          <ul id="submenu-gallery" class="hidden py-2 space-y-1 pl-8">
+            <li><a href="templates-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Templates</a></li>
+            <li><a href="logos-badges.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Logos &amp; Badges</a></li>
+          </ul>
+        </li>
+
+        <li>
+          <a href="certificate-list.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white transition-colors">
+            <i class="ri-award-line mr-3 text-lg"></i>
+            <span>Certificates</span>
+          </a>
+        </li>
+        
+        <li>
+            <a href="find-certificate.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white transition-colors">
+                <i class="ri-user-search-line mr-3 text-lg"></i>
+                <span>Find Certificate</span>
+            </a>
+        </li>
+        <li>
+          <button data-collapse-toggle="submenu-settings" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white transition-colors">
+            <span class="flex items-center"><i class="ri-settings-3-line mr-3 text-lg"></i><span>Settings</span></span>
+            <i class="ri-arrow-down-s-line transition-transform duration-200"></i>
+          </button>
+          <ul id="submenu-settings" class="hidden py-2 space-y-1 pl-8">
+            <li><a href="organisation.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Organisation</a></li>
+            <li><a href="logo-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Logos</a></li>
+            <li><a href="selected-template-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Selected Templates</a></li>
+            <li><a href="user-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Users</a></li>
+            <li class="px-4"><hr class="border-gray-700 my-1"></li>
+            <li><a href="account.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Account</a></li>
+          </ul>
+        </li>
+
+        <li class="pt-4 mt-4 border-t border-gray-700">
+          <a href="#" id="logout-sidebar" class="flex items-center py-2.5 px-4 rounded-lg text-red-400 hover:bg-red-500 hover:text-white transition-colors">
+            <i class="ri-logout-box-r-line mr-3 text-lg"></i>
+            <span>Log Out</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+
+  <div id="main-content" class="relative min-h-screen transition-all duration-300 ease-in-out">
+    <header class="sticky top-0 z-30 bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+      <div class="flex items-center justify-between p-4">
+        <div class="flex items-center space-x-4">
+          <button id="sidebar-toggle" type="button" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
+            <i class="ri-menu-line text-2xl"></i>
+          </button>
+          <a href="dashboard.html" class="flex items-center gap-x-2">
+            <img src="../../src/images/logos/logo.png" alt="MySertifico Logo" class="h-8 w-8 rounded-lg" onerror="this.onerror=null;this.src='https://placehold.co/32x32/0d9488/ffffff?text=M';">
+            <span class="font-poppins text-2xl font-bold text-primary hidden sm:block">MySertifico</span>
+          </a>
+        </div>
+        <div class="flex items-center space-x-4">
+          <button id="theme-toggle" type="button" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+            <i class="ri-moon-line block dark:hidden"></i><i class="ri-sun-line hidden dark:block"></i>
+          </button>
+          <div class="relative">
+            <button id="profile-menu-button" type="button" class="flex items-center space-x-2">
+              <img class="h-9 w-9 rounded-full object-cover" src="https://i.pravatar.cc/150?u=admin" alt="Admin" onerror="this.onerror=null;this.src='https://placehold.co/150x150/0d9488/ffffff?text=A';">
+              <div class="hidden md:block text-left">
+                <div class="text-sm font-semibold text-gray-800 dark:text-white">Fikri Nabil</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400">Super Admin</div>
+              </div>
+            </button>
+            <div id="profile-menu" class="hidden absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5">
+              <div class="py-1">
+                <a href="my-profile.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-user-line mr-3"></i>My Profile</a>
+                <a href="change-password.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-lock-password-line mr-3"></i>Change Password</a>
+                <hr class="border-gray-200 dark:border-gray-700 my-1">
+                <a href="#" id="logout-navbar" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-logout-box-r-line mr-3"></i>Logout</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="p-6 sm:p-8">
+      <div class="max-w-7xl mx-auto">
+        <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white mb-6">Logo Management</h1>
+
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md mb-8">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Primary Logo</h3>
+          <div class="flex flex-col sm:flex-row items-center gap-6">
+            <div class="w-32 h-32 flex-shrink-0 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center">
+              <img id="primary-logo-preview" src="../../src/images/logos-badges/logo-srsa.svg" alt="Primary Logo" class="max-w-full max-h-full object-contain">
+            </div>
+            <div class="flex-grow text-center sm:text-left">
+              <p class="text-gray-800 dark:text-gray-200">This is the main logo for your organisation. It will be used by default on certificates and other branding materials.</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Recommended size: 512x512px, PNG format with transparent background.</p>
+              <label for="primary-logo-upload" class="mt-4 inline-block px-4 py-2 bg-primary text-white text-sm rounded-lg hover:bg-primary-dark cursor-pointer">
+                <i class="ri-upload-2-line mr-2"></i>Change Logo
+              </label>
+              <input type="file" id="primary-logo-upload" class="hidden" accept="image/png, image/jpeg">
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Secondary Logos</h3>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage logos for clubs, associations, or special events.</p>
+            </div>
+            <label for="secondary-logo-upload" class="mt-4 sm:mt-0 w-full sm:w-auto px-4 py-2 text-sm bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 flex items-center justify-center cursor-pointer">
+              <i class="ri-add-line mr-2"></i>Upload New Logo
+            </label>
+            <input type="file" id="secondary-logo-upload" class="hidden" accept="image/png, image/jpeg" multiple>
+          </div>
+
+          <div id="logo-gallery" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <div class="logo-card group relative aspect-square bg-gray-100 dark:bg-gray-700/50 rounded-lg flex items-center justify-center p-4 overflow-hidden" data-name="Club Logo 1">
+              <img src="../../src/images/logos-badges/best-student.svg" alt="Club Logo 1" class="max-w-full max-h-full object-contain">
+              <div class="actions absolute top-2 right-2">
+                <button type="button" class="delete-logo-btn p-2 rounded-full bg-white/50 dark:bg-gray-900/50 text-red-500 hover:bg-red-500 hover:text-white transition-colors"><i class="ri-delete-bin-line"></i></button>
+              </div>
+            </div>
+            <div class="logo-card group relative aspect-square bg-gray-100 dark:bg-gray-700/50 rounded-lg flex items-center justify-center p-4 overflow-hidden" data-name="Event Logo">
+              <img src="../../src/images/logos-badges/prs.svg" alt="Event Logo" class="max-w-full max-h-full object-contain">
+              <div class="actions absolute top-2 right-2">
+                <button type="button" class="delete-logo-btn p-2 rounded-full bg-white/50 dark:bg-gray-900/50 text-red-500 hover:bg-red-500 hover:text-white transition-colors"><i class="ri-delete-bin-line"></i></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="deleteConfirmModal" class="modal fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-60 p-4 hidden opacity-0">
+    <div class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-xl w-11/12 md:w-1/3 lg:w-1/4 p-6 text-center transform transition-all scale-95">
+      <i class="ri-error-warning-line text-4xl text-red-500 mx-auto mb-4"></i>
+      <h3 class="text-lg font-bold text-gray-900 dark:text-white">Confirm Deletion</h3>
+      <p id="deleteConfirmText" class="my-4 text-gray-600 dark:text-gray-300"></p>
+      <div class="flex justify-center space-x-3">
+        <button type="button" class="modal-close-button px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500">Cancel</button>
+        <button type="button" id="confirmDeleteBtn" class="px-4 py-2 bg-danger text-white rounded-lg hover:bg-danger-dark">Yes, Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="success-toast" class="fixed top-5 right-5 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 transform translate-x-[150%] opacity-0 transition-all duration-300 ease-in-out z-[100]">
+    <i class="ri-checkbox-circle-fill text-2xl"></i>
+    <span id="toast-message"></span>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Sidebar & overlay
+      var sidebar = document.getElementById('sidebar');
+      var sidebarToggleBtn = document.getElementById('sidebar-toggle');
+      var closeSidebarBtn = document.getElementById('close-sidebar');
+      var overlay = document.getElementById('sidebar-overlay');
+
+      function openSidebar(){ sidebar.classList.remove('-translate-x-full'); overlay.classList.remove('hidden'); }
+      function closeSidebar(){ sidebar.classList.add('-translate-x-full'); overlay.classList.add('hidden'); }
+
+      if (sidebarToggleBtn) sidebarToggleBtn.addEventListener('click', function(e){ e.stopPropagation(); openSidebar(); });
+      if (closeSidebarBtn) closeSidebarBtn.addEventListener('click', closeSidebar);
+      overlay.addEventListener('click', closeSidebar);
+
+      // Collapsible submenus (Dashboard pattern)
+      document.querySelectorAll('[data-collapse-toggle]').forEach(function(button){
+        button.addEventListener('click', function(){
+          var id = button.getAttribute('data-collapse-toggle');
+          var target = document.getElementById(id);
+          var arrow = button.querySelector('.ri-arrow-down-s-line');
+          if (!target) return;
+          target.classList.toggle('hidden');
+          if (arrow) arrow.classList.toggle('rotate-180');
+        });
+      });
+
+      // Theme
+      var themeToggleBtn = document.getElementById('theme-toggle');
+      function applyTheme(){
+        if (localStorage.getItem('color-theme') === 'dark' ||
+            (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      }
+      applyTheme();
+      if (themeToggleBtn) themeToggleBtn.addEventListener('click', function(){
+        var isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('color-theme', isDark ? 'dark' : 'light');
+      });
+
+      // Profile menu
+      var profileMenuButton = document.getElementById('profile-menu-button');
+      var profileMenu = document.getElementById('profile-menu');
+      if (profileMenuButton) profileMenuButton.addEventListener('click', function(e){ e.stopPropagation(); profileMenu.classList.toggle('hidden'); });
+      window.addEventListener('click', function(e){
+        if (profileMenu && !profileMenu.classList.contains('hidden') &&
+            !profileMenuButton.contains(e.target) && !profileMenu.contains(e.target)) {
+          profileMenu.classList.add('hidden');
+        }
+      });
+
+      // Logout
+      var logout = function(){ window.location.href = "../landing/home.html"; };
+      var logoutSidebarEl = document.getElementById('logout-sidebar');
+      var logoutNavbarEl = document.getElementById('logout-navbar');
+      if (logoutSidebarEl) logoutSidebarEl.addEventListener('click', function(e){ e.preventDefault(); logout(); });
+      if (logoutNavbarEl) logoutNavbarEl.addEventListener('click', function(e){ e.preventDefault(); logout(); });
+
+      // ===== Auto-highlight current menu (seragam + aktif ikut halaman) =====
+      (function activateCurrentMenu(){
+        var current = (location.pathname.split('/').pop() || '').toLowerCase();
+        if (!current) return;
+
+        // Find matching <a> in sidebar
+        var links = document.querySelectorAll('#sidebar a[href]');
+        var activeLink = null;
+        links.forEach(function(a){
+          var href = (a.getAttribute('href') || '').toLowerCase();
+          if (href && current && href.endsWith(current)) activeLink = a;
+        });
+
+        if (activeLink) {
+          // Style for active link (top-level)
+          activeLink.classList.add('bg-primary-dark','text-white','shadow-md');
+          activeLink.classList.remove('text-gray-300');
+
+          // If this link is inside a submenu, open its parent "Settings" etc.
+          var parentUl = activeLink.closest('ul');
+          if (parentUl && parentUl.id) {
+            // open submenu
+            parentUl.classList.remove('hidden');
+            // rotate arrow on its button
+            var parentButton = document.querySelector('[data-collapse-toggle="'+ parentUl.id +'"]');
+            if (parentButton) {
+              parentButton.classList.add('bg-primary-dark','text-white');
+              var arrow = parentButton.querySelector('.ri-arrow-down-s-line');
+              if (arrow) arrow.classList.add('rotate-180');
+            }
+            // For submenu item itself, use a lighter highlight (match pattern used previously)
+            activeLink.classList.remove('bg-primary-dark');
+            activeLink.classList.add('bg-primary','text-white');
+          }
+        }
+      })();
+
+      // Toast
+      var successToast = document.getElementById('success-toast');
+      var toastMessage = document.getElementById('toast-message');
+      var toastTimeout;
+      function showToast(message){
+        clearTimeout(toastTimeout);
+        toastMessage.textContent = message;
+        successToast.classList.remove('translate-x-[150%]','opacity-0');
+        toastTimeout = setTimeout(function(){
+          successToast.classList.add('translate-x-[150%]','opacity-0');
+        }, 3000);
+      }
+
+      // Uploads
+      var primaryLogoUpload = document.getElementById('primary-logo-upload');
+      var primaryLogoPreview = document.getElementById('primary-logo-preview');
+      var secondaryLogoUpload = document.getElementById('secondary-logo-upload');
+      var logoGallery = document.getElementById('logo-gallery');
+
+      function handleFileUpload(file, isPrimary){
+        if (file.size > 2 * 1024 * 1024){
+          alert('File size is too large! Maximum 2MB.');
+          return;
+        }
+        var reader = new FileReader();
+        reader.onload = function(e){
+          if (isPrimary){
+            primaryLogoPreview.src = e.target.result;
+            showToast('Primary logo updated successfully!');
+          } else {
+            var card =
+              '<div class="logo-card group relative aspect-square bg-gray-100 dark:bg-gray-700/50 rounded-lg flex items-center justify-center p-4 overflow-hidden" data-name="' + file.name + '">' +
+                '<img src="' + e.target.result + '" alt="' + file.name + '" class="max-w-full max-h-full object-contain">' +
+                '<div class="actions absolute top-2 right-2">' +
+                  '<button type="button" class="delete-logo-btn p-2 rounded-full bg-white/50 dark:bg-gray-900/50 text-red-500 hover:bg-red-500 hover:text-white transition-colors"><i class="ri-delete-bin-line"></i></button>' +
+                '</div>' +
+              '</div>';
+            logoGallery.insertAdjacentHTML('beforeend', card);
+            showToast("'" + file.name + "' uploaded successfully.");
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+
+      if (primaryLogoUpload) primaryLogoUpload.addEventListener('change', function(e){
+        if(e.target.files && e.target.files[0]) handleFileUpload(e.target.files[0], true);
+      });
+      if (secondaryLogoUpload) secondaryLogoUpload.addEventListener('change', function(e){
+        var files = e.target.files || [];
+        for (var i=0; i<files.length; i++) handleFileUpload(files[i], false);
+      });
+
+      // Delete modal
+      var deleteConfirmModal = document.getElementById('deleteConfirmModal');
+      var deleteConfirmText = document.getElementById('deleteConfirmText');
+      var confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+      var logoToDelete = null;
+
+      function showModal(modal){
+        modal.classList.remove('hidden');
+        setTimeout(function(){
+          modal.classList.remove('opacity-0');
+          modal.querySelector('.modal-content').classList.remove('scale-95');
+        }, 10);
+      }
+      function hideModal(modal){
+        if(!modal) return;
+        modal.classList.add('opacity-0');
+        modal.querySelector('.modal-content').classList.add('scale-95');
+        setTimeout(function(){ modal.classList.add('hidden'); }, 300);
+      }
+      document.querySelectorAll('.modal-close-button').forEach(function(btn){
+        btn.addEventListener('click', function(){ hideModal(btn.closest('.modal')); });
+      });
+
+      if (logoGallery) logoGallery.addEventListener('click', function(e){
+        var btn = e.target.closest('.delete-logo-btn');
+        if (btn){
+          logoToDelete = btn.closest('.logo-card');
+          var name = logoToDelete.getAttribute('data-name');
+          deleteConfirmText.textContent = "Are you sure you want to delete '" + name + "'?";
+          showModal(deleteConfirmModal);
+        }
+      });
+
+      if (confirmDeleteBtn) confirmDeleteBtn.addEventListener('click', function(){
+        if (logoToDelete){
+          var name = logoToDelete.getAttribute('data-name');
+          logoToDelete.remove();
+          hideModal(deleteConfirmModal);
+          showToast("'" + name + "' has been deleted.");
+          logoToDelete = null;
+        }
+      });
+    });
+  </script>
+</body>
+</html>

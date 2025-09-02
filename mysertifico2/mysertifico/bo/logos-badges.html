@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySertifico Back Office - Logos & Badges</title>
+    <link rel="icon" type="image/png" href="../src/images/logos/favicon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- Konfigurasi Tambahan untuk Tailwind -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#0d9488', // Teal-600
+                        'primary-dark': '#0f766e', // Teal-700
+                        'accent': '#f59e0b', // Amber-500
+                        'accent-dark': '#d97706', // Amber-600
+                        'bo-bg-light': '#f8fafc', // Slate-50
+                        'bo-bg-dark': '#020617', // Slate-950
+                        'bo-surface-light': '#ffffff',
+                        'bo-surface-dark': '#1e293b', // Slate-800
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .sidebar { scrollbar-width: none; }
+        .sidebar::-webkit-scrollbar { display: none; }
+        .file-input-label { cursor: pointer; }
+        .file-input-label:hover { text-decoration: underline; }
+    </style>
+</head>
+<body class="bg-bo-bg-light dark:bg-bo-bg-dark transition-colors duration-300">
+
+    <!-- ===== Sidebar Start ===== -->
+    <aside id="sidebar" class="sidebar fixed top-0 left-0 z-50 h-full w-64 bg-gray-900 text-white transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto">
+        <!-- Sidebar Header -->
+        <div class="flex items-center justify-between p-5 border-b border-gray-800">
+             <a href="dashboard.html" class="flex items-center gap-3">
+                <img src="../src/images/logos/logo.png" class="h-8 w-8 rounded-lg" alt="Logo" onerror="this.onerror=null;this.src='https://placehold.co/32x32/111827/ffffff?text=M';">
+                <h2 class="font-poppins text-xl font-bold text-white">MySertifico</h2>
+             </a>
+             <button id="close-sidebar" class="text-gray-400 hover:text-white">
+                 <i class="ri-close-line text-2xl"></i>
+             </button>
+        </div>
+        
+        <!-- Navigation Menu -->
+        <nav class="p-4">
+            <ul class="space-y-1">
+                <li class="px-4 text-xs text-gray-400 uppercase font-semibold tracking-wider my-4">Menu</li>
+                <li><a href="dashboard.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700/50 text-gray-300 hover:text-white"><i class="ri-dashboard-3-line mr-3 text-lg"></i><span>Dashboard</span></a></li>
+                <li><a href="templates.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700/50 text-gray-300 hover:text-white"><i class="ri-layout-3-line mr-3 text-lg"></i><span>Templates</span></a></li>
+                <li><a href="logos-badges.html" class="flex items-center py-2.5 px-4 rounded-lg text-white bg-primary border-l-4 border-accent"><i class="ri-medal-line mr-3 text-lg"></i><span>Logos & Badges</span></a></li>
+                <li><a href="certificates.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700/50 text-gray-300 hover:text-white"><i class="ri-award-line mr-3 text-lg"></i><span>Certificates</span></a></li>
+                <li>
+                    <button data-collapse-toggle="submenu-users" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg hover:bg-gray-700/50 text-gray-300 hover:text-white">
+                        <span class="flex items-center"><i class="ri-group-line mr-3 text-lg"></i><span>Users</span></span>
+                        <i class="ri-arrow-down-s-line transition-transform duration-200"></i>
+                    </button>
+                    <ul id="submenu-users" class="hidden py-1 space-y-1 pl-8">
+                        <li><a href="organizations.html" class="flex items-center gap-3 block py-2 px-4 rounded-lg text-sm hover:bg-gray-700"><i class="ri-school-line"></i>Organizations</a></li>
+                        <li><a href="school-users.html" class="flex items-center gap-3 block py-2 px-4 rounded-lg text-sm hover:bg-gray-700"><i class="ri-user-2-line"></i>School Users</a></li>
+                        <li><a href="mywall-users.html" class="flex items-center gap-3 block py-2 px-4 rounded-lg text-sm hover:bg-gray-700"><i class="ri-user-star-line"></i>MyWall Users</a></li>
+                    </ul>
+                </li>
+                <li class="px-4 text-xs text-gray-400 uppercase font-semibold tracking-wider pt-6 pb-2">Administration</li>
+                <li>
+                    <button data-collapse-toggle="submenu-admin" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg hover:bg-gray-700/50 text-gray-300 hover:text-white">
+                        <span class="flex items-center"><i class="ri-settings-3-line mr-3 text-lg"></i><span>Settings</span></span>
+                        <i class="ri-arrow-down-s-line transition-transform duration-200"></i>
+                    </button>
+                    <ul id="submenu-admin" class="hidden py-1 space-y-1 pl-8">
+                        <li><a href="bo-users.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Staff</a></li>
+                        <li><a href="plan-subscriptions.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Plans & Subscriptions</a></li>
+                        <li><a href="system-setting.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">System Settings</a></li>
+                        <li><a href="support-help.html" class="block py-2 px-4 rounded-lg text-sm hover:bg-gray-700">Support & Help</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+    <!-- ===== Sidebar End ===== -->
+    
+    <!-- ===== Main Content Start ===== -->
+    <div id="main-content" class="relative min-h-screen transition-all duration-300 ease-in-out">
+        <!-- ===== Navbar Start ===== -->
+        <header class="sticky top-0 z-30 bg-bo-surface-light/80 dark:bg-bo-surface-dark/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between p-4 h-20">
+                <!-- Left Navbar Section -->
+                <div class="flex items-center space-x-4">
+                    <button id="sidebar-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
+                        <i class="ri-menu-line text-2xl"></i>
+                    </button>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">Logos & Badges</h1>
+                </div>
+
+                <!-- Right Navbar Section -->
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-xl"><i class="ri-moon-line block dark:hidden"></i><i class="ri-sun-line hidden dark:block"></i></button>
+                    
+                    <!-- Profile Dropdown Menu -->
+                    <div class="relative">
+                        <button id="profile-menu-button" class="flex items-center space-x-2">
+                             <img class="h-9 w-9 rounded-full object-cover" src="https://i.pravatar.cc/150?u=admin" alt="Admin" onerror="this.onerror=null;this.src='https://placehold.co/36x36/1e293b/ffffff?text=A';">
+                             <div class="hidden md:block text-left">
+                                 <div class="text-sm font-semibold text-gray-800 dark:text-white">Masta Rob</div>
+                                 <div class="text-xs text-gray-500 dark:text-gray-400">Super Admin</div>
+                             </div>
+                             <i class="ri-arrow-down-s-line text-gray-500 dark:text-gray-400 hidden md:block"></i>
+                        </button>
+                        <div id="profile-menu" class="hidden absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-bo-surface-light dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <div class="py-1">
+                                <a href="my-profile.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-user-line mr-3"></i>My Profile</a>
+                                <a href="change-password.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-lock-password-line mr-3"></i>Change Password</a>
+                                <hr class="border-gray-200 dark:border-gray-700 my-1">
+                                <a href="sign-in.html" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-logout-box-r-line mr-3"></i>Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- ===== Navbar End ===== -->
+        
+        <!-- ===== Page Content Start ===== -->
+        <main class="p-6 sm:p-8">
+            <div class="max-w-7xl mx-auto">
+                <!-- Header & Main Action Button -->
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200">Asset Library</h2>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage logos and badges for organizations to use on certificates.</p>
+                    </div>
+                    <button id="add-asset-btn" class="bg-primary hover:bg-primary-dark text-white font-bold py-2.5 px-4 rounded-lg inline-flex items-center gap-2 transition-colors w-full sm:w-auto">
+                        <i class="ri-add-line"></i>
+                        <span>Upload New Asset</span>
+                    </button>
+                </div>
+
+                <!-- Toolbar: Search -->
+                <div class="flex items-center justify-between gap-4 mb-6 p-4 bg-bo-surface-light dark:bg-bo-surface-dark rounded-xl shadow-md">
+                    <div class="relative w-full md:w-80">
+                        <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="search-input" placeholder="Search by name..." class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-bo-bg-light dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary">
+                    </div>
+                </div>
+                
+                <!-- Main Content Area -->
+                <div id="assets-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                   <!-- Assets will be rendered here by JavaScript -->
+                </div>
+                
+                <!-- Pagination -->
+                <div id="pagination-container" class="mt-8 flex justify-center">
+                    <!-- Pagination controls will be rendered here -->
+                </div>
+            </div>
+        </main>
+        <!-- ===== Page Content End ===== -->
+    </div>
+    <!-- ===== Main Content End ===== -->
+
+    <!-- Add/Edit Asset Modal -->
+    <div id="asset-modal" class="fixed inset-0 bg-black/60 z-[120] hidden items-center justify-center p-4 overflow-y-auto">
+        <div id="modal-panel" class="bg-bo-surface-light dark:bg-bo-surface-dark rounded-2xl shadow-2xl w-full max-w-md transform transition-all opacity-0 scale-95 my-auto">
+            <form id="asset-form">
+                <input type="hidden" id="asset-id">
+                <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+                    <h3 id="modal-title" class="font-poppins font-bold text-lg text-gray-800 dark:text-white"></h3>
+                    <button type="button" id="close-modal-btn" class="text-gray-400 hover:text-gray-600 dark:hover:text-white"><i class="ri-close-line text-2xl"></i></button>
+                </div>
+                <div id="modal-body" class="p-6 space-y-6">
+                    <div>
+                        <label for="asset-name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Asset Name</label>
+                        <input type="text" id="asset-name" class="mt-1 block w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-bo-bg-light dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary" placeholder="e.g., School Sports Club">
+                        <small id="name-error" class="text-red-500 mt-1 hidden">Please enter a name.</small>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Image File</label>
+                        <div id="image-upload-zone" class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 dark:border-gray-600 border-dashed rounded-lg">
+                            <div class="space-y-1 text-center">
+                                <i class="ri-image-add-line text-4xl text-gray-400"></i>
+                                <div class="flex text-sm text-gray-600 dark:text-gray-400">
+                                    <label for="file-upload" class="file-input-label relative rounded-md font-medium text-primary dark:text-accent">
+                                        <span>Upload a file</span>
+                                        <input id="file-upload" name="file-upload" type="file" class="sr-only" accept="image/svg+xml">
+                                    </label>
+                                </div>
+                                <p class="text-xs text-gray-500">SVG only, max 1MB</p>
+                            </div>
+                        </div>
+                        <div id="image-preview-zone" class="hidden mt-4 text-center">
+                            <img id="image-preview" src="" alt="Image Preview" class="max-h-32 mx-auto rounded-lg"/>
+                            <p id="file-name-display" class="mt-2 text-sm text-gray-500"></p>
+                            <button id="remove-image-btn" type="button" class="mt-2 text-xs text-red-500 hover:underline">Remove image</button>
+                        </div>
+                        <small id="file-error" class="text-red-500 mt-1 hidden">Please upload an SVG file.</small>
+                    </div>
+                </div>
+                <div class="px-6 py-4 bg-gray-50 dark:bg-slate-900/50 border-t border-gray-200 dark:border-gray-700 flex justify-end items-center space-x-3">
+                     <button type="button" id="cancel-modal-btn" class="bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors">Cancel</button>
+                     <button type="submit" id="save-asset-btn" class="bg-primary text-white font-semibold py-2 px-4 rounded-lg hover:bg-primary-dark transition-colors">Save Asset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- View Asset Modal -->
+    <div id="view-asset-modal" class="fixed inset-0 bg-black/60 z-[120] hidden items-center justify-center p-4">
+        <div id="view-asset-modal-panel" class="bg-bo-surface-light dark:bg-bo-surface-dark rounded-2xl shadow-2xl w-full max-w-lg transform transition-all opacity-0 scale-95 my-auto">
+            <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+                <h3 id="view-asset-modal-title" class="font-poppins font-bold text-lg text-gray-800 dark:text-white"></h3>
+                <button type="button" id="close-view-asset-modal-btn" class="text-gray-400 hover:text-gray-600 dark:hover:text-white"><i class="ri-close-line text-2xl"></i></button>
+            </div>
+            <div class="p-6 text-center">
+                <div class="w-full h-64 bg-gray-200 dark:bg-gray-700 flex items-center justify-center p-4 rounded-lg">
+                    <img id="view-asset-image" src="" alt="Asset Preview" class="max-w-full max-h-full object-contain">
+                </div>
+            </div>
+             <div class="px-6 py-4 bg-gray-50 dark:bg-slate-900/50 border-t border-gray-200 dark:border-gray-700 flex justify-end">
+                <button type="button" id="ok-view-asset-modal-btn" class="bg-primary text-white font-semibold py-2 px-4 rounded-lg hover:bg-primary-dark transition-colors">Close</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="fixed inset-0 bg-black/60 z-[130] hidden items-center justify-center p-4">
+        <div id="confirmation-panel" class="bg-bo-surface-light dark:bg-bo-surface-dark rounded-2xl shadow-2xl w-full max-w-sm transform transition-all opacity-0 scale-95">
+            <div class="p-6 text-center">
+                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 dark:bg-red-900/50 mb-4">
+                    <i class="ri-error-warning-line text-4xl text-red-600 dark:text-red-400"></i>
+                </div>
+                <h3 id="confirmation-title" class="text-lg font-semibold text-gray-900 dark:text-gray-100">Delete Asset?</h3>
+                <p id="confirmation-message" class="mt-2 text-sm text-gray-500 dark:text-gray-400"></p>
+            </div>
+            <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700/50 flex justify-center space-x-3">
+                <button id="cancel-confirmation-btn" class="bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors w-full">Cancel</button>
+                <button id="confirm-delete-btn" class="bg-red-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-red-700 transition-colors w-full">Yes, Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Sidebar, Theme, Profile Menu Logic (unchanged) ---
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggleBtn = document.getElementById('sidebar-toggle');
+            const closeSidebarBtn = document.getElementById('close-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const mainContent = document.getElementById('main-content');
+            
+            function openSidebar() {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                if (window.innerWidth >= 1024) { mainContent.classList.add('lg:ml-64'); }
+            }
+            function closeSidebar() {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+                mainContent.classList.remove('lg:ml-64');
+            }
+            sidebarToggleBtn.addEventListener('click', (e) => { e.stopPropagation(); openSidebar(); });
+            closeSidebarBtn.addEventListener('click', (e) => { e.stopPropagation(); closeSidebar(); });
+            overlay.addEventListener('click', closeSidebar);
+            document.querySelectorAll('[data-collapse-toggle]').forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.getAttribute('data-collapse-toggle');
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.classList.toggle('hidden');
+                        const arrowIcon = button.querySelector('.ri-arrow-down-s-line');
+                        if(arrowIcon) arrowIcon.classList.toggle('rotate-180');
+                    }
+                });
+            });
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+            themeToggleBtn.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                localStorage.setItem('color-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+            });
+            const profileMenuButton = document.getElementById('profile-menu-button');
+            const profileMenu = document.getElementById('profile-menu');
+            profileMenuButton?.addEventListener('click', (e) => { e.stopPropagation(); profileMenu.classList.toggle('hidden'); });
+            window.addEventListener('click', (e) => {
+                if (profileMenu && !profileMenu.classList.contains('hidden') && !profileMenuButton.contains(e.target)) {
+                    profileMenu.classList.add('hidden');
+                }
+            });
+
+            // --- Logos & Badges Page Logic ---
+            const assetsContainer = document.getElementById('assets-container');
+            const paginationContainer = document.getElementById('pagination-container');
+            const searchInput = document.getElementById('search-input');
+
+            let currentPage = 1;
+            const itemsPerPage = 12;
+            
+            let assetData = [
+                { id: 1, name: 'Sports Club', imageUrl: 'https://placehold.co/200x200/3b82f6/ffffff?text=1:1' },
+                { id: 2, name: 'Academic Badge', imageUrl: 'https://placehold.co/100x200/10b981/ffffff?text=1:2' },
+                { id: 3, name: 'Leadership Banner', imageUrl: 'https://placehold.co/200x100/f59e0b/ffffff?text=2:1' },
+                { id: 4, name: 'Science Fair Logo', imageUrl: 'https://placehold.co/200x200/8b5cf6/ffffff?text=1:1' },
+                { id: 5, name: 'Art Club Badge', imageUrl: 'https://placehold.co/100x200/ec4899/ffffff?text=1:2' },
+                { id: 6, name: 'Debate Team Banner', imageUrl: 'https://placehold.co/200x100/ef4444/ffffff?text=2:1' },
+                { id: 7, name: 'Chess Club', imageUrl: 'https://placehold.co/200x200/6366f1/ffffff?text=1:1' },
+                { id: 8, name: 'Music Society', imageUrl: 'https://placehold.co/200x200/14b8a6/ffffff?text=1:1' },
+                { id: 9, name: 'Robotics Club', imageUrl: 'https://placehold.co/200x200/f43f5e/ffffff?text=1:1' },
+                { id: 10, name: 'Environmental Badge', imageUrl: 'https://placehold.co/100x200/22c55e/ffffff?text=1:2' },
+                { id: 11, name: 'Math Olympiad', imageUrl: 'https://placehold.co/200x100/84cc16/ffffff?text=2:1' },
+                { id: 12, name: 'Red Crescent', imageUrl: 'https://placehold.co/200x200/dc2626/ffffff?text=1:1' },
+                { id: 13, name: 'Scouts Logo', imageUrl: 'https://placehold.co/200x200/7c3aed/ffffff?text=1:1' },
+            ];
+            let displayedData = [...assetData];
+            
+            const actionsHTML = (id) => `
+                <div class="absolute top-2 right-2 flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button class="view-asset-btn p-2 text-gray-700 bg-white/70 dark:text-white dark:bg-gray-800/70 rounded-lg hover:bg-white dark:hover:bg-gray-900" title="View" data-id="${id}"><i class="ri-eye-line"></i></button>
+                    <button class="edit-asset-btn p-2 text-gray-700 bg-white/70 dark:text-white dark:bg-gray-800/70 rounded-lg hover:bg-white dark:hover:bg-gray-900" title="Edit" data-id="${id}"><i class="ri-pencil-line"></i></button>
+                    <button class="delete-asset-btn p-2 text-red-500 bg-white/70 dark:bg-gray-800/70 rounded-lg hover:bg-red-500 hover:text-white dark:hover:bg-red-500" title="Delete" data-id="${id}"><i class="ri-delete-bin-line"></i></button>
+                </div>`;
+
+            function renderAssets(page = 1) {
+                currentPage = page;
+
+                if (displayedData.length === 0) {
+                    assetsContainer.className = 'text-center py-16 col-span-full';
+                    assetsContainer.innerHTML = `
+                        <div class="flex flex-col items-center">
+                            <i class="ri-search-eye-line text-6xl text-gray-400 mb-4"></i>
+                            <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-200">No Assets Found</h3>
+                            <p class="text-gray-500 dark:text-gray-400 mt-1">Your search did not match any assets. Try another keyword.</p>
+                        </div>`;
+                    paginationContainer.innerHTML = '';
+                    return;
+                }
+
+                assetsContainer.className = 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6';
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                const paginatedData = displayedData.slice(startIndex, endIndex);
+
+                assetsContainer.innerHTML = paginatedData.map(asset => `
+                    <div class="bg-bo-surface-light dark:bg-bo-surface-dark rounded-xl shadow-md overflow-hidden group relative">
+                        <div class="w-full h-32 bg-gray-200 dark:bg-gray-700 flex items-center justify-center p-2">
+                            <img src="${asset.imageUrl}" alt="${asset.name}" class="max-w-full max-h-full object-contain" onerror="this.onerror=null;this.src='https://placehold.co/200x128/f1f5f9/9ca3af?text=Image+not+found';">
+                        </div>
+                        <div class="p-3">
+                            <h4 class="font-semibold text-sm text-gray-800 dark:text-white truncate">${asset.name}</h4>
+                        </div>
+                        ${actionsHTML(asset.id)}
+                    </div>`).join('');
+            }
+            
+            function setupPagination() {
+                const pageCount = Math.ceil(displayedData.length / itemsPerPage);
+                if (pageCount <= 1) {
+                    paginationContainer.innerHTML = ''; return;
+                }
+                let paginationHTML = `<nav class="flex items-center gap-x-1">
+                    <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" ${currentPage === 1 ? 'disabled' : ''} data-page="${currentPage - 1}"><i class="ri-arrow-left-s-line"></i></button>`;
+                for(let i = 1; i <= pageCount; i++) {
+                    paginationHTML += `<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ${currentPage === i ? 'bg-primary text-white' : 'text-gray-800 hover:bg-gray-100'} py-2 px-3 text-sm rounded-lg focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" data-page="${i}">${i}</button>`;
+                }
+                paginationHTML += `<button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" ${currentPage === pageCount ? 'disabled' : ''} data-page="${currentPage + 1}"><i class="ri-arrow-right-s-line"></i></button></nav>`;
+                paginationContainer.innerHTML = paginationHTML;
+                paginationContainer.querySelectorAll('button').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const page = parseInt(button.dataset.page);
+                        renderAssets(page);
+                        setupPagination();
+                    });
+                });
+            }
+            
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                displayedData = assetData.filter(t => t.name.toLowerCase().includes(searchTerm));
+                renderAssets(1);
+                setupPagination();
+            });
+
+            // --- Modal Logic ---
+            const assetModal = document.getElementById('asset-modal');
+            const modalPanel = document.getElementById('modal-panel');
+            const modalTitle = document.getElementById('modal-title');
+            const assetForm = document.getElementById('asset-form');
+            const assetIdInput = document.getElementById('asset-id');
+            const addAssetBtn = document.getElementById('add-asset-btn');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const cancelModalBtn = document.getElementById('cancel-modal-btn');
+            const saveAssetBtn = document.getElementById('save-asset-btn');
+            const fileUpload = document.getElementById('file-upload');
+            const imageUploadZone = document.getElementById('image-upload-zone');
+            const imagePreviewZone = document.getElementById('image-preview-zone');
+            const imagePreview = document.getElementById('image-preview');
+            const fileNameDisplay = document.getElementById('file-name-display');
+            const removeImageBtn = document.getElementById('remove-image-btn');
+            const fileError = document.getElementById('file-error');
+            const nameError = document.getElementById('name-error');
+            const assetNameInput = document.getElementById('asset-name');
+
+            function openModal(mode = 'add', id = null) {
+                assetForm.reset();
+                assetIdInput.value = '';
+                imageUploadZone.classList.remove('hidden');
+                imagePreviewZone.classList.add('hidden');
+                fileError.classList.add('hidden');
+                nameError.classList.add('hidden');
+
+                if (mode === 'edit') {
+                    const asset = assetData.find(t => t.id === id);
+                    if (!asset) return;
+                    modalTitle.textContent = 'Edit Asset';
+                    saveAssetBtn.textContent = 'Update Asset';
+                    assetIdInput.value = asset.id;
+                    assetNameInput.value = asset.name;
+                    
+                    imagePreview.src = asset.imageUrl;
+                    fileNameDisplay.textContent = 'Current image';
+                    imageUploadZone.classList.add('hidden');
+                    imagePreviewZone.classList.remove('hidden');
+                } else {
+                    modalTitle.textContent = 'Upload New Asset';
+                    saveAssetBtn.textContent = 'Save Asset';
+                }
+
+                assetModal.classList.remove('hidden');
+                assetModal.classList.add('flex');
+                setTimeout(() => modalPanel.classList.remove('opacity-0', 'scale-95'), 10);
+            }
+
+            function closeModal() {
+                modalPanel.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => {
+                    assetModal.classList.add('hidden');
+                    assetModal.classList.remove('flex');
+                }, 200);
+            }
+
+            addAssetBtn.addEventListener('click', () => openModal('add'));
+            closeModalBtn.addEventListener('click', closeModal);
+            cancelModalBtn.addEventListener('click', closeModal);
+
+            fileUpload.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                fileError.classList.add('hidden'); // Hide previous errors
+                if (file) {
+                    // Check file type
+                    if (file.type !== 'image/svg+xml') {
+                        fileError.textContent = 'Invalid file type. Only SVG is allowed.';
+                        fileError.classList.remove('hidden');
+                        fileUpload.value = ''; // Reset the input
+                        return;
+                    }
+                    // Check file size (1MB limit)
+                    if (file.size > 1 * 1024 * 1024) {
+                        fileError.textContent = 'File is too large. Maximum size is 1MB.';
+                        fileError.classList.remove('hidden');
+                        fileUpload.value = ''; // Reset the input
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        imagePreview.src = event.target.result;
+                        fileNameDisplay.textContent = file.name;
+                        imageUploadZone.classList.add('hidden');
+                        imagePreviewZone.classList.remove('hidden');
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+            removeImageBtn.addEventListener('click', () => {
+                fileUpload.value = '';
+                imageUploadZone.classList.remove('hidden');
+                imagePreviewZone.classList.add('hidden');
+            });
+
+            assetForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const id = parseInt(assetIdInput.value);
+                const name = assetNameInput.value.trim();
+                let isValid = true;
+                
+                fileError.classList.add('hidden');
+                nameError.classList.add('hidden');
+
+                if (!id && !fileUpload.files[0]) {
+                    fileError.textContent = 'Please upload an image file.';
+                    fileError.classList.remove('hidden');
+                    isValid = false;
+                }
+
+                if (!name) {
+                    nameError.classList.remove('hidden');
+                    isValid = false;
+                }
+                
+                if (!isValid) return;
+                
+                if (id) { // Edit mode
+                    const index = assetData.findIndex(t => t.id === id);
+                    if (index > -1) {
+                        assetData[index].name = name;
+                         if (fileUpload.files[0]) {
+                            assetData[index].imageUrl = URL.createObjectURL(fileUpload.files[0]);
+                        }
+                    }
+                } else { // Add mode
+                    const newId = assetData.length > 0 ? Math.max(...assetData.map(t => t.id)) + 1 : 1;
+                    const newAsset = {
+                        id: newId,
+                        name: name,
+                        imageUrl: URL.createObjectURL(fileUpload.files[0]),
+                    };
+                    assetData.unshift(newAsset); // Add to the beginning of the array
+                }
+                
+                displayedData = [...assetData];
+                renderAssets(1); // Go back to first page to see new item
+                setupPagination();
+                closeModal();
+            });
+
+            // --- View Asset Modal Logic ---
+            const viewAssetModal = document.getElementById('view-asset-modal');
+            const viewAssetModalPanel = document.getElementById('view-asset-modal-panel');
+            const closeViewAssetModalBtn = document.getElementById('close-view-asset-modal-btn');
+            const okViewAssetModalBtn = document.getElementById('ok-view-asset-modal-btn');
+            const viewAssetModalTitle = document.getElementById('view-asset-modal-title');
+            const viewAssetImage = document.getElementById('view-asset-image');
+
+            function openViewAssetModal(id) {
+                const asset = assetData.find(t => t.id === id);
+                if (!asset) return;
+
+                viewAssetModalTitle.textContent = asset.name;
+                viewAssetImage.src = asset.imageUrl;
+                viewAssetImage.alt = asset.name;
+
+                viewAssetModal.classList.remove('hidden');
+                viewAssetModal.classList.add('flex');
+                setTimeout(() => viewAssetModalPanel.classList.remove('opacity-0', 'scale-95'), 10);
+            }
+
+            function closeViewAssetModal() {
+                viewAssetModalPanel.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => {
+                    viewAssetModal.classList.add('hidden');
+                    viewAssetModal.classList.remove('flex');
+                }, 200);
+            }
+
+            closeViewAssetModalBtn.addEventListener('click', closeViewAssetModal);
+            okViewAssetModalBtn.addEventListener('click', closeViewAssetModal);
+            
+            // --- Confirmation Modal Logic ---
+            const confirmationModal = document.getElementById('confirmation-modal');
+            const confirmationPanel = document.getElementById('confirmation-panel');
+            const confirmationMessage = document.getElementById('confirmation-message');
+            const cancelConfirmationBtn = document.getElementById('cancel-confirmation-btn');
+            const confirmDeleteBtn = document.getElementById('confirm-delete-btn');
+            let itemToDelete = null;
+
+            function openConfirmationModal(message, itemId) {
+                confirmationMessage.textContent = message;
+                itemToDelete = itemId;
+                confirmationModal.classList.remove('hidden');
+                confirmationModal.classList.add('flex');
+                setTimeout(() => confirmationPanel.classList.remove('opacity-0', 'scale-95'), 10);
+            };
+            function closeConfirmationModal() {
+                confirmationPanel.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => {
+                    confirmationModal.classList.add('hidden');
+                    confirmationModal.classList.remove('flex');
+                    itemToDelete = null;
+                }, 200);
+            };
+            cancelConfirmationBtn.addEventListener('click', closeConfirmationModal);
+            confirmDeleteBtn.addEventListener('click', () => {
+                assetData = assetData.filter(t => t.id !== itemToDelete);
+                displayedData = displayedData.filter(t => t.id !== itemToDelete);
+                renderAssets(1); // Go back to first page after delete
+                setupPagination();
+                closeConfirmationModal();
+            });
+            
+            // --- Main Event Listener for Actions ---
+            document.body.addEventListener('click', function(e) {
+                const viewBtn = e.target.closest('.view-asset-btn');
+                const editBtn = e.target.closest('.edit-asset-btn');
+                const deleteBtn = e.target.closest('.delete-asset-btn');
+
+                if (viewBtn) {
+                    openViewAssetModal(parseInt(viewBtn.dataset.id));
+                }
+                if (editBtn) {
+                    openModal('edit', parseInt(editBtn.dataset.id));
+                }
+                if (deleteBtn) {
+                    const assetId = parseInt(deleteBtn.dataset.id);
+                    const asset = assetData.find(t => t.id === assetId);
+                    if (asset) {
+                        openConfirmationModal(`Are you sure you want to delete the asset "${asset.name}"? This action cannot be undone.`, assetId);
+                    }
+                }
+            });
+            
+            // Initial render
+            renderAssets(1);
+            setupPagination();
+        });
+    </script>
+
+</body>
+</ht

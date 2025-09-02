@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySertifico Back Office - Support & Help</title>
+    <link rel="icon" type="image/png" href="../src/images/logos/favicon.png">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <!-- Google Fonts: Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+    
+    <!-- Konfigurasi Tambahan untuk Tailwind -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#0d9488', // Teal-600
+                        'primary-dark': '#0f766e', // Teal-700
+                        'accent': '#f59e0b', // Amber-500
+                        'accent-dark': '#d97706', // Amber-600
+                        'bo-bg-light': '#f8fafc', // Slate-50
+                        'bo-bg-dark': '#020617', // Slate-950
+                        'bo-surface-light': '#ffffff',
+                        'bo-surface-dark': '#1e293b', // Slate-800
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .sidebar { scrollbar-width: none; }
+        .sidebar::-webkit-scrollbar { display: none; }
+        select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        .dark select {
+             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23d1d5db' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        }
+        #toast-notification {
+            transition: opacity 0.3s, transform 0.3s;
+        }
+    </style>
+</head>
+<body class="bg-bo-bg-light dark:bg-bo-bg-dark transition-colors duration-300">
+
+    <!-- ===== Sidebar Start ===== -->
+    <aside id="sidebar" class="sidebar fixed top-0 left-0 z-50 h-full w-64 bg-gray-900 text-white transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto">
+        <!-- Sidebar Header -->
+        <div class="flex items-center justify-between p-5 border-b border-gray-800">
+             <a href="dashboard.html" class="flex items-center gap-3">
+                <img src="../src/images/logos/logo.png" class="h-8 w-8 rounded-lg" alt="Logo">
+                <h2 class="font-poppins text-xl font-bold text-white">MySertifico</h2>
+             </a>
+             <button id="close-sidebar" class="text-gray-400 hover:text-white">
+                 <i class="ri-close-line text-2xl"></i>
+             </button>
+        </div>
+        
+        <!-- Navigation Menu -->
+        <nav class="p-4">
+            <ul class="space-y-1">
+                <li class="px-4 text-xs text-gray-400 uppercase font-semibold tracking-wider my-4">Menu</li>
+                <li><a href="dashboard.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700/50 text-gray-300 hover:text-white"><i class="ri-dashboard-3-line mr-3 text-lg"></i><span>Dashboard</span></a></li>
+                <li><a href="templates.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700/50 text-gray-300 hover:text-white"><i class="ri-layout-3-line mr-3 text-lg"></i><span>Templates</span></a></li>
+                <li><a href="logos-badges.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700/50 text-gray-300 hover:text-white"><i class="ri-medal-line mr-3 text-lg"></i><span>Logos & Badges</span></a></li>
+                <li><a href="certificates.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700/50 text-gray-300 hover:text-white"><i class="ri-award-line mr-3 text-lg"></i><span>Certificates</span></a></li>
+                <li>
+                    <button data-collapse-toggle="submenu-users" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg hover:bg-gray-700/50 text-gray-300 hover:text-white">
+                        <span class="flex items-center"><i class="ri-group-line mr-3 text-lg"></i><span>Users</span></span>
+                        <i class="ri-arrow-down-s-line transition-transform duration-200"></i>
+                    </button>
+                    <ul id="submenu-users" class="hidden py-1 space-y-1 pl-8">
+                        <li><a href="organizations.html" class="flex items-center gap-3 block py-2 px-4 rounded-lg text-sm text-gray-300 hover:bg-gray-700"><i class="ri-school-line"></i>Organizations</a></li>
+                        <li><a href="school-users.html" class="flex items-center gap-3 block py-2 px-4 rounded-lg text-sm text-gray-300 hover:bg-gray-700"><i class="ri-user-2-line"></i>School Users</a></li>
+                        <li><a href="mywall-users.html" class="flex items-center gap-3 block py-2 px-4 rounded-lg text-sm text-gray-300 hover:bg-gray-700"><i class="ri-user-star-line"></i>MyWall Users</a></li>
+                    </ul>
+                </li>
+                <li class="px-4 text-xs text-gray-400 uppercase font-semibold tracking-wider pt-6 pb-2">Administration</li>
+                <li>
+                    <button data-collapse-toggle="submenu-admin" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg bg-gray-700/30 text-white">
+                        <span class="flex items-center"><i class="ri-settings-3-line mr-3 text-lg"></i><span>Settings</span></span>
+                        <i class="ri-arrow-down-s-line transition-transform duration-200 rotate-180"></i>
+                    </button>
+                    <ul id="submenu-admin" class="py-1 space-y-1 pl-8">
+                        <li><a href="bo-users.html" class="flex items-center gap-3 block py-2 px-4 rounded-lg text-sm text-gray-300 hover:bg-gray-700"><i class="ri-user-settings-line"></i>Staff</a></li>
+                        <li>
+                            <button data-collapse-toggle="submenu-plans" type="button" class="w-full flex items-center justify-between py-2 px-4 rounded-lg text-sm text-gray-300 hover:bg-gray-700">
+                                <span class="flex items-center gap-3"><i class="ri-price-tag-3-line"></i><span>Plans & Subscriptions</span></span>
+                                <i class="ri-arrow-down-s-line transition-transform duration-200"></i>
+                            </button>
+                             <ul id="submenu-plans" class="hidden py-1 space-y-1 pl-8">
+                                <li><a href="mysertifico-plans.html" class="block py-2 px-4 rounded-lg text-xs text-gray-300 hover:bg-gray-700">MySertifico Plans</a></li>
+                                <li><a href="mywall-plans.html" class="block py-2 px-4 rounded-lg text-xs text-gray-300 hover:bg-gray-700">MyWall Plans</a></li>
+                             </ul>
+                        </li>
+                        <li><a href="support-help.html" class="flex items-center gap-3 block py-2 px-4 rounded-lg text-sm text-primary bg-primary/10"><i class="ri-question-line"></i>Support & Help</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+    <!-- ===== Sidebar End ===== -->
+    
+    <!-- ===== Main Content Start ===== -->
+    <div id="main-content" class="relative min-h-screen transition-all duration-300 ease-in-out">
+        <!-- ===== Navbar Start ===== -->
+        <header class="sticky top-0 z-30 bg-bo-surface-light/80 dark:bg-bo-surface-dark/80 backdrop-blur-sm border-b border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between p-4 h-20">
+                <!-- Left Navbar Section -->
+                <div class="flex items-center space-x-4">
+                    <button id="sidebar-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
+                        <i class="ri-menu-line text-2xl"></i>
+                    </button>
+                    <h1 class="text-xl md:text-2xl font-bold text-gray-800 dark:text-white">Support & Help</h1>
+                </div>
+
+                <!-- Right Navbar Section -->
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-xl"><i class="ri-moon-line block dark:hidden"></i><i class="ri-sun-line hidden dark:block"></i></button>
+                    
+                    <!-- Profile Dropdown Menu -->
+                    <div class="relative">
+                        <button id="profile-menu-button" class="flex items-center space-x-2">
+                             <img class="h-9 w-9 rounded-full object-cover" src="https://i.pravatar.cc/150?u=admin" alt="Admin">
+                             <div class="hidden md:block text-left">
+                                 <div class="text-sm font-semibold text-gray-800 dark:text-white">Masta Rob</div>
+                                 <div class="text-xs text-gray-500 dark:text-gray-400">Super Admin</div>
+                             </div>
+                             <i class="ri-arrow-down-s-line text-gray-500 dark:text-gray-400 hidden md:block"></i>
+                        </button>
+                        <div id="profile-menu" class="hidden absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-bo-surface-light dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <div class="py-1">
+                                <a href="my-profile.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-user-line mr-3"></i>My Profile</a>
+                                <a href="change-password.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-lock-password-line mr-3"></i>Change Password</a>
+                                <hr class="border-gray-200 dark:border-gray-700 my-1">
+                                <a href="#" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-logout-box-r-line mr-3"></i>Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- ===== Navbar End ===== -->
+        
+        <!-- ===== Page Content Start ===== -->
+        <main class="p-6 sm:p-8">
+            <div class="max-w-7xl mx-auto">
+                <!-- Header -->
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-700 dark:text-gray-200">Support Tickets</h2>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Respond to user inquiries and complaints from the Contact Us page.</p>
+                    </div>
+                </div>
+
+                <!-- Main Content Card -->
+                <div class="bg-bo-surface-light dark:bg-bo-surface-dark rounded-xl shadow-md">
+                    <!-- Toolbar: Search & Filter -->
+                    <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex flex-col md:flex-row items-center gap-4">
+                        <div class="relative w-full md:w-80">
+                            <i class="ri-search-line absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                            <input type="text" id="search-input" placeholder="Search by subject or email..." class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-bo-bg-light dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary">
+                        </div>
+                        <select id="status-filter" class="w-full md:w-auto py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-bo-bg-light dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option value="all">All Status</option>
+                            <option value="New">New</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Resolved">Resolved</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Tickets List -->
+                    <div id="tickets-container" class="overflow-x-auto">
+                       <!-- Tickets table will be rendered here by JavaScript -->
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div id="pagination-container" class="p-4 border-t border-gray-200 dark:border-gray-700 flex justify-center">
+                        <!-- Pagination controls will be rendered here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- ===== Page Content End ===== -->
+    </div>
+    <!-- ===== Main Content End ===== -->
+
+    <!-- Reply Modal -->
+    <div id="reply-modal" class="fixed inset-0 bg-black/60 z-[120] hidden items-center justify-center p-4">
+        <div id="modal-panel" class="bg-bo-surface-light dark:bg-bo-surface-dark rounded-2xl shadow-2xl w-full max-w-2xl transform transition-all opacity-0 scale-95 my-auto">
+            <form id="reply-form">
+                <input type="hidden" id="ticket-id">
+                <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+                    <h3 id="modal-title" class="font-poppins font-bold text-lg text-gray-800 dark:text-white"></h3>
+                    <button type="button" id="close-modal-btn" class="text-gray-400 hover:text-gray-600 dark:hover:text-white"><i class="ri-close-line text-2xl"></i></button>
+                </div>
+                <div class="p-6 max-h-[60vh] overflow-y-auto space-y-4">
+                    <div>
+                        <h4 class="text-sm font-semibold text-gray-500 dark:text-gray-400">From</h4>
+                        <p id="sender-info" class="text-gray-800 dark:text-white"></p>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-semibold text-gray-500 dark:text-gray-400">Message</h4>
+                        <p id="message-content" class="mt-1 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800/50 p-3 rounded-lg"></p>
+                    </div>
+                    <div>
+                        <label for="reply-message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Your Reply</label>
+                        <textarea id="reply-message" rows="5" class="w-full py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-bo-bg-light dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"></textarea>
+                        <small id="reply-error" class="text-red-500 mt-1 hidden">Reply message cannot be empty.</small>
+                    </div>
+                </div>
+                <div class="px-6 py-4 bg-gray-50 dark:bg-slate-900/50 border-t border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-between items-center gap-4">
+                     <div class="flex items-center">
+                        <label for="mark-resolved" class="mr-2 text-sm font-medium text-gray-700 dark:text-gray-300">Mark as:</label>
+                        <select id="mark-resolved" class="py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-bo-bg-light dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option value="In Progress">In Progress</option>
+                            <option value="Resolved">Resolved</option>
+                        </select>
+                     </div>
+                     <div class="flex items-center gap-3">
+                        <button type="button" id="cancel-modal-btn" class="bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors">Cancel</button>
+                        <button type="submit" class="bg-primary text-white font-semibold py-2 px-4 rounded-lg hover:bg-primary-dark transition-colors">Send Reply</button>
+                     </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Toast Notification -->
+    <div id="toast-notification" class="fixed top-24 right-6 bg-green-100 border border-green-200 text-green-700 dark:bg-green-900/30 dark:text-green-300 px-4 py-3 rounded-lg shadow-md flex items-center gap-3 transition-transform transform translate-x-full opacity-0 z-[150]">
+        <i class="ri-checkbox-circle-fill text-xl"></i>
+        <span id="toast-message"></span>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Sidebar, Theme, Profile Menu Logic (unchanged) ---
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggleBtn = document.getElementById('sidebar-toggle');
+            const closeSidebarBtn = document.getElementById('close-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            const mainContent = document.getElementById('main-content');
+            
+            function openSidebar() {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                if (window.innerWidth >= 1024) { mainContent.classList.add('lg:ml-64'); }
+            }
+            function closeSidebar() {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+                mainContent.classList.remove('lg:ml-64');
+            }
+            sidebarToggleBtn.addEventListener('click', (e) => { e.stopPropagation(); openSidebar(); });
+            closeSidebarBtn.addEventListener('click', (e) => { e.stopPropagation(); closeSidebar(); });
+            overlay.addEventListener('click', closeSidebar);
+            document.querySelectorAll('[data-collapse-toggle]').forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetId = button.getAttribute('data-collapse-toggle');
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.classList.toggle('hidden');
+                        const arrowIcon = button.querySelector('.ri-arrow-down-s-line');
+                        if(arrowIcon) arrowIcon.classList.toggle('rotate-180');
+                    }
+                });
+            });
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+            themeToggleBtn.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                localStorage.setItem('color-theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+            });
+            const profileMenuButton = document.getElementById('profile-menu-button');
+            const profileMenu = document.getElementById('profile-menu');
+            profileMenuButton?.addEventListener('click', (e) => { e.stopPropagation(); profileMenu.classList.toggle('hidden'); });
+            window.addEventListener('click', (e) => {
+                if (profileMenu && !profileMenu.classList.contains('hidden') && !profileMenuButton.contains(e.target)) {
+                    profileMenu.classList.add('hidden');
+                }
+            });
+
+            // --- Support & Help Page Logic ---
+            const ticketsContainer = document.getElementById('tickets-container');
+            const paginationContainer = document.getElementById('pagination-container');
+            const searchInput = document.getElementById('search-input');
+            const statusFilter = document.getElementById('status-filter');
+
+            let currentPage = 1;
+            const itemsPerPage = 10;
+            
+            let ticketData = [
+                { id: 1, subject: 'Problem with QR Code', name: 'Ahmad bin Ali', email: 'ahmad.ali@example.com', date: '2025-08-01', status: 'New', message: 'The QR code on my certificate is not scannable. Please help.' },
+                { id: 2, name: 'Siti Nurhaliza', email: 'siti.nurhaliza@example.com', subject: 'Payment Issue', date: '2025-07-28', status: 'In Progress', message: 'I have made the payment but my token balance is not updated.' },
+                { id: 3, name: 'John Doe', email: 'john.doe@example.com', subject: 'Unable to login', date: '2025-07-25', status: 'Resolved', message: 'I forgot my password and the reset link is not working.' },
+                { id: 4, name: 'Lee Wei', email: 'lee.wei@example.com', subject: 'Feature Request', date: '2025-07-22', status: 'Resolved', message: 'Can you add a feature to bulk upload student names from a CSV file?' },
+                { id: 5, name: 'Muthu Samy', email: 'muthu.samy@example.com', subject: 'Template Customization', date: '2025-07-20', status: 'New', message: 'How can I change the font color on the template?' },
+            ];
+            let displayedData = [...ticketData];
+            
+            const statusStyles = {
+                'New': 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
+                'In Progress': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
+                'Resolved': 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+            };
+
+            function renderTickets(page = 1) {
+                currentPage = page;
+
+                if (displayedData.length === 0) {
+                    ticketsContainer.innerHTML = `
+                        <div class="text-center py-16">
+                            <i class="ri-search-eye-line text-6xl text-gray-400 mb-4"></i>
+                            <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-200">No Tickets Found</h3>
+                            <p class="text-gray-500 dark:text-gray-400 mt-1">Your search or filter did not match any tickets.</p>
+                        </div>`;
+                    paginationContainer.innerHTML = '';
+                    return;
+                }
+
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                const paginatedData = displayedData.slice(startIndex, endIndex);
+
+                ticketsContainer.innerHTML = `
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <tr>
+                                    <th class="px-6 py-3">#</th>
+                                    <th class="px-6 py-3">Subject</th>
+                                    <th class="px-6 py-3">From</th>
+                                    <th class="px-6 py-3">Date Received</th>
+                                    <th class="px-6 py-3">Status</th>
+                                    <th class="px-6 py-3 text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            ${paginatedData.map((ticket, index) => `
+                                <tr class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600/20">
+                                    <td class="px-6 py-4 text-gray-600 dark:text-gray-300">${startIndex + index + 1}</td>
+                                    <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">${ticket.subject}</td>
+                                    <td class="px-6 py-4">
+                                        <div>
+                                            <div class="text-gray-800 dark:text-gray-200">${ticket.name}</div>
+                                            <div class="text-xs text-gray-500 dark:text-gray-400">${ticket.email}</div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 text-gray-600 dark:text-gray-300">${ticket.date}</td>
+                                    <td class="px-6 py-4">
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full ${statusStyles[ticket.status]}">${ticket.status}</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <button class="reply-btn p-2 text-gray-500 hover:text-primary dark:hover:text-white rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700" title="View & Reply" data-id="${ticket.id}">
+                                            <i class="ri-mail-send-line"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+            
+            function setupPagination() {
+                const pageCount = Math.ceil(displayedData.length / itemsPerPage);
+                if (pageCount <= 1) {
+                    paginationContainer.innerHTML = ''; return;
+                }
+                let paginationHTML = `<nav class="flex items-center gap-x-1">
+                    <button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" ${currentPage === 1 ? 'disabled' : ''} data-page="${currentPage - 1}"><i class="ri-arrow-left-s-line"></i></button>`;
+                for(let i = 1; i <= pageCount; i++) {
+                    paginationHTML += `<button type="button" class="min-h-[38px] min-w-[38px] flex justify-center items-center ${currentPage === i ? 'bg-primary text-white' : 'text-gray-800 hover:bg-gray-100'} py-2 px-3 text-sm rounded-lg focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" data-page="${i}">${i}</button>`;
+                }
+                paginationHTML += `<button type="button" class="min-h-[38px] min-w-[38px] py-2 px-2.5 inline-flex justify-center items-center gap-x-2 text-sm rounded-lg text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none dark:text-white dark:hover:bg-white/10 dark:focus:bg-white/10" ${currentPage === pageCount ? 'disabled' : ''} data-page="${currentPage + 1}"><i class="ri-arrow-right-s-line"></i></button></nav>`;
+                paginationContainer.innerHTML = paginationHTML;
+                paginationContainer.querySelectorAll('button').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const page = parseInt(button.dataset.page);
+                        renderTickets(page);
+                        setupPagination();
+                    });
+                });
+            }
+            
+            function applyFilters() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const selectedStatus = statusFilter.value;
+                
+                displayedData = ticketData.filter(ticket => {
+                    const matchesSearch = ticket.subject.toLowerCase().includes(searchTerm) || ticket.email.toLowerCase().includes(searchTerm);
+                    const matchesStatus = selectedStatus === 'all' || ticket.status === selectedStatus;
+                    return matchesSearch && matchesStatus;
+                });
+                
+                renderTickets(1);
+                setupPagination();
+            }
+
+            searchInput.addEventListener('input', applyFilters);
+            statusFilter.addEventListener('change', applyFilters);
+
+            // --- Reply Modal Logic ---
+            const replyModal = document.getElementById('reply-modal');
+            const modalPanel = document.getElementById('modal-panel');
+            const modalTitle = document.getElementById('modal-title');
+            const replyForm = document.getElementById('reply-form');
+            const ticketIdInput = document.getElementById('ticket-id');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            const cancelModalBtn = document.getElementById('cancel-modal-btn');
+            const senderInfo = document.getElementById('sender-info');
+            const messageContent = document.getElementById('message-content');
+            const replyMessageInput = document.getElementById('reply-message');
+            const markResolvedSelect = document.getElementById('mark-resolved');
+            const replyError = document.getElementById('reply-error');
+
+            function openReplyModal(id) {
+                const ticket = ticketData.find(t => t.id === id);
+                if (!ticket) return;
+
+                replyForm.reset();
+                replyError.classList.add('hidden');
+                replyMessageInput.classList.remove('border-red-500', 'dark:border-red-500');
+                ticketIdInput.value = ticket.id;
+                modalTitle.textContent = `Re: ${ticket.subject}`;
+                senderInfo.textContent = `${ticket.name} (${ticket.email})`;
+                messageContent.textContent = ticket.message;
+                markResolvedSelect.value = ticket.status === 'Resolved' ? 'Resolved' : 'In Progress';
+
+                replyModal.classList.remove('hidden');
+                replyModal.classList.add('flex');
+                setTimeout(() => modalPanel.classList.remove('opacity-0', 'scale-95'), 10);
+            }
+
+            function closeReplyModal() {
+                modalPanel.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => {
+                    replyModal.classList.add('hidden');
+                    replyModal.classList.remove('flex');
+                }, 200);
+            }
+
+            closeModalBtn.addEventListener('click', closeReplyModal);
+            cancelModalBtn.addEventListener('click', closeReplyModal);
+            
+            // --- Toast Notification Logic ---
+            const toast = document.getElementById('toast-notification');
+            const toastMessage = document.getElementById('toast-message');
+
+            function showToast(message) {
+                toastMessage.innerHTML = message; // Use innerHTML to render line breaks
+                toast.classList.remove('translate-x-full', 'opacity-0');
+                setTimeout(() => {
+                    toast.classList.add('translate-x-full', 'opacity-0');
+                }, 4000); // Hide after 4 seconds
+            }
+
+            replyForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const ticketId = parseInt(ticketIdInput.value);
+                const replyMessage = replyMessageInput.value.trim();
+                const newStatus = markResolvedSelect.value;
+                
+                if (!replyMessage) {
+                    replyError.classList.remove('hidden');
+                    replyMessageInput.classList.add('border-red-500', 'dark:border-red-500');
+                    replyMessageInput.focus();
+                    return;
+                }
+                replyError.classList.add('hidden');
+                replyMessageInput.classList.remove('border-red-500', 'dark:border-red-500');
+
+                const ticketIndex = ticketData.findIndex(t => t.id === ticketId);
+                if (ticketIndex > -1) {
+                    ticketData[ticketIndex].status = newStatus;
+                }
+                
+                // --- Create detailed success message ---
+                const now = new Date();
+                const repliedBy = "Masta Rob"; // This would be dynamic in a real app
+                const formattedDate = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+                const formattedTime = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+                
+                const successMsg = `
+                    Reply sent successfully! <br>
+                    <span class="text-xs font-normal">
+                        By: ${repliedBy} on ${formattedDate} at ${formattedTime}
+                    </span>
+                `;
+
+                showToast(successMsg);
+                applyFilters();
+                closeReplyModal();
+            });
+            
+            // --- Main Event Listener for Actions ---
+            document.body.addEventListener('click', function(e) {
+                const replyBtn = e.target.closest('.reply-btn');
+                if (replyBtn) {
+                    openReplyModal(parseInt(replyBtn.dataset.id));
+                }
+            });
+            
+            // Initial render
+            renderTickets(1);
+            setupPagination();
+        });
+    </script>
+
+</body>
+</html>

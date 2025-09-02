@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organisation Settings - MySertifico</title>
+    <link rel="icon" type="image/png" href="../../src/images/logos/favicon.png" onerror="this.onerror=null;this.src='https://placehold.co/32x32/0d9488/ffffff?text=M';">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        poppins: ['Poppins', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': {
+                            'DEFAULT': '#0d9488', // Teal-600
+                            'dark': '#0f766e', // Teal-700
+                            'light': '#ccfbf1', // Teal-100
+                        },
+                        'accent': {
+                            'DEFAULT': '#f59e0b', // Amber-500
+                            'hover': '#d97706', // Amber-600
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .sidebar { scrollbar-width: none; }
+        .sidebar::-webkit-scrollbar { display: none; }
+        .modal { transition: opacity .3s ease; }
+        .modal-content { transition: transform .3s ease; }
+        .input-error { border-color: #ef4444 !important; }
+        .input-error:focus { --tw-ring-color: #ef4444 !important; }
+        /* Gaya seragam untuk pautan sidebar aktif */
+        .nav-active { background-color: #0f766e; color: #fff !important; box-shadow: 0 1px 2px rgb(0 0 0 / .1); }
+        /* Gaya seragam untuk dropdown */
+        select {
+          background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+          background-position: right .5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; padding-right: 2.5rem; appearance: none;
+        }
+        .dark select {
+          background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23d1d5db' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+
+    <aside id="sidebar" class="sidebar fixed top-0 left-0 z-50 h-full w-64 bg-gray-800 dark:bg-gray-950 text-white transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto">
+        <div class="flex items-center justify-between p-6">
+             <h2 class="font-poppins text-2xl font-bold text-white">Menu</h2>
+             <button id="close-sidebar" class="text-gray-400 hover:text-white">
+                 <i class="ri-close-line text-2xl"></i>
+             </button>
+        </div>
+        <nav class="p-4">
+            <ul class="space-y-2">
+                <li>
+                    <a href="dashboard.html" data-route="dashboard.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white">
+                        <i class="ri-dashboard-3-line mr-3 text-lg"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <button data-collapse-toggle="submenu-gallery" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white transition-colors">
+                        <span class="flex items-center"><i class="ri-gallery-line mr-3 text-lg"></i><span>Gallery</span></span>
+                        <i class="ri-arrow-down-s-line transition-transform duration-200"></i>
+                    </button>
+                    <ul id="submenu-gallery" class="hidden py-2 space-y-1 pl-8">
+                        <li><a href="templates-list.html" data-route="templates-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Templates</a></li>
+                        <li><a href="logos-badges.html" data-route="logos-badges.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Logos & Badges</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="certificate-list.html" data-route="certificate-list.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white transition-colors">
+                        <i class="ri-award-line mr-3 text-lg"></i>
+                        <span>Certificates</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="find-certificate.html" data-route="find-certificate.html" class="flex items-center py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white">
+                        <i class="ri-user-search-line mr-3 text-lg"></i>
+                        <span>Find Certificate</span>
+                    </a>
+                </li>
+                <li>
+                    <button data-collapse-toggle="submenu-settings" type="button" class="w-full flex items-center justify-between py-2.5 px-4 rounded-lg hover:bg-gray-700 text-gray-300 hover:text-white transition-colors">
+                        <span class="flex items-center"><i class="ri-settings-3-line mr-3 text-lg"></i><span>Settings</span></span>
+                        <i class="ri-arrow-down-s-line transition-transform duration-200"></i>
+                    </button>
+                    <ul id="submenu-settings" class="hidden py-2 space-y-1 pl-8">
+                        <li><a href="organisation.html" data-route="organisation.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Organisation</a></li>
+                        <li><a href="logo-list.html" data-route="logo-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Logos</a></li>
+                        <li><a href="selected-template-list.html" data-route="selected-template-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Selected Templates</a></li>
+                        <li><a href="user-list.html" data-route="user-list.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Users</a></li>
+                        <li class="px-4"><hr class="border-gray-700 my-1"></li>
+                        <li><a href="account.html" data-route="account.html" class="block py-2 px-4 rounded-lg text-sm text-gray-400 hover:text-white hover:bg-gray-700">Account</a></li>
+                    </ul>
+                </li>
+                <li class="pt-4 mt-4 border-t border-gray-700">
+                    <a href="#" id="logout-sidebar" class="flex items-center py-2.5 px-4 rounded-lg text-red-400 hover:bg-red-500 hover:text-white transition-colors">
+                        <i class="ri-logout-box-r-line mr-3 text-lg"></i>
+                        <span>Log Out</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+    <div id="main-content" class="relative min-h-screen transition-all duration-300 ease-in-out">
+        <header class="sticky top-0 z-30 bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between p-4">
+                <div class="flex items-center space-x-4">
+                    <button id="sidebar-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
+                        <i class="ri-menu-line text-2xl"></i>
+                    </button>
+                    <a href="dashboard.html" class="flex items-center gap-x-2">
+                        <img src="../../src/images/logos/logo.png" alt="MySertifico Logo" class="h-8 w-8 rounded-lg" onerror="this.onerror=null;this.src='https://placehold.co/32x32/0d9488/ffffff?text=M';">
+                        <span class="font-poppins text-2xl font-bold text-primary hidden sm:block">MySertifico</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="theme-toggle" class="text-gray-600 dark:text-gray-300 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-moon-line block dark:hidden"></i><i class="ri-sun-line hidden dark:block"></i></button>
+                    <div class="relative">
+                        <button id="profile-menu-button" class="flex items-center space-x-2">
+                             <img class="h-9 w-9 rounded-full object-cover" src="https://i.pravatar.cc/150?u=admin" alt="Admin" onerror="this.onerror=null;this.src='https://placehold.co/40x40/0d9488/ffffff?text=A';">
+                             <div class="hidden md:block text-left">
+                                 <div class="text-sm font-semibold text-gray-800 dark:text-white">Fikri Nabil</div>
+                                 <div class="text-xs text-gray-500 dark:text-gray-400">Super Admin</div>
+                             </div>
+                        </button>
+                        <div id="profile-menu" class="hidden absolute right-0 mt-2 w-56 origin-top-right rounded-md bg-white dark:bg-gray-800 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                            <div class="py-1">
+                                <a href="my-profile.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-user-line mr-3"></i>My Profile</a>
+                                <a href="change-password.html" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-lock-password-line mr-3"></i>Change Password</a>
+                                <hr class="border-gray-200 dark:border-gray-700 my-1">
+                                <a href="#" id="logout-navbar" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-logout-box-r-line mr-3"></i>Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main class="p-6 sm:p-8">
+            <div class="max-w-7xl mx-auto">
+                
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Settings</h1>
+                    <p class="text-gray-500 dark:text-gray-400 mt-1">Manage your organisation's profile and related settings.</p>
+                </div>
+
+                <div class="mb-6 border-b border-gray-200 dark:border-gray-700">
+                  <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" role="tablist">
+                    <li class="mr-2" role="presentation"><button class="inline-block p-4 border-b-2 rounded-t-lg" id="profile-tab" data-tabs-target="#profile" type="button" role="tab">Organisation</button></li>
+                    <li class="mr-2" role="presentation"><button class="inline-block p-4 border-b-2 rounded-t-lg" id="position-tab" data-tabs-target="#position" type="button" role="tab">Position</button></li>
+                    <li class="mr-2" role="presentation"><button class="inline-block p-4 border-b-2 rounded-t-lg" id="group-tab" data-tabs-target="#group" type="button" role="tab">Group</button></li>
+                  </ul>
+                </div>
+
+                <div id="myTabContent">
+                  <div class="hidden bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md" id="profile" role="tabpanel">
+                    <form id="org-form" class="space-y-8" novalidate>
+                      <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white border-b dark:border-gray-700 pb-3">Organisation Profile</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                            <div>
+                                <label for="org_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Organisation Name <span class="text-red-500">*</span></label>
+                                <input type="text" id="org_name" value="Sekolah Menengah Kebangsaan Seri Bintang" class="mt-1 w-full pl-4 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                                <p id="error-org_name" class="text-red-500 text-xs mt-1 hidden"></p>
+                            </div>
+                            <div>
+                                <label for="org_code" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Organisation Code</label>
+                                <input type="text" id="org_code" value="WBA0001" class="mt-1 w-full pl-4 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary" placeholder="e.g., WBA0001">
+                            </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white border-b dark:border-gray-700 pb-3">Mailing Address</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                            <div class="md:col-span-2">
+                                <label for="address1" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Address Line 1</label>
+                                <input type="text" id="address1" value="Jalan 3/91, Taman Shamelin Perkasa" class="mt-1 w-full pl-4 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary" placeholder="e.g., Unit 123, Level 4">
+                            </div>
+                            <div class="md:col-span-2">
+                                <label for="address2" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Address Line 2 (Optional)</label>
+                                <input type="text" id="address2" value="Batu 3 1/2 Cheras" class="mt-1 w-full pl-4 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary" placeholder="e.g., Building Name, Street Name">
+                            </div>
+                            <div>
+                                <label for="postcode" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Postcode</label>
+                                <input type="text" id="postcode" value="56100" class="mt-1 w-full pl-4 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary" placeholder="e.g., 50480">
+                            </div>
+                            <div>
+                                <label for="city" class="block text-sm font-medium text-gray-700 dark:text-gray-300">City</label>
+                                <input type="text" id="city" value="Kuala Lumpur" class="mt-1 w-full pl-4 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary" placeholder="e.g., Kuala Lumpur">
+                            </div>
+                            <div>
+                                <label for="state" class="block text-sm font-medium text-gray-700 dark:text-gray-300">State</label>
+                                <select id="state" class="mt-1 w-full py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"></select>
+                            </div>
+                            <div>
+                                <label for="country" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Country</label>
+                                <select id="country" class="mt-1 w-full py-2 px-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"></select>
+                            </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white border-b dark:border-gray-700 pb-3">Contact Information</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Telephone No.</label>
+                                <input type="tel" id="phone" value="03-9284 8499" class="mt-1 w-full pl-4 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary" placeholder="e.g., 03-1234 5678">
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+                                <input type="email" id="email" value="info@smksbs.edu.my" class="mt-1 w-full pl-4 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary" placeholder="e.g., admin@organisation.com">
+                                <p id="error-email" class="text-red-500 text-xs mt-1 hidden"></p>
+                            </div>
+                        </div>
+                      </div>
+
+                      <div class="flex justify-end pt-4">
+                        <button type="submit" class="px-5 py-2.5 text-sm font-medium bg-primary text-white rounded-lg hover:bg-primary-dark focus:outline-none focus:ring-4 focus:ring-primary/50">Save Changes</button>
+                      </div>
+                    </form>
+                  </div>
+
+                  <div class="hidden p-4 rounded-lg bg-white dark:bg-gray-800" id="position" role="tabpanel">
+                    <div class="flex justify-between items-center mb-4">
+                      <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Position Management</h3>
+                      <button id="add-position-btn" class="px-4 py-2 text-sm bg-primary text-white rounded-lg hover:bg-primary-dark flex items-center"><i class="ri-add-line mr-2"></i>Add Position</button>
+                    </div>
+
+                    <div class="overflow-x-auto hidden md:block">
+                      <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-300">
+                          <tr><th class="px-6 py-3">#</th><th class="px-6 py-3">Position Name</th><th class="px-6 py-3 text-center">Action</th></tr>
+                        </thead>
+                        <tbody>
+                          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" data-name="Principal">
+                            <td class="px-6 py-4">1</td>
+                            <th class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Principal</th>
+                            <td class="px-6 py-4 text-center">
+                              <div class="relative inline-block">
+                                <button class="action-menu-button p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700"><i class="ri-more-2-fill"></i></button>
+                                <div class="action-menu-template hidden">
+                                  <a href="#" data-action="edit" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-pencil-line mr-3"></i>Edit</a>
+                                  <a href="#" data-action="delete" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-delete-bin-line mr-3"></i>Delete</a>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" data-name="Senior Assistant">
+                            <td class="px-6 py-4">2</td>
+                            <th class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">Senior Assistant</th>
+                            <td class="px-6 py-4 text-center">
+                              <div class="relative inline-block">
+                                <button class="action-menu-button p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700"><i class="ri-more-2-fill"></i></button>
+                                <div class="action-menu-template hidden">
+                                  <a href="#" data-action="edit" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-pencil-line mr-3"></i>Edit</a>
+                                  <a href="#" data-action="delete" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-delete-bin-line mr-3"></i>Delete</a>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div class="space-y-4 md:hidden">
+                      <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg flex justify-between items-center" data-name="Principal">
+                        <span class="font-medium text-gray-900 dark:text-white">Principal</span>
+                        <div class="relative">
+                          <button class="action-menu-button p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"><i class="ri-more-2-fill"></i></button>
+                          <div class="action-menu-template hidden">
+                            <a href="#" data-action="edit" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-pencil-line mr-3"></i>Edit</a>
+                            <a href="#" data-action="delete" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-delete-bin-line mr-3"></i>Delete</a>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg flex justify-between items-center" data-name="Senior Assistant">
+                        <span class="font-medium text-gray-900 dark:text-white">Senior Assistant</span>
+                        <div class="relative">
+                          <button class="action-menu-button p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"><i class="ri-more-2-fill"></i></button>
+                          <div class="action-menu-template hidden">
+                            <a href="#" data-action="edit" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-pencil-line mr-3"></i>Edit</a>
+                            <a href="#" data-action="delete" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-delete-bin-line mr-3"></i>Delete</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <nav class="flex items-center justify-end pt-6 mt-4 border-t border-gray-200 dark:border-gray-700" aria-label="Pagination">
+                      <ul class="inline-flex items-center -space-x-px text-sm">
+                        <li><a href="#" class="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"><span class="sr-only">Previous</span><i class="ri-arrow-left-s-line"></i></a></li>
+                        <li><a href="#" aria-current="page" class="z-10 flex items-center justify-center px-3 h-8 leading-tight text-primary border border-primary bg-primary/10 hover:bg-primary/20 dark:border-gray-700 dark:bg-gray-700 dark:text-white">1</a></li>
+                        <li><a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a></li>
+                        <li><a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"><span class="sr-only">Next</span><i class="ri-arrow-right-s-line"></i></a></li>
+                      </ul>
+                    </nav>
+                  </div>
+
+                  <div class="hidden p-4 rounded-lg bg-white dark:bg-gray-800" id="group" role="tabpanel">
+                    <div class="flex justify-between items-center mb-4">
+                      <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Group Management</h3>
+                      <button id="add-group-btn" class="px-4 py-2 text-sm bg-primary text-white rounded-lg hover:bg-primary-dark flex items-center"><i class="ri-add-line mr-2"></i>Add Group</button>
+                    </div>
+
+                    <div class="overflow-x-auto hidden md:block">
+                      <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-300">
+                          <tr><th class="px-6 py-3">#</th><th class="px-6 py-3">Group Name</th><th class="px-6 py-3 text-center">Action</th></tr>
+                        </thead>
+                        <tbody>
+                          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" data-name="1 Amanah">
+                            <td class="px-6 py-4">1</td>
+                            <th class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">1 Amanah</th>
+                            <td class="px-6 py-4 text-center">
+                              <div class="relative inline-block">
+                                <button class="action-menu-button p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700"><i class="ri-more-2-fill"></i></button>
+                                <div class="action-menu-template hidden">
+                                  <a href="#" data-action="edit" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-pencil-line mr-3"></i>Edit</a>
+                                  <a href="#" data-action="delete" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-delete-bin-line mr-3"></i>Delete</a>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" data-name="2 Bestari">
+                            <td class="px-6 py-4">2</td>
+                            <th class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">2 Bestari</th>
+                            <td class="px-6 py-4 text-center">
+                              <div class="relative inline-block">
+                                <button class="action-menu-button p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700"><i class="ri-more-2-fill"></i></button>
+                                <div class="action-menu-template hidden">
+                                  <a href="#" data-action="edit" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-pencil-line mr-3"></i>Edit</a>
+                                  <a href="#" data-action="delete" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-delete-bin-line mr-3"></i>Delete</a>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div class="space-y-4 md:hidden">
+                      <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg flex justify-between items-center" data-name="1 Amanah">
+                        <span class="font-medium text-gray-900 dark:text-white">1 Amanah</span>
+                        <div class="relative">
+                          <button class="action-menu-button p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"><i class="ri-more-2-fill"></i></button>
+                          <div class="action-menu-template hidden">
+                            <a href="#" data-action="edit" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-pencil-line mr-3"></i>Edit</a>
+                            <a href="#" data-action="delete" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-delete-bin-line mr-3"></i>Delete</a>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg flex justify-between items-center" data-name="2 Bestari">
+                        <span class="font-medium text-gray-900 dark:text-white">2 Bestari</span>
+                        <div class="relative">
+                          <button class="action-menu-button p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600"><i class="ri-more-2-fill"></i></button>
+                          <div class="action-menu-template hidden">
+                            <a href="#" data-action="edit" class="flex items-center w-full px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-pencil-line mr-3"></i>Edit</a>
+                            <a href="#" data-action="delete" class="flex items-center w-full px-4 py-2 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700"><i class="ri-delete-bin-line mr-3"></i>Delete</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <nav class="flex items-center justify-end pt-6 mt-4 border-t border-gray-200 dark:border-gray-700" aria-label="Pagination">
+                      <ul class="inline-flex items-center -space-x-px text-sm">
+                        <li><a href="#" class="flex items-center justify-center px-3 h-8 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"><span class="sr-only">Previous</span><i class="ri-arrow-left-s-line"></i></a></li>
+                        <li><a href="#" aria-current="page" class="z-10 flex items-center justify-center px-3 h-8 leading-tight text-primary border border-primary bg-primary/10 hover:bg-primary/20 dark:border-gray-700 dark:bg-gray-700 dark:text-white">1</a></li>
+                        <li><a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a></li>
+                        <li><a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"><span class="sr-only">Next</span><i class="ri-arrow-right-s-line"></i></a></li>
+                      </ul>
+                    </nav>
+                  </div>
+                </div> </div>
+        </main>
+        </div>
+    <div id="itemModal" class="modal fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-50 hidden opacity-0">
+        <div class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-xl w-11/12 md:w-1/3 p-6 transform transition-all scale-95">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="itemModalTitle" class="text-xl font-bold text-gray-900 dark:text-white"></h3>
+                <button type="button" class="modal-close-button p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700"><i class="ri-close-line"></i></button>
+            </div>
+            <form id="item-form" class="space-y-4">
+                <div>
+                    <label for="item-name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
+                    <input type="text" id="item-name" class="w-full pl-4 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary" required>
+                </div>
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" class="modal-close-button px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="deleteConfirmModal" class="modal fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-50 hidden opacity-0">
+        <div class="modal-content bg-white dark:bg-gray-800 rounded-lg shadow-xl w-11/12 md:w-1/3 lg:w-1/4 p-6 text-center transform transition-all scale-95">
+            <i class="ri-error-warning-line text-4xl text-red-500 mx-auto mb-4"></i>
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white">Confirm Deletion</h3>
+            <p id="deleteConfirmText" class="my-4 text-gray-600 dark:text-gray-300"></p>
+            <div class="flex justify-center space-x-3">
+                <button type="button" class="modal-close-button px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500">Cancel</button>
+                <button type="button" id="confirmDeleteBtn" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">Yes, Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="success-toast" class="fixed top-5 right-5 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg flex items-center gap-3 transform translate-x-[150%] opacity-0 transition-all duration-300 ease-in-out z-[100]">
+        <i class="ri-checkbox-circle-fill text-2xl"></i>
+        <span id="toast-message"></span>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            /* ===== Shell & Theme (dari acuan) ===== */
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggleBtn = document.getElementById('sidebar-toggle');
+            const closeSidebarBtn = document.getElementById('close-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            function openSidebar() { sidebar.classList.remove('-translate-x-full'); overlay.classList.remove('hidden'); }
+            function closeSidebar() { sidebar.classList.add('-translate-x-full'); overlay.classList.add('hidden'); }
+            
+            sidebarToggleBtn.addEventListener('click', (e) => { e.stopPropagation(); openSidebar(); });
+            closeSidebarBtn.addEventListener('click', closeSidebar);
+            overlay.addEventListener('click', closeSidebar);
+            
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const applyTheme = () => {
+                if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                } else { document.documentElement.classList.remove('dark'); }
+            };
+            applyTheme();
+            themeToggleBtn.addEventListener('click', () => {
+                const isDark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('color-theme', isDark ? 'dark' : 'light');
+            });
+
+            const profileMenuButton = document.getElementById('profile-menu-button');
+            const profileMenu = document.getElementById('profile-menu');
+            profileMenuButton?.addEventListener('click', (e) => { e.stopPropagation(); profileMenu.classList.toggle('hidden'); });
+            window.addEventListener('click', (e) => {
+                if (profileMenu && !profileMenu.classList.contains('hidden') && !profileMenuButton.contains(e.target) && !profileMenu.contains(e.target)) {
+                    profileMenu.classList.add('hidden');
+                }
+            });
+
+            const logout = () => { window.location.href = "../landing/home.html"; };
+            document.getElementById('logout-sidebar').addEventListener('click', (e) => { e.preventDefault(); logout(); });
+            document.getElementById('logout-navbar').addEventListener('click', (e) => { e.preventDefault(); logout(); });
+
+            /* ===== Sidebar Memory (dari acuan) ===== */
+            const NAV_KEY = 'mys_sidebar_memory';
+            const getFile = (href) => (href || '').split('/').pop();
+            const currentFile = getFile(window.location.pathname) || 'organisation.html';
+
+            function saveNavState(state){ try{ localStorage.setItem(NAV_KEY, JSON.stringify(state)); }catch(e){} }
+            function readNavState(){ try{ return JSON.parse(localStorage.getItem(NAV_KEY) || '{}'); }catch(e){ return {}; } }
+
+            function setActiveLink(routeFile){
+                document.querySelectorAll('nav a[data-route]').forEach(a => {
+                    a.classList.remove('nav-active','text-white');
+                    a.classList.add('text-gray-300', 'hover:text-white');
+                });
+                const target = Array.from(document.querySelectorAll('nav a[data-route]')).find(a => a.dataset.route === routeFile);
+                if (target){
+                    target.classList.add('nav-active');
+                    target.classList.remove('text-gray-300');
+                    const parentUl = target.closest('ul[id^="submenu-"]');
+                    if (parentUl){
+                        const btn = document.querySelector(`[data-collapse-toggle="${parentUl.id}"]`);
+                        const arrow = btn?.querySelector('.ri-arrow-down-s-line');
+                        parentUl.classList.remove('hidden');
+                        btn?.classList.add('bg-gray-700','text-white');
+                        arrow?.classList.add('rotate-180');
+                    }
+                    const state = readNavState();
+                    state.active = routeFile;
+                    state.open = state.open || {};
+                    document.querySelectorAll('[data-collapse-toggle]').forEach(btn => {
+                        const id = btn.getAttribute('data-collapse-toggle');
+                        state.open[id] = !document.getElementById(id)?.classList.contains('hidden');
+                    });
+                    saveNavState(state);
+                }
+            }
+
+            function restoreSidebar(){
+                const state = readNavState();
+                document.querySelectorAll('[data-collapse-toggle]').forEach(btn => {
+                    const id = btn.getAttribute('data-collapse-toggle');
+                    const ul = document.getElementById(id);
+                    const arrow = btn.querySelector('.ri-arrow-down-s-line');
+                    const open = state.open?.[id] ?? false;
+                    if (ul){
+                        ul.classList.toggle('hidden', !open);
+                        if (open) { btn.classList.add('bg-gray-700','text-white'); }
+                        arrow?.classList.toggle('rotate-180', open);
+                    }
+                });
+                setActiveLink(state.active || currentFile);
+            }
+
+            document.querySelectorAll('[data-collapse-toggle]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.getAttribute('data-collapse-toggle');
+                    const ul = document.getElementById(id);
+                    const arrow = btn.querySelector('.ri-arrow-down-s-line');
+                    if (!ul) return;
+                    ul.classList.toggle('hidden');
+                    arrow?.classList.toggle('rotate-180');
+                    btn.classList.toggle('bg-gray-700');
+                    btn.classList.toggle('text-white');
+
+                    const state = readNavState();
+                    state.open = state.open || {};
+                    state.open[id] = !ul.classList.contains('hidden');
+                    saveNavState(state);
+                });
+            });
+
+            document.querySelectorAll('nav a[data-route]').forEach(a => { a.addEventListener('click', (e) => setActiveLink(a.dataset.route)); });
+            
+            setActiveLink('organisation.html');
+            restoreSidebar();
+
+            /* ===== KANDUNGAN HALAMAN INI (DIKEMBALIKAN & DIPERBAIKI) ===== */
+            const successToast = document.getElementById('success-toast');
+            const toastMessage = document.getElementById('toast-message');
+            let toastTimeout;
+            function showToast(message){
+                clearTimeout(toastTimeout);
+                toastMessage.textContent = message;
+                successToast.classList.remove('translate-x-[150%]','opacity-0');
+                toastTimeout = setTimeout(() => { successToast.classList.add('translate-x-[150%]','opacity-0'); }, 3000);
+            }
+
+            /* ===== Organisation Form ===== */
+            const orgForm = document.getElementById('org-form');
+            const states = ["Johor","Kedah","Kelantan","Melaka","Negeri Sembilan","Pahang","Perak","Perlis","Pulau Pinang","Sabah","Sarawak","Selangor","Terengganu","W.P. Kuala Lumpur","W.P. Labuan","W.P. Putrajaya"];
+            const countries = ["Malaysia","Singapore","Indonesia","Brunei","Thailand"];
+
+            function populateOrgForm(){
+                const stateSelect = document.getElementById('state');
+                states.forEach(s => {
+                    const o = document.createElement('option'); o.value = s; o.textContent = s;
+                    if (s === 'W.P. Kuala Lumpur') o.selected = true;
+                    stateSelect.appendChild(o);
+                });
+                const countrySelect = document.getElementById('country');
+                countries.forEach(c => {
+                    const o = document.createElement('option'); o.value = c; o.textContent = c;
+                    if (c === 'Malaysia') o.selected = true;
+                    countrySelect.appendChild(o);
+                });
+            }
+            populateOrgForm();
+
+            function showError(inputId, message){
+                const input = document.getElementById(inputId);
+                const errorEl = document.getElementById(`error-${inputId}`);
+                input.classList.add('input-error');
+                if (errorEl){ errorEl.textContent = message; errorEl.classList.remove('hidden'); }
+            }
+
+            function clearError(inputId){
+                const input = document.getElementById(inputId);
+                const errorEl = document.getElementById(`error-${inputId}`);
+                input.classList.remove('input-error');
+                if (errorEl){ errorEl.classList.add('hidden'); }
+            }
+
+            orgForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                let isValid = true;
+                clearError('org_name'); clearError('email');
+                if (!document.getElementById('org_name').value.trim()){
+                    showError('org_name','Organisation name is required.');
+                    isValid = false;
+                }
+                const email = document.getElementById('email').value.trim();
+                if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+                    showError('email','Please enter a valid email.');
+                    isValid = false;
+                }
+                if (isValid){ showToast('Organisation details saved successfully!'); }
+            });
+
+            /* ===== Tabs ===== */
+            const tabElements = [
+                { id:'profile',  triggerEl: document.querySelector('#profile-tab') },
+                { id:'position', triggerEl: document.querySelector('#position-tab') },
+                { id:'group',    triggerEl: document.querySelector('#group-tab') },
+            ];
+            tabElements.forEach(t => t.targetEl = document.querySelector(t.triggerEl.dataset.tabsTarget));
+            const tabOpts = {
+                defaultTabId: 'profile',
+                activeClasses: 'text-primary border-primary dark:text-accent dark:border-accent',
+                inactiveClasses: 'text-gray-500 border-transparent hover:text-gray-600 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300',
+            };
+            function showTab(tabId){
+                tabElements.forEach(t => {
+                    if (t.id === tabId){
+                        t.targetEl.classList.remove('hidden');
+                        t.triggerEl.classList.add(...tabOpts.activeClasses.split(' '));
+                        t.triggerEl.classList.remove(...tabOpts.inactiveClasses.split(' '));
+                        t.triggerEl.setAttribute('aria-selected','true');
+                    } else {
+                        t.targetEl.classList.add('hidden');
+                        t.triggerEl.classList.remove(...tabOpts.activeClasses.split(' '));
+                        t.triggerEl.classList.add(...tabOpts.inactiveClasses.split(' '));
+                        t.triggerEl.setAttribute('aria-selected','false');
+                    }
+                });
+            }
+            showTab(tabOpts.defaultTabId);
+            tabElements.forEach(t => t.triggerEl.addEventListener('click', () => showTab(t.id)));
+
+            /* ===== Modal & Action Menus (Dikembalikan) ===== */
+            function showModal(modal){
+                modal.classList.remove('hidden');
+                setTimeout(()=>{ modal.classList.remove('opacity-0'); modal.querySelector('.modal-content').classList.remove('scale-95'); },10);
+            }
+            function hideModal(modal){
+                if (!modal) return;
+                modal.classList.add('opacity-0');
+                modal.querySelector('.modal-content').classList.add('scale-95');
+                setTimeout(()=> modal.classList.add('hidden'), 300);
+            }
+            document.querySelectorAll('.modal-close-button').forEach(btn => btn.addEventListener('click', () => hideModal(btn.closest('.modal'))));
+
+            const itemModal = document.getElementById('itemModal');
+            const itemModalTitle = document.getElementById('itemModalTitle');
+            const itemForm = document.getElementById('item-form');
+            const itemNameInput = document.getElementById('item-name');
+            const deleteConfirmModal = document.getElementById('deleteConfirmModal');
+            const deleteConfirmText = document.getElementById('deleteConfirmText');
+            const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+            let currentItemType = ''; let editingItemName = null; let activeRow = null;
+
+            function openItemModal(type, name = ''){
+                currentItemType = type; editingItemName = name;
+                itemModalTitle.textContent = name ? `Edit ${type}` : `Add New ${type}`;
+                itemNameInput.value = name;
+                itemNameInput.previousElementSibling.textContent = `${type} Name`;
+                showModal(itemModal);
+            }
+
+            document.getElementById('add-position-btn')?.addEventListener('click', () => openItemModal('Position'));
+            document.getElementById('add-group-btn')?.addEventListener('click', () => openItemModal('Group'));
+
+            itemForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const newName = itemNameInput.value.trim();
+                if (!newName) return;
+                if (editingItemName) showToast(`${currentItemType} '${editingItemName}' updated to '${newName}'.`);
+                else showToast(`New ${currentItemType} '${newName}' added successfully.`);
+                hideModal(itemModal);
+                itemForm.reset();
+            });
+
+            document.body.addEventListener('click', (e) => {
+                const existingDD = document.getElementById('active-action-menu');
+                const isBtn = e.target.closest('.action-menu-button');
+                if (existingDD && !isBtn && !existingDD.contains(e.target)){ existingDD.remove(); activeRow = null; }
+                if (isBtn){
+                    e.preventDefault();
+                    const btn = isBtn;
+                    const row = btn.closest('tr') || btn.closest('div[data-name]');
+                    if (existingDD && activeRow === row){ existingDD.remove(); activeRow = null; return; }
+                    if (existingDD) existingDD.remove();
+                    activeRow = row;
+                    const tpl = btn.nextElementSibling;
+                    const dd = tpl.cloneNode(true);
+                    dd.id = 'active-action-menu';
+                    dd.className = 'absolute w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 ring-1 ring-black ring-opacity-5 z-50';
+                    dd.classList.remove('hidden');
+                    document.body.appendChild(dd);
+                    const r = btn.getBoundingClientRect();
+                    dd.style.top = `${r.bottom + window.scrollY}px`;
+                    dd.style.left = `${r.right - dd.offsetWidth}px`;
+                } else if (e.target.closest('#active-action-menu')){
+                    const a = e.target.closest('[data-action]');
+                    if (!a || !activeRow) return;
+                    const action = a.dataset.action;
+                    const name = activeRow.dataset.name;
+                    if (action === 'delete'){
+                        const type = activeRow.closest('#position') ? 'Position' : 'Group';
+                        deleteConfirmText.textContent = `Are you sure you want to delete the ${type.toLowerCase()} '${name}'?`;
+                        showModal(deleteConfirmModal);
+                    } else if (action === 'edit'){
+                        const type = activeRow.closest('#position') ? 'Position' : 'Group';
+                        openItemModal(type, name);
+                    }
+                    document.getElementById('active-action-menu')?.remove();
+                }
+            });
+
+            confirmDeleteBtn.addEventListener('click', () => {
+                if (activeRow){
+                    const name = activeRow.dataset.name;
+                    activeRow.remove();
+                    showToast(`'${name}' has been deleted.`);
+                }
+                hideModal(deleteConfirmModal);
+            });
+        });
+    </script>
+</body>
+</html>
