@@ -57,18 +57,18 @@
     <nav class="container mx-auto px-6 py-3">
       <div class="flex items-center justify-between">
         <a href="mywall.html" class="flex items-center gap-2">
-          <img src="../../src/images/logos/logo.png" alt="MyWall Logo" class="h-10 w-10 rounded-full" />
+          <img src="../../src/images/logos/logo.png" alt="MyWall Logo" class="h-10 w-10 rounded-full" onerror="this.onerror=null;this.src='https://placehold.co/40x40/134E4A/FFFFFF?text=M';"/>
           <span class="font-poppins font-bold text-2xl text-primary">MyWall</span>
         </a>
         <div class="relative">
-          <button id="profile-menu-button" class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary hover:border-primary-600 transition-all">
-            <img src="../../src/images/users/nabil.png" onerror="this.onerror=null;this.src='https://placehold.co/40x40/134E4A/FFFFFF?text=A';" alt="User Avatar" class="w-full h-full object-cover" />
-          </button>
+            <button id="profile-menu-button" class="w-11 h-11 flex items-center justify-center rounded-lg bg-primary text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
+                <i class="ri-menu-4-line text-3xl"></i>
+            </button>
           <div id="profile-menu" class="hidden absolute top-full right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 z-50">
             <a href="mywall.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-layout-grid-fill mr-3"></i>MyWall</a>
             <a href="myprofile.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-user-line mr-3"></i>MyProfile</a>
             <a href="myaccount.html" class="flex items-center px-4 py-2 text-sm text-primary font-bold bg-primary-50"><i class="ri-settings-3-line mr-3"></i>MyAccount</a>
-            <a href="resume.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-article-line mr-3"></i>MyResume</a>
+            <a href="resume.html" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-article-line mr-3"></i>My Resume</a>
             <div class="border-t my-1 border-gray-200"></div>
             <a href="#" class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-primary-50 hover:text-primary"><i class="ri-logout-box-r-line mr-3"></i>Logout</a>
           </div>
@@ -161,18 +161,12 @@
       }
 
       const fpxBanks = [
-          { value: "Maybank", name: "Maybank2u" },
-          { value: "CIMB Clicks", name: "CIMB Clicks" },
-          { value: "Public Bank", name: "Public Bank" },
-          { value: "RHB Bank", name: "RHB Now" },
-          { value: "Hong Leong Bank", name: "Hong Leong Connect" },
-          { value: "AmBank", name: "AmBank" },
-          { value: "Bank Islam", name: "Bank Islam" },
-          { value: "Bank Rakyat", name: "Bank Rakyat" },
-          { value: "Affin Bank", name: "Affin Bank" },
-          { value: "Bank Muamalat", name: "Bank Muamalat" },
-          { value: "OCBC Bank", name: "OCBC Bank" },
-          { value: "Standard Chartered", name: "Standard Chartered" },
+          { value: "Maybank", name: "Maybank2u" }, { value: "CIMB Clicks", name: "CIMB Clicks" },
+          { value: "Public Bank", name: "Public Bank" }, { value: "RHB Bank", name: "RHB Now" },
+          { value: "Hong Leong Bank", name: "Hong Leong Connect" }, { value: "AmBank", name: "AmBank" },
+          { value: "Bank Islam", name: "Bank Islam" }, { value: "Bank Rakyat", name: "Bank Rakyat" },
+          { value: "Affin Bank", name: "Affin Bank" }, { value: "Bank Muamalat", name: "Bank Muamalat" },
+          { value: "OCBC Bank", name: "OCBC Bank" }, { value: "Standard Chartered", name: "Standard Chartered" },
           { value: "UOB Bank", name: "UOB Bank" },
       ];
 
@@ -244,10 +238,8 @@
                 <div class="space-y-3">
                   <input type="radio" name="payment-method" id="pay-card" value="card" class="payment-radio hidden" />
                   <label for="pay-card" class="flex items-center p-4 bg-white/5 rounded-lg border-2 border-transparent transition-all cursor-pointer"><i class="ri-bank-card-line text-2xl text-primary-200"></i><span class="ml-4 font-bold text-white">Credit / Debit Card</span></label>
-
                   <input type="radio" name="payment-method" id="pay-fpx" value="fpx" class="payment-radio hidden" checked />
                   <label for="pay-fpx" class="flex items-center p-4 bg-white/5 rounded-lg border-2 border-transparent transition-all cursor-pointer"><i class="ri-bank-line text-2xl text-primary-200"></i><span class="ml-4 font-bold text-white">Online Banking (FPX)</span></label>
-
                   <input type="radio" name="payment-method" id="pay-ewallet" value="ewallet" class="payment-radio hidden" />
                   <label for="pay-ewallet" class="flex items-center p-4 bg-white/5 rounded-lg border-2 border-transparent transition-all cursor-pointer"><i class="ri-qr-code-line text-2xl text-primary-200"></i><span class="ml-4 font-bold text-white">E-Wallet (TNG, DuitNow QR)</span></label>
                 </div>
@@ -270,85 +262,10 @@
                 <option value="" disabled selected>-- Select a Bank --</option>
                 ${fpxBanks.map(bank => `<option value="${bank.value}">${bank.name}</option>`).join('')}
               </select>
-              <p id="fpx-bank-error" class="hidden text-red-300 text-xs mt-1">Please select a bank to continue.</p>
             </div>
             <div class="p-4 flex justify-between items-center gap-4 border-t border-primary-800/50">
               <button type="button" class="payment-back-button px-6 py-2 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600">Back</button>
               <button type="submit" class="px-8 py-2 bg-accent text-white font-bold rounded-lg hover:bg-accent-hover">Proceed</button>
-            </div>
-          </form>`,
-        fpxLogin: `
-          <form id="fpx-login-form" novalidate>
-            <div class="flex justify-between items-center p-4 border-b border-primary-800/50">
-              <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="ri-login-circle-line"></i> <span id="fpx-login-title">Bank Login</span></h3>
-              <button type="button" class="modal-close-button text-primary-200 hover:text-white text-2xl"><i class="ri-close-line"></i></button>
-            </div>
-            <div id="fpx-login-banner" class="hidden mx-6 mt-4 rounded-lg border border-red-500/40 bg-red-900/30 text-red-200 text-sm p-3 flex items-start gap-2">
-              <i class="ri-error-warning-line text-red-300 text-xl leading-none"></i>
-              <div><span class="font-semibold">Please fix the highlighted fields.</span><div id="fpx-login-errors" class="mt-1 space-y-0.5"></div></div>
-            </div>
-            <div class="p-6 space-y-4">
-              <div class="text-sm text-primary-200">Bank: <span id="fpx-bank-name" class="font-semibold text-white">-</span></div>
-              <div>
-                <label class="block text-sm font-medium text-primary-200 mb-1">Username</label>
-                <input type="text" id="fpx-username" class="w-full bg-white/10 border border-primary-700 rounded-lg px-3 py-2 text-white focus:ring-accent focus:border-accent" placeholder="e.g. ahmad123" autocomplete="username" />
-                <p id="fpx-username-err" class="mt-1 text-xs text-red-300 hidden">Username is required.</p>
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-primary-200 mb-1">Password</label>
-                <input type="password" id="fpx-password" class="w-full bg-white/10 border border-primary-700 rounded-lg px-3 py-2 text-white focus:ring-accent focus:border-accent" placeholder="••••••••" autocomplete="current-password" />
-                <p id="fpx-password-err" class="mt-1 text-xs text-red-300 hidden">Password is required.</p>
-              </div>
-              <div class="grid grid-cols-2 gap-4">
-                <div>
-                  <label class="block text-sm font-medium text-primary-200 mb-1">Email (receipt)</label>
-                  <input type="email" id="fpx-email" class="w-full bg-white/10 border border-primary-700 rounded-lg px-3 py-2 text-white focus:ring-accent focus:border-accent" placeholder="name@email.com" autocomplete="email" />
-                  <p id="fpx-email-err" class="mt-1 text-xs text-red-300 hidden">Enter a valid email.</p>
-                </div>
-                <div>
-                  <label class="block text-sm font-medium text-primary-200 mb-1">Amount</label>
-                  <input type="text" id="fpx-amount" class="w-full bg-white/10 border border-primary-700 rounded-lg px-3 py-2 text-white" disabled />
-                </div>
-              </div>
-              <p class="text-xs text-primary-300">Demo only. Do not enter real credentials.</p>
-            </div>
-            <div class="p-4 flex justify-between items-center gap-4 border-t border-primary-800/50">
-              <button type="button" class="fpx-back-to-banks px-6 py-2 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600">Back</button>
-              <div class="flex items-center gap-3">
-                <button type="button" class="modal-close-button px-6 py-2 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600">Cancel</button>
-                <button id="fpx-login-submit" type="submit" class="px-8 py-2 bg-accent text-white font-bold rounded-lg hover:bg-accent-hover flex items-center gap-2">
-                  <span>Login</span><i class="ri-arrow-right-line"></i>
-                </button>
-              </div>
-            </div>
-          </form>`,
-        fpxOtp: `
-          <form id="fpx-otp-form" novalidate>
-            <div class="flex justify-between items-center p-4 border-b border-primary-800/50">
-              <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="ri-fingerprint-line"></i> Enter OTP</h3>
-              <button type="button" class="modal-close-button text-primary-200 hover:text-white text-2xl"><i class="ri-close-line"></i></button>
-            </div>
-            <div id="fpx-otp-banner" class="hidden mx-6 mt-4 rounded-lg border border-red-500/40 bg-red-900/30 text-red-200 text-sm p-3 flex items-start gap-2">
-              <i class="ri-error-warning-line text-red-300 text-xl leading-none"></i>
-              <div><span class="font-semibold">Please fix the highlighted fields.</span><div id="fpx-otp-errors" class="mt-1 space-y-0.5"></div></div>
-            </div>
-            <div class="p-6 space-y-4">
-              <p class="text-primary-200 text-sm">An OTP has been sent to your registered device for <span id="fpx-otp-bank" class="text-white font-semibold">your bank</span>.</p>
-              <div>
-                <label class="block text-sm font-medium text-primary-200 mb-1">6-digit OTP</label>
-                <input type="text" id="fpx-otp" inputmode="numeric" class="w-full bg-white/10 border border-primary-700 rounded-lg px-3 py-2 text-white focus:ring-accent focus:border-accent" placeholder="••••••" />
-                <p id="fpx-otp-err" class="mt-1 text-xs text-red-300 hidden">Enter a 6-digit OTP.</p>
-                <p class="text-xs text-primary-300 mt-2">Hint (demo): <span class="text-white">111111</span> usually succeeds; <span class="text-white">000000</span> fails.</p>
-              </div>
-            </div>
-            <div class="p-4 flex justify-between items-center gap-4 border-t border-primary-800/50">
-              <button type="button" class="fpx-otp-back px-6 py-2 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600">Back</button>
-              <div class="flex items-center gap-3">
-                <button type="button" class="modal-close-button px-6 py-2 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600">Cancel</button>
-                <button id="fpx-otp-submit" type="submit" class="px-8 py-2 bg-accent text-white font-bold rounded-lg hover:bg-accent-hover flex items-center gap-2">
-                  <span>Confirm</span><i class="ri-shield-check-line"></i>
-                </button>
-              </div>
             </div>
           </form>`,
         qrCode: `
@@ -368,19 +285,13 @@
         cardPayment: `
           <form id="card-payment-form" novalidate>
             <div class="flex justify-between items-center p-4 border-b border-primary-800/50">
-              <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                <i class="ri-bank-card-line"></i> Card Payment
-              </h3>
-              <button type="button" class="modal-close-button text-primary-200 hover:text-white text-2xl">
-                <i class="ri-close-line"></i>
-              </button>
+              <h3 class="text-lg font-bold text-white flex items-center gap-2"><i class="ri-bank-card-line"></i> Card Payment</h3>
+              <button type="button" class="modal-close-button text-primary-200 hover:text-white text-2xl"><i class="ri-close-line"></i></button>
             </div>
-
             <div id="cp-error" class="hidden mx-6 mt-4 mb-0 rounded-lg border border-red-500/40 bg-red-900/30 text-red-200 text-sm p-3 flex items-start gap-2">
               <i class="ri-error-warning-line text-red-300 text-xl leading-none"></i>
               <div><span class="font-semibold">Please fix the highlighted fields.</span><div id="cp-error-list" class="mt-1 space-y-0.5"></div></div>
             </div>
-
             <div class="p-6 space-y-4">
               <div>
                 <label for="cp-name" class="block text-sm font-medium text-primary-200 mb-1">Name on Card</label>
@@ -413,21 +324,7 @@
                 <span>Pay Now</span><i class="ri-arrow-right-line"></i>
               </button>
             </div>
-          </form>
-        `,
-        gateway: `
-          <div class="p-6 text-center">
-            <div class="text-5xl text-primary-400 mb-4"><i class="ri-shield-check-line"></i></div>
-            <h3 class="text-lg font-bold text-white">Redirecting to Payment Gateway…</h3>
-            <p class="text-sm text-primary-200 mt-2">Please do not refresh this page.</p>
-            <div class="mt-6">
-              <i class="ri-loader-4-line animate-spin text-3xl text-primary-200"></i>
-            </div>
-          </div>
-          <div class="p-4 flex justify-center items-center gap-4 border-t border-primary-800/50">
-            <button type="button" class="modal-close-button px-8 py-2 bg-accent text-white font-semibold rounded-lg hover:bg-accent-hover">Close</button>
-          </div>
-        `,
+          </form>`,
         paymentResult: `
           <div class="p-6 text-center">
             <div id="pr-icon" class="text-5xl mb-4"><i class="ri-checkbox-circle-line text-green-400"></i></div>
@@ -839,4 +736,4 @@
     });
   </script>
 </body>
-</ht
+</html>

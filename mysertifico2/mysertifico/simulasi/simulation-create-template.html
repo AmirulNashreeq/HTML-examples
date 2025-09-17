@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi: Cipta Templat Sijil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Menambah sedikit gaya kustom untuk pratonton */
+        #canvas-container {
+            width: 1122px; /* Saiz standard A4 Landscape dalam piksel (approx @ 96 DPI) */
+            height: 793px;
+            background-color: #f3f4f6; /* Latar belakang kanvas */
+            border: 2px dashed #9ca3af;
+            position: relative;
+            overflow: hidden;
+        }
+        #blanko-preview {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+        .draggable-element {
+            position: absolute;
+            cursor: move;
+            border: 1px dotted rgba(0,0,0,0.3);
+            z-index: 10;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 p-4 sm:p-8">
+
+    <div class="max-w-7xl mx-auto">
+
+        <div id="form-section">
+            <h1 class="text-3xl font-bold mb-2">Cipta Templat Sijil Baru</h1>
+            <p class="mb-6 text-gray-500">Langkah 1: Masukkan maklumat asas untuk templat sijil anda.</p>
+
+            <form id="template-form" class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="blanko-upload" class="block mb-2 text-sm font-medium">1. Muat Naik Blanko/Templat Sijil</label>
+                        <input id="blanko-upload" type="file" accept="image/svg+xml, image/png, image/jpeg" required class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                    </div>
+
+                    <div>
+                        <label for="suitable_for" class="block mb-2 text-sm font-medium">2. Sesuai Untuk</label>
+                        <input type="text" id="suitable_for" value="Sijil rasmi" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                    </div>
+
+                    <div>
+                        <label for="style" class="block mb-2 text-sm font-medium">3. Style</label>
+                        <select id="style" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <option value="Classic" selected>Classic</option>
+                            <option value="Modern">Modern</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="orientation" class="block mb-2 text-sm font-medium">4. Orientation</label>
+                        <select id="orientation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <option value="Landscape" selected>Landscape</option>
+                            <option value="Portrait">Portrait</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="alignment" class="block mb-2 text-sm font-medium">5. Default Object Alignment</label>
+                        <select id="alignment" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <option value="Center" selected>Center</option>
+                            <option value="Left">Left</option>
+                            <option value="Right">Right</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="theme_color" class="block mb-2 text-sm font-medium">6. Theme Color</label>
+                        <select id="theme_color" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <option value="GOLD" selected>Gold</option>
+                            <option value="BLACK">Black</option>
+                            <option value="BROWN">Brown</option>
+                            <option value="BLUE">Blue</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mt-8 text-right">
+                    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        Next →
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div id="canvas-section" class="hidden">
+            <h1 class="text-3xl font-bold mb-2">Pratonton & Susun Atur Elemen</h1>
+            <p class="mb-6 text-gray-500">Langkah 2: Seret dan lepas elemen untuk menyesuaikan kedudukan. Klik 'Save' untuk menyimpan.</p>
+
+            <div class="flex justify-center bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md overflow-x-auto">
+                <div id="canvas-container">
+                    <img id="blanko-preview" src="" alt="Pratonton Blanko Sijil">
+                    <div id="elements-container"></div>
+                </div>
+            </div>
+
+            <div class="mt-8 flex justify-between">
+                <button id="back-btn" type="button" class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                    ← Back
+                </button>
+                <button id="save-btn" type="button" class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+                    Save Template
+                </button>
+            </div>
+        </div>
+
+        <div id="result-section" class="hidden">
+             <h1 class="text-3xl font-bold mb-2">Templat Berjaya Disimpan! ✅</h1>
+            <p class="mb-6 text-gray-500">Berikut adalah contoh data JSON yang akan disimpan ke dalam pangkalan data (table `templates`).</p>
+
+            <div class="bg-gray-900 text-white p-6 rounded-lg shadow-inner">
+                <pre><code id="json-output" class="language-json"></code></pre>
+            </div>
+        </div>
+
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    // Rujukan kepada elemen DOM
+    const formSection = document.getElementById('form-section');
+    const canvasSection = document.getElementById('canvas-section');
+    const resultSection = document.getElementById('result-section');
+
+    const templateForm = document.getElementById('template-form');
+    const backBtn = document.getElementById('back-btn');
+    const saveBtn = document.getElementById('save-btn');
+
+    const blankoUpload = document.getElementById('blanko-upload');
+    const blankoPreview = document.getElementById('blanko-preview');
+    const elementsContainer = document.getElementById('elements-container');
+    const jsonOutput = document.getElementById('json-output');
+
+    let templateData = {}; // Objek untuk menyimpan data sementara
+
+    // Apabila borang dihantar (klik 'Next')
+    templateForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        // 1. Dapatkan semua nilai dari borang
+        const formData = {
+            suitableFor: document.getElementById('suitable_for').value,
+            style: document.getElementById('style').value,
+            orientation: document.getElementById('orientation').value,
+            alignment: document.getElementById('alignment').value,
+            themeColor: document.getElementById('theme_color').value
+        };
+
+        // 2. Semak jika fail telah dimuat naik
+        if (blankoUpload.files.length === 0) {
+            alert('Sila muat naik imej blanko sijil dahulu.');
+            return;
+        }
+
+        // 3. Jana Template Code
+        const styleCode = formData.style.charAt(0).toUpperCase();
+        const orientationCode = formData.orientation.substring(0, 2).toUpperCase();
+        const alignmentCode = formData.alignment.substring(0, 2).toUpperCase();
+        const serialNumber = '001'; // Simulasi nombor siri
+        const templateCode = `${styleCode}${orientationCode}${alignmentCode}-${formData.themeColor}-${serialNumber}`;
+        
+        // 4. Simpan data ke objek sementara
+        templateData = {
+            suitable_for: formData.suitableFor,
+            style: formData.style,
+            orientation: formData.orientation,
+            default_alignment: formData.alignment,
+            theme_color: formData.themeColor,
+            template_code: templateCode,
+        };
+
+        // 5. Paparkan imej blanko pada kanvas
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            blankoPreview.src = event.target.result;
+        };
+        reader.readAsDataURL(blankoUpload.files[0]);
+
+        // 6. Jana dan tampal elemen-elemen default
+        populateCanvas(formData.alignment);
+
+        // 7. Tukar paparan dari borang ke kanvas
+        formSection.classList.add('hidden');
+        canvasSection.classList.remove('hidden');
+    });
+
+    // Apabila butang 'Back' diklik
+    backBtn.addEventListener('click', () => {
+        canvasSection.classList.add('hidden');
+        formSection.classList.remove('hidden');
+    });
+
+    // Apabila butang 'Save' diklik
+    saveBtn.addEventListener('click', () => {
+        // Bina objek data akhir untuk disimpan
+        const finalData = {
+            template_id: `(Akan dijana oleh MySQL, cth: 123)`,
+            template_url: `../../src/images/template/${templateData.template_code.toLowerCase()}.svg`,
+            ...templateData,
+            const_elements: getDefaultElements(), // Mengambil data elemen
+            created_by: 'nabil_backoffice_01',
+            created_at: new Date().toISOString(),
+            updated_by: null,
+            updated_at: null,
+            deleted_by: null,
+            deleted_at: null,
+            is_active: 1
+        };
+
+        // Paparkan data JSON
+        jsonOutput.textContent = JSON.stringify(finalData, null, 4);
+
+        // Tukar paparan ke skrin hasil
+        canvasSection.classList.add('hidden');
+        resultSection.classList.remove('hidden');
+    });
+
+    // Fungsi untuk menampal elemen pada kanvas
+    function populateCanvas(alignment) {
+        elementsContainer.innerHTML = ''; // Kosongkan elemen sedia ada
+        const elements = getDefaultElements();
+        
+        elements.forEach(el => {
+            const div = document.createElement('div');
+            div.classList.add('draggable-element');
+            div.style.left = `${el.position_x}px`;
+            div.style.top = `${el.position_y}px`;
+            div.style.fontFamily = el.font_family;
+            div.style.fontSize = `${el.font_size}px`;
+            div.style.fontWeight = el.font_weight;
+            div.style.color = el.color;
+
+            // Laraskan `translateX` berdasarkan alignment
+            if(alignment === 'Center') {
+                div.style.transform = 'translateX(-50%)';
+            } else if (alignment === 'Right') {
+                 div.style.transform = 'translateX(-100%)';
+            }
+
+            if (el.type === 'image') {
+                div.style.width = `${el.width}px`;
+                div.style.height = `${el.height}px`;
+                const img = document.createElement('img');
+                img.src = el.content;
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.objectFit = 'contain';
+                div.appendChild(img);
+            } else { // type === 'text'
+                div.textContent = el.content;
+            }
+            
+            elementsContainer.appendChild(div);
+        });
+    }
+
+    // Fungsi untuk mendapatkan senarai elemen default
+    function getDefaultElements() {
+        return [
+            { "element_id": "logo", "type": "image", "content": "../../src/images/logos-badges/sample-logo.svg", "position_x": 561, "position_y": 80, "width": 120, "height": 120, "visible": true, "aspect_ratio": 1},
+            { "element_id": "organization_name", "type": "text", "content": "{Organization_Name}", "position_x": 561, "position_y": 190, "font_family": "Montserrat", "font_size": 20, "font_weight": "500", "color": "#111827", "visible": true},
+            { "element_id": "address_1", "type": "text", "content": "{Address_row1}", "position_x": 561, "position_y": 210, "font_family": "Montserrat", "font_size": 14, "font_weight": "normal", "color": "#374151", "visible": true},
+            { "element_id": "address_2", "type": "text", "content": "{Address_row2}", "position_x": 561, "position_y": 225, "font_family": "Montserrat", "font_size": 14, "font_weight": "normal", "color": "#374151", "visible": true},
+            { "element_id": "certificate_title", "type": "text", "content": "CERTIFICATE TITLE", "position_x": 561, "position_y": 280, "font_family": "EB Garamond", "font_size": 46, "font_weight": "bold", "color": "#111827", "visible": true},
+            { "element_id": "certificate_body", "type": "text", "content": "Certificate body text here", "position_x": 561, "position_y": 360, "font_family": "Montserrat", "font_size": 18, "font_weight": "normal", "color": "#374151", "visible": true},
+            { "element_id": "recipient_name", "type": "text", "content": "{Recipient_Name}", "position_x": 561, "position_y": 390, "font_family": "Montserrat", "font_size": 24, "font_weight": "bold", "color": "#000000", "visible": true},
+            { "element_id": "event_description", "type": "text", "content": "Certificate event or description here", "position_x": 561, "position_y": 430, "font_family": "Montserrat", "font_size": 18, "font_weight": "500", "color": "#374151", "visible": true},
+            { "element_id": "event_date", "type": "text", "content": "{EventName} on {EventDate}", "position_x": 561, "position_y": 450, "font_family": "Montserrat", "font_size": 18, "font_weight": "600", "color": "#111827", "visible": true},
+            { "element_id": "signature_image", "type": "image", "content": "../../src/images/signatures/sample-signature.png", "position_x": 250, "position_y": 520, "width": 200, "height": 100, "visible": true, "aspect_ratio": 200/100},
+            { "element_id": "signatory_name", "type": "text", "content": "{Signatory_Name}", "position_x": 250, "position_y": 590, "font_family": "Montserrat", "font_size": 16, "font_weight": "500", "color": "#000000", "visible": true},
+            { "element_id": "signatory_position", "type": "text", "content": "{Signatory_Position}", "position_x": 250, "position_y": 610, "font_family": "Montserrat", "font_size": 16, "font_weight": "normal", "color": "#374151", "visible": true},
+            { "element_id": "signed_date", "type": "text", "content": "{SignedDate}", "position_x": 250, "position_y": 680, "font_family": "Montserrat", "font_size": 14, "font_weight": "normal", "color": "#374151", "visible": true},
+            { "element_id": "qr_code", "type": "image", "content": "https://via.placeholder.com/120/000000/FFFFFF/?text=QR", "position_x": 872, "position_y": 540, "width": 120, "height": 120, "visible": true, "aspect_ratio": 1}
+        ];
+    }
+});
+</script>
+
+</body>
+</html>

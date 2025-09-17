@@ -6,7 +6,7 @@
     <title>MySertifico - Contact Us</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="../../src/images/logos/favicon.png">
+    <link rel="icon" type="image/png" href="../../src/images/logos/favicon.png" onerror="this.onerror=null;this.src='https://placehold.co/32x32/0d9488/ffffff?text=M';">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -46,7 +46,7 @@
             <div class="flex items-center justify-between">
                 <!-- Logo -->
                 <a href="home.html" class="flex items-center gap-2">
-                    <img src="../../src/images/logos/logo.png" alt="Logo" class="h-10 w-10">
+                    <img src="../../src/images/logos/logo.png" alt="Logo" class="h-10 w-10" onerror="this.onerror=null;this.src='https://placehold.co/40x40/0d9488/ffffff?text=M';">
                     <span class="font-poppins font-bold text-2xl text-primary">MySertifico</span>
                 </a>
 
@@ -108,6 +108,10 @@
                             <div>
                                 <label for="email" class="block text-sm font-medium text-teal-100">Email Address</label>
                                 <input type="email" id="email" name="email" required class="mt-1 block w-full bg-white/20 border border-white/30 rounded-lg shadow-sm px-4 py-2 text-white placeholder-teal-200 focus:ring-accent focus:border-accent">
+                            </div>
+                            <div>
+                                <label for="subject" class="block text-sm font-medium text-teal-100">Subject</label>
+                                <input type="text" id="subject" name="subject" required class="mt-1 block w-full bg-white/20 border border-white/30 rounded-lg shadow-sm px-4 py-2 text-white placeholder-teal-200 focus:ring-accent focus:border-accent">
                             </div>
                             <div>
                                 <label for="message" class="block text-sm font-medium text-teal-100">Message</label>

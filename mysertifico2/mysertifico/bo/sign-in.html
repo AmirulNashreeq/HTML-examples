@@ -1,39 +1,22 @@
 <!DOCTYPE html>
-<html lang="en" class="dark"> <!-- Changed to 'en' for English -->
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MySertifico - Back Office Sign In</title>
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="../src/images/logos/favicon.png">
-
-    <!-- Tailwind CSS CDN -->
+    <link rel="icon" type="image/png" href="../src/images/logos/favicon.png" onerror="this.onerror=null;this.src='https://placehold.co/32x32/0d9488/ffffff?text=M';">
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Remix Icon CDN -->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
-
-    <!-- Google Fonts: Inter & Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@700&display=swap" rel="stylesheet">
-
-    <!-- Custom Tailwind Config -->
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        poppins: ['Poppins', 'sans-serif'],
-                    },
-                    colors: {
-                        'primary': '#0d9488', // Teal-600
-                        'primary-dark': '#0f766e', // Teal-700
-                        'accent': '#f59e0b', // Amber-500
-                    }
+                    fontFamily: { sans: ['Inter', 'sans-serif'], poppins: ['Poppins', 'sans-serif'] },
+                    colors: { 'primary': '#0d9488', 'primary-dark': '#0f766e', 'accent': '#f59e0b' }
                 }
             }
         }
@@ -42,7 +25,6 @@
 <body class="bg-gray-900">
 
     <div class="flex flex-col items-center justify-center min-h-screen p-4">
-        <!-- Logo -->
         <a href="#" class="flex items-center gap-2 mb-8">
             <img src="../src/images/logos/logo.png" alt="Logo" class="h-10 w-10" onerror="this.onerror=null;this.src='https://placehold.co/40x40/111827/ffffff?text=M';">
             <span class="font-poppins font-bold text-2xl text-white">MySertifico</span>
@@ -54,20 +36,14 @@
                 <p class="text-sm font-normal text-gray-400 mb-4">For authorized personnel only.</p>
             </div>
             
-            <!-- Success Message (hidden by default) -->
             <div id="success-message" class="hidden flex items-center p-4 mb-4 text-sm text-teal-400 rounded-lg bg-teal-900/20 border border-teal-400/30" role="alert">
                 <i class="ri-checkbox-circle-line mr-3"></i>
-                <div>
-                    <span class="font-medium">Sign In Successful!</span> Redirecting...
-                </div>
+                <div><span class="font-medium">Sign In Successful!</span> Redirecting...</div>
             </div>
 
-            <!-- Error Message (hidden by default) -->
             <div id="error-message" class="hidden flex items-center p-4 mb-4 text-sm text-red-400 rounded-lg bg-red-900/20 border border-red-400/30" role="alert">
                 <i class="ri-error-warning-line mr-3"></i>
-                <div id="error-text">
-                    <span class="font-medium">Sign In Failed!</span> Invalid credentials or unauthorized access.
-                </div>
+                <div id="error-text"></div>
             </div>
 
             <form id="login-form" class="space-y-5">
@@ -95,28 +71,25 @@
                 
                 <button type="submit" class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary-dark">Sign In</button>
             </form>
-
-            <!-- Removed the registration link section -->
         </div>
         <p class="text-xs text-gray-600 text-center mt-6">&copy; 2025 MySertifico | Webapp Studio Sdn. Bhd.</p>
     </div>
 
-    <!-- Script for form validation and password toggle -->
     <script>
-        // Password visibility toggle
-        document.querySelectorAll('.password-toggle').forEach(button => {
-            button.addEventListener('click', function () {
-                const input = this.closest('.relative').querySelector('input');
-                const icon = this.querySelector('i');
-                const isPassword = input.getAttribute('type') === 'password';
-                input.setAttribute('type', isPassword ? 'text' : 'password');
-                icon.classList.toggle('ri-eye-line', isPassword);
-                icon.classList.toggle('ri-eye-off-line', !isPassword);
-            });
-        });
-
-        // Form validation logic
         document.addEventListener('DOMContentLoaded', function() {
+            // Password visibility toggle
+            document.querySelectorAll('.password-toggle').forEach(button => {
+                button.addEventListener('click', function () {
+                    const input = this.closest('.relative').querySelector('input');
+                    const icon = this.querySelector('i');
+                    const isPassword = input.getAttribute('type') === 'password';
+                    input.setAttribute('type', isPassword ? 'text' : 'password');
+                    icon.classList.toggle('ri-eye-line', isPassword);
+                    icon.classList.toggle('ri-eye-off-line', !isPassword);
+                });
+            });
+
+            // ===== SKRIP SIMULASI =====
             const loginForm = document.getElementById('login-form');
             const emailInput = document.getElementById('email');
             const passwordInput = document.getElementById('password');
@@ -124,40 +97,66 @@
             const errorMessage = document.getElementById('error-message');
             const errorText = document.getElementById('error-text');
 
-            // Dummy credentials for testing
-            const DUMMY_EMAIL = 'admin@mysertifico.com';
-            const DUMMY_PASSWORD = 'password123';
+            // Ambil "database" dari localStorage. Ia sepatutnya telah diwujudkan oleh halaman verify-email.html
+            const userDatabase = JSON.parse(localStorage.getItem('userDatabase'));
+
+            // Senarai peranan yang sah
+            const validRoles = ['Manager', 'Super Admin', 'Admin'];
 
             loginForm.addEventListener('submit', function(event) {
-                event.preventDefault(); // Prevent actual form submission
+                event.preventDefault();
 
-                // Hide messages before validation
                 successMessage.classList.add('hidden');
                 errorMessage.classList.add('hidden');
 
-                const email = emailInput.value.trim();
+                const email = emailInput.value.trim().toLowerCase();
                 const password = passwordInput.value.trim();
+                
+                // Semak jika database wujud (jika pengguna datang terus ke halaman ini tanpa proses emel)
+                if (!userDatabase) {
+                    errorText.innerHTML = '<span class="font-medium">Error!</span> User data not found. Please start from the verification process.';
+                    errorMessage.classList.remove('hidden');
+                    return;
+                }
+                
+                const user = userDatabase[email];
 
-                // Validation 1: Check for empty fields
-                if (email === '' || password === '') {
-                    errorText.innerHTML = '<span class="font-medium">Error!</span> Please fill in both email and password fields.';
+                // Kes 1: Emel tidak wujud dalam database
+                if (!user) {
+                    errorText.innerHTML = '<span class="font-medium">Sign In Failed!</span> User not found.';
                     errorMessage.classList.remove('hidden');
                     return;
                 }
 
-                // Validation 2: Check credentials
-                if (email === DUMMY_EMAIL && password === DUMMY_PASSWORD) {
-                    // On success
-                    successMessage.classList.remove('hidden');
-                    // Redirect after a short delay
-                    setTimeout(() => {
-                        window.location.href = 'dashboard.html'; // Redirect to dashboard
-                    }, 2000);
-                } else {
-                    // On failure
+                // Kes 2: Pengguna wujud, tetapi emel belum disahkan
+                if (!user.verified) {
+                    errorText.innerHTML = '<span class="font-medium">Verification Required!</span> Please verify your email before signing in.';
+                    errorMessage.classList.remove('hidden');
+                    return;
+                }
+                
+                // Kes 3: Pengguna wujud, emel disahkan, tetapi kata laluan salah
+                if (user.password !== password) {
                     errorText.innerHTML = '<span class="font-medium">Sign In Failed!</span> Please check your email and password.';
                     errorMessage.classList.remove('hidden');
+                    return;
                 }
+
+                // Kes 4: Pengguna wujud, kata laluan betul, emel disahkan, tetapi tiada peranan sah
+                if (!user.role || !validRoles.includes(user.role)) {
+                    errorText.innerHTML = '<span class="font-medium">Access Denied!</span> You do not have permission to access this system.';
+                    errorMessage.classList.remove('hidden');
+                    return;
+                }
+
+                // Jika semua semakan lepas: Berjaya
+                successMessage.classList.remove('hidden');
+                localStorage.setItem('currentUserRole', user.role); // Simpan peranan untuk digunakan di halaman lain
+                
+                // Bawa ke dashboard
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
             });
         });
     </script>

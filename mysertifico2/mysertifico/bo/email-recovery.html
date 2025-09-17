@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Password Recovery - MySertifico</title>
+     <link rel="icon" type="image/png" href="../../src/images/logos/favicon.png" onerror="this.onerror=null;this.src='https://placehold.co/32x32/0d9488/ffffff?text=M';">
+    <style>
+        body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; background-color: #f3f4f6; font-family: Arial, sans-serif; }
+        table { border-spacing: 0; }
+        td { padding: 0; }
+        img { border: 0; }
+        .wrapper { width: 100%; table-layout: fixed; background-color: #f3f4f6; padding-bottom: 60px; }
+        .main { background-color: #ffffff; margin: 0 auto; width: 100%; max-width: 600px; border-spacing: 0; font-family: Arial, sans-serif; color: #4a4a4a; }
+    </style>
+</head>
+<body>
+    <center class="wrapper">
+        <table class="main" width="100%">
+            <tr>
+                <td style="padding: 24px 0; text-align: center; background-color: #0d9488;">
+                    <a href="https://mysertifico.com" target="_blank" style="display: inline-flex; align-items: center; text-decoration: none; color: #ffffff;">
+                        <img src="../../src/images/logos/logo.png" alt="MySertifico Logo" width="40" height="40" style="width: 40px; height: 40px; margin-right: 12px; border-radius: 8px;">
+                        <span style="font-family: Arial, sans-serif; font-size: 24px; font-weight: bold;">MySertifico</span>
+                    </a>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="padding: 48px 32px;">
+                    <table width="100%">
+                        <tr>
+                            <td>
+                                <h1 style="font-size: 28px; font-weight: bold; color: #111827; margin: 0 0 24px;">Password Reset</h1>
+                                <p id="greeting" style="font-size: 16px; line-height: 24px; color: #374151; margin: 0 0 24px;">
+                                    You recently requested to reset your password for your MySertifico account. Use the temporary password below to sign in.
+                                </p>
+
+                                <div id="password-section">
+                                    <p style="font-size: 16px; line-height: 24px; color: #374151; margin: 0 0 16px;">Your new temporary password is:</p>
+                                    <div style="background-color: #f3f4f6; border: 2px dashed #d1d5db; border-radius: 8px; padding: 16px; text-align: center; margin-bottom: 24px;">
+                                        <p id="new-temp-password" style="font-size: 24px; font-weight: bold; color: #0d9488; letter-spacing: 2px; margin: 0;">
+                                            [New_Password]
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <a href="sign-in.html" target="_blank" style="display: inline-block; background-color: #0d9488; color: #ffffff; font-size: 16px; font-weight: bold; text-decoration: none; padding: 14px 28px; border-radius: 8px;">
+                                    Sign In Now
+                                </a>
+                                
+                                <p style="font-size: 16px; line-height: 24px; color: #374151; margin: 24px 0 0;">
+                                    If you did not request a password reset, please ignore this email or contact support if you have concerns.
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="background-color: #1f2937; padding: 32px; text-align: center;">
+                    <p style="font-size: 14px; color: #9ca3af; margin: 0 0 16px;">&copy; 2025 MySertifico | Webapp Studio | All rights reserved.</p>
+                    <p style="font-size: 14px; color: #9ca3af; margin: 0;">Cyberjaya, Malaysia</p>
+                </td>
+            </tr>
+        </table>
+    </center>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // ===== SIMULASI DATA UNTUK MANAGER =====
+            // Kod di bawah menetapkan data seolah-olah Manager baru sahaja meminta kata laluan baharu.
+            sessionStorage.setItem('recoveryEmail', 'manager@sertifico.com');
+            sessionStorage.setItem('recoveryPassword', 'MNG-A1B2');
+
+            // Ambil data dari sessionStorage yang telah ditetapkan di atas
+            const userEmail = sessionStorage.getItem('recoveryEmail');
+            const newPassword = sessionStorage.getItem('recoveryPassword');
+
+            const greetingEl = document.getElementById('greeting');
+            const passwordSectionEl = document.getElementById('password-section');
+            const newTempPasswordEl = document.getElementById('new-temp-password');
+            
+            // Semak jika data wujud
+            if (userEmail && newPassword) {
+                // Jika wujud, paparkan data tersebut di halaman
+                greetingEl.innerHTML = `Hi ${userEmail},<br><br>You recently requested to reset your password for your MySertifico account. Use the temporary password below to sign in.`;
+                newTempPasswordEl.textContent = newPassword;
+            } else {
+                // Jika tiada data, paparkan mesej generik
+                greetingEl.textContent = 'This is a simulation of a password recovery email. To see a real example, please initiate the process from the "Forgot Password" page.';
+                passwordSectionEl.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

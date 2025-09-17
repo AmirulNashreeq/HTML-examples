@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi Akhir v9: Paparan Sempurna</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        #preview-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            min-height: 500px;
+            overflow: auto;
+        }
+        #preview-container {
+            background-color: #e5e7eb;
+            border: 2px dashed #9ca3af;
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0; 
+        }
+        #blanko-preview {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;
+        }
+        .generated-element {
+            position: absolute;
+            z-index: 10;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 p-4 sm:p-8">
+
+    <div class="max-w-7xl mx-auto">
+
+        <div id="form-section">
+            <h1 class="text-3xl font-bold mb-2">Penjana Templat Automatik</h1>
+            <p class="mb-6 text-gray-500">Pilih opsyen utama. Sistem akan menjana templat profesional secara automatik menggunakan set data tetap.</p>
+
+            <form id="template-form" class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="blanko-upload" class="block mb-2 text-sm font-medium">1. Muat Naik Blanko Sijil</label>
+                        <input id="blanko-upload" type="file" accept="image/*" required class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                    </div>
+                    <div>
+                        <label for="suitable_for" class="block mb-2 text-sm font-medium">2. Sesuai Untuk (Cth: Sijil Graduasi)</label>
+                        <input type="text" id="suitable_for" value="Sijil Graduasi 2025" required class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    </div>
+                    <div>
+                        <label for="orientation" class="block mb-2 text-sm font-medium">3. Pilih Orientasi</label>
+                        <select id="orientation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <option value="Landscape" selected>Landscape</option>
+                            <option value="Portrait">Portrait</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="alignment" class="block mb-2 text-sm font-medium">4. Pilih Jajaran Lalai</label>
+                        <select id="alignment" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                            <option value="Center" selected>Center</option>
+                            <option value="Left">Left</option>
+                            <option value="Right">Right</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mt-8 text-right">
+                    <button type="submit" class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700">
+                        Jana Templat
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div id="result-section" class="hidden">
+            <h1 class="text-3xl font-bold mb-2">Templat Profesional Berjaya Dijana! ✅</h1>
+            <p class="mb-6 text-gray-500">Berikut adalah pratonton visual dan data JSON yang akan disimpan.</p>
+
+            <div class="bg-white dark:bg-gray-800 p-4 sm:p-8 rounded-lg shadow-md">
+                <div>
+                    <h3 class="font-bold text-xl mb-4 text-center">Pratonton Visual (Saiz Asli 100%)</h3>
+                    <div id="preview-wrapper" class="bg-gray-200 dark:bg-gray-700 rounded-lg">
+                        <div id="preview-container">
+                            <img id="blanko-preview" src="" alt="Pratonton Blanko Sijil">
+                            <div id="elements-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="my-8 border-gray-300 dark:border-gray-600">
+
+                <div>
+                    <h3 class="font-bold text-xl mb-4">Data JSON untuk Disimpan</h3>
+                    <div class="bg-gray-900 text-white p-4 rounded-lg shadow-inner">
+                        <pre><code id="json-output" class="language-json text-sm"></code></pre>
+                    </div>
+                </div>
+            </div>
+
+             <div class="mt-8 text-center">
+                <button id="reset-btn" type="button" class="text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700">
+                    Cipta Templat Baru
+                </button>
+            </div>
+        </div>
+    </div>
+
+<script>
+// ===== 'OTAK' SISTEM: DATA TETAP DAN TEPAT SEPERTI YANG DIBERIKAN =====
+const TEMPLATE_PRESETS = (() => {
+      const PORTRAIT_W = 794,  PORTRAIT_H = 1123;
+      const LAND_W     = 1123, LAND_H     = 794;
+
+      const portraitLeft = [
+        { element_id:"logo", type:"image", content:"../../src/images/logos-badges/sample-logo.svg", position_x:120, position_y:150, width:120, height:120 },
+        { element_id:"organization_name", type:"text", content:"{Organization_Name}", position_x:120, position_y:230, font_family:"Montserrat", font_size:18, font_weight:"600", color:"#111827" },
+        { element_id:"address_1", type:"text", content:"{Address_row1}", position_x:120, position_y:255, font_family:"Montserrat", font_size:14, color:"#374151" },
+        { element_id:"address_2", type:"text", content:"{Address_row2}", position_x:120, position_y:275, font_family:"Montserrat", font_size:14, color:"#374151" },
+        { element_id:"certificate_title", type:"text", content:"CERTIFICATE TITLE", position_x:120, position_y:360, font_family:"EB Garamond", font_size:40, font_weight:"bold", color:"#AA8F29" },
+        { element_id:"certificate_body", type:"text", content:"Certificate body text here lorem ipsum dolor sit amet.", position_x:120, position_y:450, font_family:"Montserrat", font_size:16, color:"#374151" },
+        { element_id:"recipient_name", type:"text", content:"{Recipient_Name}", position_x:120, position_y:500, font_family:"Montserrat", font_size:20, font_weight:"bold", color:"#000000" },
+        { element_id:"event_description", type:"text", content:"Event description sample", position_x:120, position_y:540, font_family:"Montserrat", font_size:16, color:"#374151" },
+        { element_id:"event_date", type:"text", content:"on {Event_Date}", position_x:120, position_y:565, font_family:"Montserrat", font_size:16, font_weight:"600", color:"#111827" },
+        { element_id:"signature_image", type:"image", content:"../../src/images/signatures/sample-signature.png", position_x:120, position_y:820, width:200, height:150 },
+        { element_id:"signatory_name", type:"text", content:"{Signatory_Name}", position_x:120, position_y:880, font_family:"Montserrat", font_size:14, font_weight:"500", color:"#000000" },
+        { element_id:"signatory_position", type:"text", content:"{Signatory_Position}", position_x:120, position_y:905, font_family:"Montserrat", font_size:14, color:"#374151" },
+        { element_id:"signed_date", type:"text", content:"{Signed_Date}", position_x:120, position_y:950, font_family:"Montserrat", font_size:12, color:"#374151" },
+        { element_id:"qr_code", type:"qrcode", content:"https://des.mysertifico.com/verify.html?id=graduasi-2025-900101105555", position_x:560, position_y:860, width:120, height:120 },
+      ];
+      const portraitCenter = [
+        { element_id:"logo", type:"image", content:"../../src/images/logos-badges/sample-logo.svg", position_x:397, position_y:150, width:120, height:120 },
+        { element_id:"organization_name", type:"text", content:"{Organization_Name}", position_x:397, position_y:230, font_family:"Montserrat", font_size:18, font_weight:"600", color:"#111827" },
+        { element_id:"address_1", type:"text", content:"{Address_row1}", position_x:397, position_y:255, font_family:"Montserrat", font_size:14, color:"#374151" },
+        { element_id:"address_2", type:"text", content:"{Address_row2}", position_x:397, position_y:275, font_family:"Montserrat", font_size:14, color:"#374151" },
+        { element_id:"certificate_title", type:"text", content:"CERTIFICATE TITLE", position_x:397, position_y:360, font_family:"EB Garamond", font_size:40, font_weight:"bold", color:"#AA8F29" },
+        { element_id:"certificate_body", type:"text", content:"Center aligned sample body text for the certificate.", position_x:397, position_y:440, font_family:"Montserrat", font_size:16, color:"#374151" },
+        { element_id:"recipient_name", type:"text", content:"{Recipient_Name}", position_x:397, position_y:485, font_family:"Montserrat", font_size:20, font_weight:"bold", color:"#000000" },
+        { element_id:"event_description", type:"text", content:"Event description here", position_x:397, position_y:525, font_family:"Montserrat", font_size:16, color:"#374151" },
+        { element_id:"event_date", type:"text", content:"on {Event_Date}", position_x:397, position_y:550, font_family:"Montserrat", font_size:16, font_weight:"600", color:"#111827" },
+        { element_id:"signature_image", type:"image", content:"../../src/images/signatures/sample-signature.png", position_x:260, position_y:820, width:200, height:150 },
+        { element_id:"signatory_name", type:"text", content:"{Signatory_Name}", position_x:260, position_y:880, font_family:"Montserrat", font_size:14, font_weight:"500", color:"#000000" },
+        { element_id:"signatory_position", type:"text", content:"{Signatory_Position}", position_x:260, position_y:905, font_family:"Montserrat", font_size:14, color:"#374151" },
+        { element_id:"signed_date", type:"text", content:"{Signed_Date}", position_x:260, position_y:950, font_family:"Montserrat", font_size:12, color:"#374151" },
+        { element_id:"qr_code", type:"qrcode", content:"https://des.mysertifico.com/verify.html?id=graduasi-2025-900101105555", position_x:560, position_y:860, width:120, height:120 },
+      ];
+      const portraitRight = [
+        { element_id:"logo", type:"image", content:"../../src/images/logos-badges/sample-logo.svg", position_x:670, position_y:150, width:120, height:120 },
+        { element_id:"organization_name", type:"text", content:"{Organization_Name}", position_x:670, position_y:240, font_family:"Montserrat", font_size:18, font_weight:"600", color:"#111827" },
+        { element_id:"address_1", type:"text", content:"{Address_row1}", position_x:670, position_y:265, font_family:"Montserrat", font_size:14, color:"#374151" },
+        { element_id:"address_2", type:"text", content:"{Address_row2}", position_x:670, position_y:285, font_family:"Montserrat", font_size:14, color:"#374151" },
+        { element_id:"certificate_title", type:"text", content:"CERTIFICATE TITLE", position_x:670, position_y:360, font_family:"EB Garamond", font_size:40, font_weight:"bold", color:"#AA8F29" },
+        { element_id:"certificate_body", type:"text", content:"Body text sample at right side.", position_x:670, position_y:445, font_family:"Montserrat", font_size:16, color:"#374151" },
+        { element_id:"recipient_name", type:"text", content:"{Recipient_Name}", position_x:670, position_y:492, font_family:"Montserrat", font_size:20, font_weight:"bold", color:"#000000" },
+        { element_id:"event_description", type:"text", content:"Description right-aligned look", position_x:670, position_y:530, font_family:"Montserrat", font_size:16, color:"#374151" },
+        { element_id:"event_date", type:"text", content:"on {Event_Date}", position_x:670, position_y:555, font_family:"Montserrat", font_size:16, font_weight:"600", color:"#111827" },
+        { element_id:"signature_image", type:"image", content:"../../src/images/signatures/sample-signature.png", position_x:670, position_y:820, width:200, height:150 },
+        { element_id:"signatory_name", type:"text", content:"{Signatory_Name}", position_x:670, position_y:880, font_family:"Montserrat", font_size:14, font_weight:"500", color:"#000000" },
+        { element_id:"signatory_position", type:"text", content:"{Signatory_Position}", position_x:670, position_y:905, font_family:"Montserrat", font_size:14, color:"#374151" },
+        { element_id:"signed_date", type:"text", content:"{Signed_Date}", position_x:670, position_y:950, font_family:"Montserrat", font_size:12, color:"#374151" },
+        { element_id:"qr_code", type:"qrcode", content:"https://des.mysertifico.com/verify.html?id=graduasi-2025-900101105555", position_x:260, position_y:860, width:120, height:120 },
+      ];
+      const landscapeLeft = [
+        { element_id:"logo", type:"image", content:"../../src/images/logos-badges/sample-logo.svg", position_x:100, position_y:150, width:120, height:120 },
+        { element_id:"organization_name", type:"text", content:"{Organization_Name}", position_x:100, position_y:220, font_family:"Montserrat", font_size:18, font_weight:"600", color:"#111827" },
+        { element_id:"address_1", type:"text", content:"{Address_row1}", position_x:100, position_y:240, font_family:"Montserrat", font_size:14, color:"#374151" },
+        { element_id:"address_2", type:"text", content:"{Address_row2}", position_x:100, position_y:260, font_family:"Montserrat", font_size:14, color:"#374151" },
+        { element_id:"certificate_title", type:"text", content:"CERTIFICATE TITLE", position_x:100, position_y:320, font_family:"EB Garamond", font_size:40, font_weight:"bold", color:"#AA8F29" },
+        { element_id:"certificate_body", type:"text", content:"Landscape body left side.", position_x:100, position_y:390, font_family:"Montserrat", font_size:16, color:"#374151" },
+        { element_id:"recipient_name", type:"text", content:"{Recipient_Name}", position_x:100, position_y:430, font_family:"Montserrat", font_size:20, font_weight:"bold", color:"#000000" },
+        { element_id:"event_description", type:"text", content:"Event details here", position_x:100, position_y:465, font_family:"Montserrat", font_size:16, color:"#374151" },
+        { element_id:"event_date", type:"text", content:"on {Event_Date}", position_x:100, position_y:490, font_family:"Montserrat", font_size:16, font_weight:"600", color:"#111827" },
+        { element_id:"signature_image", type:"image", content:"../../src/images/signatures/sample-signature.png", position_x:100, position_y:590, width:200, height:150 },
+        { element_id:"signatory_name", type:"text", content:"{Signatory_Name}", position_x:100, position_y:630, font_family:"Montserrat", font_size:14, font_weight:"500", color:"#000000" },
+        { element_id:"signatory_position", type:"text", content:"{Signatory_Position}", position_x:100, position_y:650, font_family:"Montserrat", font_size:14, color:"#374151" },
+        { element_id:"signed_date", type:"text", content:"{Signed_Date}", position_x:100, position_y:700, font_family:"Montserrat", font_size:12, color:"#374151" },
+        { element_id:"qr_code", type:"qrcode", content:"https://des.mysertifico.com/verify.html?id=graduasi-2025-900101105555", position_x:900, position_y:590, width:120, height:120 },
+      ];
+      const landscapeCenter = [
+        { element_id:"logo", type:"image", content:"../../src/images/logos-badges/sample-logo.svg", position_x:561, position_y:150, width:120, height:120 },
+        { element_id:"organization_name", type:"text", content:"{Organization_Name}", position_x:561, position_y:220, font_family:"Montserrat", font_size:18, font_weight:"600", color:"#111827" },
+        { element_id:"address_1", type:"text", content:"{Address_row1}", position_x:561, position_y:240, font_family:"Montserrat", font_size:14, color:"#374151" },
+        { element_id:"address_2", type:"text", content:"{Address_row2}", position_x:561, position_y:260, font_family:"Montserrat", font_size:14, color:"#374151" },
+        { element_id:"certificate_title", type:"text", content:"CERTIFICATE TITLE", position_x:561, position_y:305, font_family:"EB Garamond", font_size:40, font_weight:"bold", color:"#AA8F29" },
+        { element_id:"certificate_body", type:"text", content:"Centered landscape certificate body text.", position_x:561, position_y:370, font_family:"Montserrat", font_size:16, color:"#374151" },
+        { element_id:"recipient_name", type:"text", content:"{Recipient_Name}", position_x:561, position_y:410, font_family:"Montserrat", font_size:20, font_weight:"bold", color:"#000000" },
+        { element_id:"event_description", type:"text", content:"Event centered description", position_x:561, position_y:445, font_family:"Montserrat", font_size:16, color:"#374151" },
+        { element_id:"event_date", type:"text", content:"on {Event_Date}", position_x:561, position_y:470, font_family:"Montserrat", font_size:16, font_weight:"600", color:"#111827" },
+        { element_id:"signature_image", type:"image", content:"../../src/images/signatures/sample-signature.png", position_x:350, position_y:580, width:200, height:150 },
+        { element_id:"signatory_name", type:"text", content:"{Signatory_Name}", position_x:350, position_y:640, font_family:"Montserrat", font_size:14, font_weight:"500", color:"#000000" },
+        { element_id:"signatory_position", type:"text", content:"{Signatory_Position}", position_x:350, position_y:665, font_family:"Montserrat", font_size:14, color:"#374151" },
+        { element_id:"signed_date", type:"text", content:"{Signed_Date}", position_x:350, position_y:690, font_family:"Montserrat", font_size:12, color:"#374151" },
+        { element_id:"qr_code", type:"qrcode", content:"https://des.mysertifico.com/verify.html?id=graduasi-2025-900101105565", position_x:900, position_y:600, width:120, height:120 },
+      ];
+      const landscapeRight = [
+        { element_id:"logo", type:"image", content:"../../src/images/logos-badges/sample-logo.svg", position_x:1000, position_y:150, width:120, height:120 },
+        { element_id:"organization_name", type:"text", content:"{Organization_Name}", position_x:1000, position_y:220, font_family:"Montserrat", font_size:18, font_weight:"600", color:"#111827" },
+        { element_id:"address_1", type:"text", content:"{Address_row1}", position_x:1000, position_y:240, font_family:"Montserrat", font_size:14, color:"#374151" },
+        { element_id:"address_2", type:"text", content:"{Address_row2}", position_x:1000, position_y:260, font_family:"Montserrat", font_size:14, color:"#374151" },
+        { element_id:"certificate_title", type:"text", content:"CERTIFICATE TITLE", position_x:1000, position_y:320, font_family:"EB Garamond", font_size:40, font_weight:"bold", color:"#AA8F29" },
+        { element_id:"certificate_body", type:"text", content:"Right-side layout example text.", position_x:1000, position_y:390, font_family:"Montserrat", font_size:16, color:"#374151" },
+        { element_id:"recipient_name", type:"text", content:"{Recipient_Name}", position_x:1000, position_y:430, font_family:"Montserrat", font_size:20, font_weight:"bold", color:"#000000" },
+        { element_id:"event_description", type:"text", content:"Event description area", position_x:1000, position_y:465, font_family:"Montserrat", font_size:16, color:"#374151" },
+        { element_id:"event_date", type:"text", content:"on {Event_Date}", position_x:1000, position_y:490, font_family:"Montserrat", font_size:16, font_weight:"600", color:"#111827" },
+        { element_id:"signature_image", type:"image", content:"../../src/images/signatures/sample-signature.png", position_x:1000, position_y:600, width:200, height:150 },
+        { element_id:"signatory_name", type:"text", content:"{Signatory_Name}", position_x:1000, position_y:640, font_family:"Montserrat", font_size:14, font_weight:"500", color:"#000000" },
+        { element_id:"signatory_position", type:"text", content:"{Signatory_Position}", position_x:1000, position_y:665, font_family:"Montserrat", font_size:14, color:"#374151" },
+        { element_id:"signed_date", type:"text", content:"{Signed_Date}", position_x:1000, position_y:690, font_family:"Montserrat", font_size:12, color:"#374151" },
+        { element_id:"qr_code", type:"qrcode", content:"https://des.mysertifico.com/verify.html?id=graduasi-2025-900101105545", position_x:250, position_y:600, width:150, height:150 },
+      ];
+      const templatesData = [
+        { id: 1, template_code:'MDPL-GREEN-001',  style:'Modern',  orientation:'Portrait',  alignment:'Left',   theme_color:'Green',  imageUrl:'../../src/images/templates/mdpl-green-001.svg',  content:portraitLeft,    original_width:PORTRAIT_W, original_height:PORTRAIT_H },
+        { id: 2, template_code:'MDPC-GOLD-002',   style:'Modern',  orientation:'Portrait',  alignment:'Center', theme_color:'Gold',   imageUrl:'../../src/images/templates/clpc-gold-010.svg',  content:portraitCenter,  original_width:PORTRAIT_W, original_height:PORTRAIT_H },
+        { id: 3, template_code:'MDPR-BLUE-003',   style:'Modern',  orientation:'Portrait',  alignment:'Right',  theme_color:'Blue',   imageUrl:'../../src/images/templates/mdpr-blue-003.svg',  content:portraitRight,   original_width:PORTRAIT_W, original_height:PORTRAIT_H },
+        { id: 4, template_code:'CLLL-RED-004',    style:'Classic', orientation:'Landscape', alignment:'Left',   theme_color:'Red',    imageUrl:'../../src/images/templates/clll-red-004.svg',   content:landscapeLeft,   original_width:LAND_W,     original_height:LAND_H     },
+        { id: 5, template_code:'MDLC-PURPLE-005', style:'Modern',  orientation:'Landscape', alignment:'Center', theme_color:'Purple', imageUrl:'../../src/images/templates/mdlc-purple-003.svg', content:landscapeCenter, original_width:LAND_W,     original_height:LAND_H     },
+        { id: 6, template_code:'CLLR-BLACK-006',  style:'Classic', orientation:'Landscape', alignment:'Right',  theme_color:'Black',  imageUrl:'../../src/images/templates/cllr-black-006.svg', content:landscapeRight,  original_width:LAND_W,     original_height:LAND_H     },
+      ];
+
+    return { templatesData };
+})();
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Rujukan kepada elemen DOM
+    const formSection = document.getElementById('form-section');
+    const resultSection = document.getElementById('result-section');
+    const templateForm = document.getElementById('template-form');
+    const resetBtn = document.getElementById('reset-btn');
+    const blankoUpload = document.getElementById('blanko-upload');
+    const previewContainer = document.getElementById('preview-container');
+    const blankoPreview = document.getElementById('blanko-preview');
+    const elementsContainer = document.getElementById('elements-container');
+    const jsonOutput = document.getElementById('json-output');
+
+    templateForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const choices = {
+            suitableFor: document.getElementById('suitable_for').value,
+            orientation: document.getElementById('orientation').value,
+            alignment: document.getElementById('alignment').value,
+        };
+
+        if (blankoUpload.files.length === 0) {
+            alert('Sila muat naik imej blanko sijil.');
+            return;
+        }
+
+        const matchedTemplate = TEMPLATE_PRESETS.templatesData.find(t => 
+            t.orientation === choices.orientation && t.alignment === choices.alignment
+        );
+
+        if (!matchedTemplate) {
+            alert('Kombinasi reka letak tidak ditemui dalam data tetap.');
+            return;
+        }
+        
+        const finalData = {
+            template_id: `(Akan dijana oleh MySQL, cth: ${matchedTemplate.id})`,
+            template_url: matchedTemplate.imageUrl,
+            suitable_for: choices.suitableFor,
+            style: matchedTemplate.style,
+            orientation: matchedTemplate.orientation,
+            default_alignment: matchedTemplate.alignment,
+            theme_color: matchedTemplate.theme_color,
+            template_code: matchedTemplate.template_code,
+            const_elements: matchedTemplate.content,
+            created_by: 'nabil_backoffice_01',
+            created_at: new Date().toISOString(),
+            is_active: 1
+        };
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            blankoPreview.src = event.target.result;
+            jsonOutput.textContent = JSON.stringify(finalData, null, 4);
+            previewContainer.style.width = `${matchedTemplate.original_width}px`;
+            previewContainer.style.height = `${matchedTemplate.original_height}px`;
+            previewContainer.style.transform = 'scale(1)'; 
+            renderPreview(matchedTemplate.content, choices.alignment);
+            formSection.classList.add('hidden');
+            resultSection.classList.remove('hidden');
+        };
+        reader.readAsDataURL(blankoUpload.files[0]);
+    });
+
+    resetBtn.addEventListener('click', () => {
+        window.location.reload();
+    });
+
+    function renderPreview(elements, alignment) {
+        elementsContainer.innerHTML = '';
+        elements.forEach(el => {
+            const div = document.createElement('div');
+            div.classList.add('generated-element');
+            div.style.left = `${el.position_x}px`;
+            div.style.top = `${el.position_y}px`;
+            div.style.fontFamily = `'${el.font_family}', sans-serif`;
+            div.style.fontSize = `${el.font_size}px`;
+            div.style.fontWeight = el.font_weight || 'normal';
+            div.style.color = el.color;
+            div.style.width = el.width ? `${el.width}px` : 'auto';
+            div.style.height = el.height ? `${el.height}px` : 'auto';
+
+            if (alignment === 'Center') {
+                div.style.transform = 'translateX(-50%)';
+            } else if (alignment === 'Right') {
+                div.style.transform = 'translateX(-100%)';
+            }
+
+            if (el.type === 'text') {
+                div.textContent = el.content;
+                // `textAlign` hanya untuk teks
+                if (alignment !== 'Left') {
+                    div.style.textAlign = alignment.toLowerCase();
+                }
+            } else if (el.type === 'image' || el.type === 'qrcode') {
+                // **PEMBETULAN: Memastikan bekas imej tidak dipengaruhi oleh sifat teks**
+                div.style.display = 'flex';
+                div.style.lineHeight = '1'; // Menghapuskan potensi ruang tambahan
+
+                const img = document.createElement('img');
+                img.alt = el.element_id;
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.objectFit = 'cover';
+                
+                if (el.type === 'qrcode') {
+                    const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=${el.width}x${el.height}&data=${encodeURIComponent(el.content)}`;
+                    img.src = qrApiUrl;
+                } else {
+                    img.src = el.content;
+                }
+                
+                img.onerror = function() {
+                    this.onerror = null;
+                    this.src = `https://via.placeholder.com/${el.width}x${el.height}/808080/FFFFFF?text=${el.element_id.replace('_',' ')}`; 
+                };
+                div.appendChild(img);
+            }
+            
+            elementsContainer.appendChild(div);
+        });
+    }
+});
+</script>
+
+</body>
+</html>

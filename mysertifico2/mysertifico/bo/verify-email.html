@@ -4,107 +4,139 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Email Verification</title>
+    <title>Email Verification - MySertifico</title>
+     <link rel="icon" type="image/png" href="../../src/images/logos/favicon.png" onerror="this.onerror=null;this.src='https://placehold.co/32x32/0d9488/ffffff?text=M';">
     <style>
-        /* General Styles */
-        body {
-            margin: 0;
-            padding: 0;
-            -webkit-text-size-adjust: 100%;
-            -ms-text-size-adjust: 100%;
-            background-color: #f3f4f6;
-            font-family: Arial, sans-serif;
-        }
-        table {
-            border-spacing: 0;
-        }
-        td {
-            padding: 0;
-        }
-        img {
-            border: 0;
-        }
-        .wrapper {
-            width: 100%;
-            table-layout: fixed;
-            background-color: #f3f4f6;
-            padding-bottom: 60px;
-        }
-        .main {
-            background-color: #ffffff;
-            margin: 0 auto;
-            width: 100%;
-            max-width: 600px;
-            border-spacing: 0;
-            font-family: Arial, sans-serif;
-            color: #4a4a4a;
-        }
+        body { margin: 0; padding: 0; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; background-color: #f3f4f6; font-family: Arial, sans-serif; }
+        table { border-spacing: 0; }
+        td { padding: 0; }
+        img { border: 0; }
+        .wrapper { width: 100%; table-layout: fixed; background-color: #f3f4f6; padding-bottom: 60px; }
+        .main { background-color: #ffffff; margin: 0 auto; width: 100%; max-width: 600px; border-spacing: 0; font-family: Arial, sans-serif; color: #4a4a4a; }
+        .status-box { padding: 16px; border-radius: 8px; margin-bottom: 24px; text-align: center; }
+        .success { background-color: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; }
+        .error { background-color: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
     </style>
 </head>
 <body>
     <center class="wrapper">
         <table class="main" width="100%">
-            <!-- Header with Logo -->
             <tr>
-                <td style="padding: 32px 0; text-align: center; background-color: #0d9488;">
-                    <a href="https://mysertifico.com" target="_blank">
-                        <img src="https://placehold.co/180x40/ffffff/0d9488?text=MySertifico" alt="MySertifico Logo" width="180" style="max-width: 100%;">
+                <td style="padding: 24px 0; text-align: center; background-color: #0d9488;">
+                    <a href="https://mysertifico.com" target="_blank" style="display: inline-flex; align-items: center; text-decoration: none; color: #ffffff;">
+                        <img src="../../src/images/logos/logo.png" alt="MySertifico Logo" width="40" height="40" style="width: 40px; height: 40px; margin-right: 12px; border-radius: 8px;">
+                        <span style="font-family: Arial, sans-serif; font-size: 24px; font-weight: bold;">MySertifico</span>
                     </a>
                 </td>
             </tr>
-
-            <!-- Main Content -->
             <tr>
                 <td style="padding: 48px 32px;">
                     <table width="100%">
                         <tr>
                             <td>
-                                <h1 style="font-size: 28px; font-weight: bold; color: #111827; margin: 0 0 24px;">Verify Your Email Address</h1>
-                                <p style="font-size: 16px; line-height: 24px; color: #374151; margin: 0 0 24px;">
-                                    Welcome to MySertifico! To complete your registration and secure your account, please verify your email address by clicking the button below.
-                                </p>
-
-                                <!-- Temporary Password Section -->
-                                <p style="font-size: 16px; line-height: 24px; color: #374151; margin: 0 0 16px;">
-                                    Here is your temporary password:
-                                </p>
-                                <div style="background-color: #f3f4f6; border: 2px dashed #d1d5db; border-radius: 8px; padding: 16px; text-align: center; margin-bottom: 24px;">
-                                    <p style="font-size: 24px; font-weight: bold; color: #0d9488; letter-spacing: 2px; margin: 0;">
-                                        [Temporary_Password]
+                                <div id="status-message-box" class="status-box" style="display: none;"></div>
+                                
+                                <div id="email-content">
+                                    <h1 id="main-heading" style="font-size: 28px; font-weight: bold; color: #111827; margin: 0 0 24px;">Verify Your Email Address</h1>
+                                    <p id="main-paragraph" style="font-size: 16px; line-height: 24px; color: #374151; margin: 0 0 24px;">
+                                        Welcome to MySertifico! To complete your registration and secure your account, please verify your email address by clicking the button below.
+                                    </p>
+                                    <div id="password-section">
+                                        <p style="font-size: 16px; line-height: 24px; color: #374151; margin: 0 0 16px;">Here is your temporary password:</p>
+                                        <div style="background-color: #f3f4f6; border: 2px dashed #d1d5db; border-radius: 8px; padding: 16px; text-align: center; margin-bottom: 24px;">
+                                            <p id="temp-password" style="font-size: 24px; font-weight: bold; color: #0d9488; letter-spacing: 2px; margin: 0;">[Temporary_Password]</p>
+                                        </div>
+                                    </div>
+                                    <div id="cta-button-container">
+                                        <a href="#" id="verify-button" style="display: inline-block; background-color: #0d9488; color: #ffffff; font-size: 16px; font-weight: bold; text-decoration: none; padding: 14px 28px; border-radius: 8px;">
+                                            Verify Email Address
+                                        </a>
+                                    </div>
+                                    <p id="info-paragraph" style="font-size: 16px; line-height: 24px; color: #374151; margin: 24px 0 0;">
+                                        If you did not create an account, no further action is required.
+                                    </p>
+                                    <p id="link-paragraph" style="font-size: 14px; line-height: 20px; color: #6b7280; margin: 32px 0 0;">
+                                        If the button above doesn't work, copy and paste this link into your browser:
+                                        <br>
+                                        <a id="verify-link" href="#" target="_blank" style="color: #0d9488; text-decoration: none; word-break: break-all;">https://mysertifico.com/verify?token=[verification_token]</a>
                                     </p>
                                 </div>
-                                
-                                <!-- CTA Button -->
-                                <a href="#" target="_blank" style="display: inline-block; background-color: #0d9488; color: #ffffff; font-size: 16px; font-weight: bold; text-decoration: none; padding: 14px 28px; border-radius: 8px;">
-                                    Verify Email Address
-                                </a>
-                                
-                                <p style="font-size: 16px; line-height: 24px; color: #374151; margin: 24px 0 0;">
-                                    If you did not create an account, no further action is required.
-                                </p>
-                                <p style="font-size: 14px; line-height: 20px; color: #6b7280; margin: 32px 0 0;">
-                                    If the button above doesn't work, copy and paste this link into your browser:
-                                    <br>
-                                    <a href="#" target="_blank" style="color: #0d9488; text-decoration: none; word-break: break-all;">https://mysertifico.com/verify?token=[verification_token]</a>
-                                </p>
                             </td>
                         </tr>
                     </table>
                 </td>
             </tr>
-
-            <!-- Footer -->
             <tr>
                 <td style="background-color: #1f2937; padding: 32px; text-align: center;">
-                    <p style="font-size: 14px; color: #9ca3af; margin: 0 0 16px;">
-                        &copy; 2024 MySertifico. All rights reserved.
-                    </p>
-                    <p style="font-size: 14px; color: #9ca3af; margin: 0;">
-                        MySertifico HQ, Kuala Lumpur, Malaysia
-                    </p>
+                    <p style="font-size: 14px; color: #9ca3af; margin: 0 0 16px;">&copy; 2025 MySertifico | Webapp Studio | All rights reserved.</p>
+                    <p style="font-size: 14px; color: #9ca3af; margin: 0;">Cyberjaya, Malaysia</p>
                 </td>
             </tr>
         </table>
     </center>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // PENTING: Padam localStorage untuk 'reset' simulasi setiap kali halaman dimuat semula.
+            localStorage.removeItem('userDatabase');
+
+            // Data asal
+            const userDatabase = {
+                'manager@sertifico.com':    { password: 'MNG-A1B2', role: 'Manager',    token: 'tokenForManager123', verified: false },
+                'superadmin@sertifico.com': { password: 'SPA-C3D4', role: 'Super Admin', token: 'tokenForSuperAdmin456', verified: false },
+                'admin@sertifico.com':      { password: 'ADM-E5F6', role: 'Admin',      token: 'tokenForAdmin789', verified: false },
+            };
+            
+            // Simpan data bersih ke localStorage
+            localStorage.setItem('userDatabase', JSON.stringify(userDatabase));
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const email = urlParams.get('email');
+            const token = urlParams.get('token');
+            const storedDb = JSON.parse(localStorage.getItem('userDatabase'));
+            const user = email ? storedDb[email.toLowerCase()] : null;
+
+            const tempPassEl = document.getElementById('temp-password');
+            const verifyLinkEl = document.getElementById('verify-link');
+            const verifyButtonEl = document.getElementById('verify-button');
+            const statusBox = document.getElementById('status-message-box');
+            const emailContent = document.getElementById('email-content');
+
+            function showMessage(type, message) {
+                statusBox.style.display = 'block';
+                statusBox.className = `status-box ${type}`;
+                statusBox.innerHTML = message;
+                emailContent.style.display = 'none';
+            }
+
+            if (user && user.token === token) {
+                emailContent.style.display = 'block';
+                statusBox.style.display = 'none';
+
+                if (user.verified) {
+                    showMessage('error', `<strong>Email Already Verified!</strong><br>The account for ${email} has already been verified. You can proceed to sign in.`);
+                    return;
+                }
+                
+                tempPassEl.textContent = user.password;
+                const verificationUrl = `?email=${encodeURIComponent(email)}&token=${token}`;
+                verifyLinkEl.href = verificationUrl;
+                verifyButtonEl.href = verificationUrl;
+
+                verifyButtonEl.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    user.verified = true;
+                    localStorage.setItem('userDatabase', JSON.stringify(storedDb));
+                    showMessage('success', `<strong>Verification Successful!</strong><br>Your email (${email}) has been verified. Redirecting you to the sign-in page...`);
+                    setTimeout(() => {
+                        window.location.href = 'sign-in.html';
+                    }, 3000);
+                });
+
+            } else {
+                showMessage('error', '<strong>Invalid Link!</strong><br>This verification link is invalid or has expired. Please contact your administrator.');
+            }
+        });
+    </script>
 </body>
 </html>

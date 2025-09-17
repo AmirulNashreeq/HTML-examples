@@ -68,16 +68,14 @@
             <div class="flex items-center justify-between">
                 <!-- Logo -->
                 <a href="mywall.html" class="flex items-center gap-2">
-                    <img src="../../src/images/logos/logo.png" alt="MyWall Logo" class="h-10 w-10 rounded-full">
+                    <img src="../../src/images/logos/logo.png" alt="MyWall Logo" class="h-10 w-10 rounded-full" onerror="this.onerror=null;this.src='https://placehold.co/40x40/134E4A/FFFFFF?text=M';">
                     <span class="font-poppins font-bold text-2xl text-primary">MyWall</span>
                 </a>
 
                 <!-- Profile Icon & Dropdown -->
                 <div class="relative">
-                    <button id="profile-menu-button" class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary hover:border-primary-600 transition-all">
-                        <img src="../../src/images/users/nabil.png" 
-                             onerror="this.onerror=null;this.src='https://placehold.co/40x40/134E4A/FFFFFF?text=A';"
-                             alt="User Avatar" class="w-full h-full object-cover">
+                    <button id="profile-menu-button" class="w-11 h-11 flex items-center justify-center rounded-lg bg-primary text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200">
+                        <i class="ri-menu-4-line text-3xl"></i>
                     </button>
                     <!-- Dropdown Menu -->
                     <div id="profile-menu" class="hidden absolute top-full right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 z-50">
